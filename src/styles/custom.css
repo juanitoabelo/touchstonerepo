@@ -1,0 +1,188 @@
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: #333;
+}
+p {
+    color: #797c7f !important;
+}
+
+.color-red {
+    color: #E1213D;
+}
+.text-animation {
+    opacity: 0;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+    animation-name: fadeIn; 
+    animation-duration: 1s; 
+    -webkit-animation-delay:1.3s; 
+    animation-delay:1.3s; 
+    animation-fill-mode: forwards;
+}
+
+@media (min-width: 769px) {
+    .text-animation {
+        opacity: 0;
+        -webkit-animation: fadeIn 2.3s;
+        animation: fadeIn 2.3s;
+        animation-name: fadeIn; 
+        animation-duration: 2.3s; 
+        -webkit-animation-delay:4s; 
+        animation-delay:4s; 
+        animation-fill-mode: forwards;
+    }
+}
+
+#main-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    max-width: 100%;
+}
+
+.login-link a, .login-link a:visited {
+    font-family: "Roboto", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-style: italic;
+    text-align: center;
+    color: #c7a34a !important;
+    text-decoration: none !important;
+  }
+
+  .custom-form h1 {
+    font-size: 1rem !important;
+    font-weight: normal;
+    color: #545656;
+  }
+  .custom-form h1 + p {
+    font-size: 0.7rem !important;
+  }
+
+  .custom-form .forgot {
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    font-style: italic;
+    text-align: center;
+    color: #c7a34a !important;
+    text-decoration: none !important;
+  }
+  .custom-form .forgot a {
+    color: #c7a34a !important;
+  }
+  
+
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#login-form .form-wrapper input {
+    outline: none !important;
+}
+#login-form .form-wrapper button,
+.custom-form .form-wrapper input[type="submit"] {
+    border-radius: 0rem;
+    width: 100%;
+    border-style: solid;
+    border-width: 0;
+    text-transform: uppercase;
+    padding: 0.6875rem 1.125rem;
+    background-color: #0FD3ED;
+    border-color: #0FD3ED;
+    color: white;
+    font-weight: 700;
+}
+
+.control-label {
+    color: #797c7f !important;
+}
+
+@media (max-width: 399.8px) {
+    .main-content {
+        padding: 0 !important;
+    }
+}
+div.main-content {
+    padding: 0 !important;
+}
+
+
+#login-shortcut {
+    -moz-animation: cssAnimation 0s ease-in 2s forwards;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 2s forwards;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 2s forwards;
+    /* Opera */
+    animation: cssAnimation 0s ease-in 2s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+@media (min-width: 769px) {
+    #login-shortcut {
+        -moz-animation: cssAnimation 0s ease-in 4.3s forwards;
+        /* Firefox */
+        -webkit-animation: cssAnimation 0s ease-in 4.3s forwards;
+        /* Safari and Chrome */
+        -o-animation: cssAnimation 0s ease-in 4.3s forwards;
+        /* Opera */
+        animation: cssAnimation 0s ease-in 4.3s forwards;
+        -webkit-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }   
+}
+@keyframes cssAnimation {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+}
+@-webkit-keyframes cssAnimation {
+    to {
+        width:0;
+        height:0;
+        visibility:hidden;
+    }
+}
+
+
+.cqeonB .logo {
+    width: 200px !important;
+}
+
+.main-content > div,
+.main-content .content-wrapper > div  {
+    height: 84vh;
+}
+
+.StartDate, .EndDate, .react-datepicker-wrapper {
+    width: 100%;
+}
+
+.error {
+    color: #E1213D;
+    position: relative;
+    top: -14px;
+}
+
+.dCbApY {
+    overflow: auto;
+}
+.pagination li a {
+    text-decoration: none;
+}
+
+.success-message {
+    background-color: rgb(0, 214, 143) !important;
+    text-align: center !important;
+    color: white !important;
+}
