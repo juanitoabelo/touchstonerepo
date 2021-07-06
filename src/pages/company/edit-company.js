@@ -582,7 +582,7 @@ export default class EditCompany extends Component {
                           <Col breakPoint={{ xs: 12 }}>
                             <label htmlFor="OONAccept">Accept OON</label>
                             <SelectStyled options={selectOONAcceptOptions.map(({ value, label }) => { 
-                                  switch(value){
+                                  switch(this.state.OONAccept){
                                     case '0':
                                         defaultOONAcceptSelectOption = 'No'
                                         break;

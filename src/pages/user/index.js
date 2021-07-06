@@ -1,9 +1,9 @@
 import Select from '@paljs/ui/Select';
 import { InputGroup } from '@paljs/ui/Input';
 import { Card, CardBody } from '@paljs/ui/Card';
-import { ButtonLink } from '@paljs/ui/Button';
+// import { ButtonLink } from '@paljs/ui/Button';
 import { Button } from '@paljs/ui/Button';
-import { navigate } from 'gatsby';
+// import { navigate } from 'gatsby';
 import Col from '@paljs/ui/Col';
 import Row from '@paljs/ui/Row';
 import React, { Component } from 'react';
@@ -22,22 +22,22 @@ const SelectStyled = styled(Select)`
   margin-bottom: 1rem;
 `;
 
-const ErrorStyle = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 2rem;
-  small {
-    margin-bottom: 3rem;
-  }
-  h1 {
-    margin-bottom: 0.5rem;
-  }
-  a {
-    max-width: 20rem;
-  }
-`;
+// const ErrorStyle = styled.div`
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   margin-bottom: 2rem;
+//   small {
+//     margin-bottom: 3rem;
+//   }
+//   h1 {
+//     margin-bottom: 0.5rem;
+//   }
+//   a {
+//     max-width: 20rem;
+//   }
+// `;
 
 const searchByOption = [
   { value: '1', label: 'Administrators' }

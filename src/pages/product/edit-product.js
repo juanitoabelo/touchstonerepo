@@ -111,7 +111,7 @@ export default class EditProduct extends Component  {
     });
 
 
-      console.log('product id:'+prodId);
+     // console.log('product id:'+prodId);
      /** Get All Company Details **/
      axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
       params: {

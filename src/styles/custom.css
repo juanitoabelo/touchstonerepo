@@ -164,6 +164,11 @@ div.main-content {
     height: 84vh;
 }
 
+
+.main-content > div.lead-view-edit-wrapper,
+.main-content .content-wrapper.lead-view-edit-wrapper > div {
+    height: inherit !important;
+}
 .StartDate, .EndDate, .react-datepicker-wrapper {
     width: 100%;
 }
@@ -185,4 +190,11 @@ div.main-content {
     background-color: rgb(0, 214, 143) !important;
     text-align: center !important;
     color: white !important;
+}
+.selectoption {
+    width: 100%;
+}
+
+.expanded {
+    max-height: inherit !important;
 }

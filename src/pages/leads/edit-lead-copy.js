@@ -21,7 +21,7 @@ import {
   objLeadInfoText, stringFirstCharCapitalized, leadAdmins
 } from '../../components/utils/common';
 
-//  import { LeadInformationForm } from '../../components/LeadForms/lead-information-form';
+ import { LeadInformationForm } from '../../components/LeadForms/lead-information-form';
 // import { PatientChildprofileForm } from '../../components/LeadForms/patien-child-profile-form';
 
 
@@ -37,13 +37,9 @@ const SelectStyled = styled(Select)`
 
 // const LeadInformationAwareOfTreatmentCostsStatus = '';
 
- let LeadInformationAwareOfTreatmentCostsStatus = 'Select Option';
- let PatientIsAdoptedStatus = '';
- let PatientIsRunawayStatus = '';
- let InsuranceProviderStatus = '';
- let InsuranceTypeStatus = '';
- let IsViolentStatus = '';
- let IsCourtOrderedStatus = '';
+// let LeadInformationAwareOfTreatmentCostsStatus = 'Select Option';
+// let PatientIsAdoptedStatus = '';
+// let PatientIsRunawayStatus = '';
 
 // const AwareOfTreatmentCost = [
 //   { value: '0', label: 'No' },
@@ -124,44 +120,44 @@ export default class EditLead extends Component {
     Diagnosis: '',
 
     // Lead Information form state variables
-    LeadInformationCompanyName: '',
-    LeadInformationWorkPhone: '',
-    LeadInformationCellPhone: '',
-    LeadInformationShippingAddress1: '',
-    LeadInformationShippingCity: '',
-    LeadInformationShippingState: '',
-    LeadInformationShippingZip: '',
-    LeadInformationShippingCountry: '',
-    LeadInformationMonthlyBudget: '',
-    LeadInformationServicesPrefered: '',
-    LeadInformationBestContact: '',
-    LeadInformationAwareOfTreatmentCosts: '',
-    LeadInformationResourcePlan: '',
+    // LeadInformationCompanyName: '',
+    // LeadInformationWorkPhone: '',
+    // LeadInformationCellPhone: '',
+    // LeadInformationShippingAddress1: '',
+    // LeadInformationShippingCity: '',
+    // LeadInformationShippingState: '',
+    // LeadInformationShippingZip: '',
+    // LeadInformationShippingCountry: '',
+    // LeadInformationMonthlyBudget: '',
+    // LeadInformationServicesPrefered: '',
+    // LeadInformationBestContact: '',
+    // LeadInformationAwareOfTreatmentCosts: '',
+    // LeadInformationResourcePlan: '',
 
     // Patient Child Profile form state variables
-    PatientName: '',
-    PatientDOB: new Date(),
-    PatientAge: '',
-    PatientGender: '',
-    PatientIsAdopted: '',
-    PatientExpectToEnrollDate: new Date(),
-    PatientBehaviors: '',
-    PatientEthinicity: '',
-    PatientHeight: '',
-    PatientWeight: '',
-    PatientEyeColor: '',
-    PatientHairColor: '',
-    PatientShoeSize: '',
-    PatientShirtSize: '',
-    PatientWaistSize: '',
-    PatientReligion: '',
-    PatientRiskTimeline: '',
-    PatientIsRunaway: '',
-    PatientRunawayOutcome: '',
-    PatientHealthIssues: '',
-    PatientAllergyHistory: '',
-    PatientIQ: '',
-    PatientPhysicalLimits: '',
+    // PatientName: '',
+    // PatientDOB: new Date(),
+    // PatientAge: '',
+    // PatientGender: '',
+    // PatientIsAdopted: '',
+    // PatientExpectToEnrollDate: new Date(),
+    // PatientBehaviors: '',
+    // PatientEthinicity: '',
+    // PatientHeight: '',
+    // PatientWeight: '',
+    // PatientEyeColor: '',
+    // PatientHairColor: '',
+    // PatientShoeSize: '',
+    // PatientShirtSize: '',
+    // PatientWaistSize: '',
+    // PatientReligion: '',
+    // PatientRiskTimeline: '',
+    // PatientIsRunaway: '',
+    // PatientRunawayOutcome: '',
+    // PatientHealthIssues: '',
+    // PatientAllergyHistory: '',
+    // PatientIQ: '',
+    // PatientPhysicalLimits: '',
 
   // Insurance form state variables
     InsuranceProvider: '',
@@ -296,44 +292,44 @@ export default class EditLead extends Component {
       Diagnosis: '',
 
       /* Lead Information form state variables */
-      LeadInformationCompanyName: '',
-      LeadInformationWorkPhone: '',
-      LeadInformationCellPhone: '',
-      LeadInformationShippingAddress1: '',
-      LeadInformationShippingCity: '',
-      LeadInformationShippingState: '',
-      LeadInformationShippingZip: '',
-      LeadInformationShippingCountry: '',
-      LeadInformationMonthlyBudget: '',
-      LeadInformationServicesPrefered: '',
-      LeadInformationBestContact: '',
-      LeadInformationAwareOfTreatmentCosts: '',
-      LeadInformationResourcePlan: '',
+      // LeadInformationCompanyName: '',
+      // LeadInformationWorkPhone: '',
+      // LeadInformationCellPhone: '',
+      // LeadInformationShippingAddress1: '',
+      // LeadInformationShippingCity: '',
+      // LeadInformationShippingState: '',
+      // LeadInformationShippingZip: '',
+      // LeadInformationShippingCountry: '',
+      // LeadInformationMonthlyBudget: '',
+      // LeadInformationServicesPrefered: '',
+      // LeadInformationBestContact: '',
+      // LeadInformationAwareOfTreatmentCosts: '',
+      // LeadInformationResourcePlan: '',
 
       /* Patient Child Profile form state variables */
-      PatientName: '',
-      PatientDOB: new Date(),
-      PatientAge: '',
-      PatientGender: '',
-      PatientIsAdopted: '',
-      PatientExpectToEnrollDate: new Date(),
-      PatientBehaviors: '',
-      PatientEthinicity: '',
-      PatientHeight: '',
-      PatientWeight: '',
-      PatientEyeColor: '',
-      PatientHairColor: '',
-      PatientShoeSize: '',
-      PatientShirtSize: '',
-      PatientWaistSize: '',
-      PatientReligion: '',
-      PatientRiskTimeline: '',
-      PatientIsRunaway: '',
-      PatientRunawayOutcome: '',
-      PatientHealthIssues: '',
-      PatientAllergyHistory: '',
-      PatientIQ: '',
-      PatientPhysicalLimits: '',
+      // PatientName: '',
+      // PatientDOB: new Date(),
+      // PatientAge: '',
+      // PatientGender: '',
+      // PatientIsAdopted: '',
+      // PatientExpectToEnrollDate: new Date(),
+      // PatientBehaviors: '',
+      // PatientEthinicity: '',
+      // PatientHeight: '',
+      // PatientWeight: '',
+      // PatientEyeColor: '',
+      // PatientHairColor: '',
+      // PatientShoeSize: '',
+      // PatientShirtSize: '',
+      // PatientWaistSize: '',
+      // PatientReligion: '',
+      // PatientRiskTimeline: '',
+      // PatientIsRunaway: '',
+      // PatientRunawayOutcome: '',
+      // PatientHealthIssues: '',
+      // PatientAllergyHistory: '',
+      // PatientIQ: '',
+      // PatientPhysicalLimits: '',
 
     // Insurance form state variables
       InsuranceProvider: '',
@@ -465,6 +461,11 @@ export default class EditLead extends Component {
       // console.log('product id 2:'+prodId);
       console.log('Single Lead Data: '+ JSON.stringify(response.data));
       saveState({
+        
+        // PatientName: response.data.PatientName,
+        // PatientGender: response.data.PatientGender,
+        // PatientAge: response.data.PatientAge,
+        // IsAdopted: response.data.IsAdopted,
 
         AlcoholOrMarijuana: response.data.AlcoholOrMarijuana,
         IsSexuallyActive: response.data.IsSexuallyActive,
@@ -498,397 +499,201 @@ export default class EditLead extends Component {
 
 
     /* Get Lead Information Form data for default Field display */
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'getLeadInfoData',
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
-      saveState({
-        LeadInformationCompanyName: response.data.CompanyName,
-        LeadInformationWorkPhone: response.data.WorkPhone,
-        LeadInformationCellPhone: response.data.CellPhone,
-        LeadInformationShippingAddress1: response.data.ShippingAddress1,
-        LeadInformationShippingCity: response.data.ShippingCity,
-        LeadInformationShippingState: response.data.ShippingState,
-        LeadInformationShippingZip: response.data.ShippingZip,
-        LeadInformationShippingCountry: response.data.ShippingCountry,
-        LeadInformationMonthlyBudget: response.data.MonthlyBudget,
-        LeadInformationServicesPrefered: response.data.ServicesPrefered,
-        LeadInformationBestContact: response.data.BestContact,
-        LeadInformationAwareOfTreatmentCosts: response.data.AwareOfTreatmentCosts,
-        LeadInformationResourcePlan: response.data.ResourcePlan
-      });
+    // axios({
+    //   method: 'get',
+    //   url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+    //   params: {
+    //     tblName: 'tblLeads',
+    //     queryType: 'getLeadInfoData',
+    //     LeadID: LeadID
+    //   }
+    // })
+    // .then(function (response) {
+    //   // console.log(response,`successfully Updating Lead information`);
+    //   console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
+    //   saveState({
+    //     LeadInformationCompanyName: response.data.CompanyName,
+    //     LeadInformationWorkPhone: response.data.WorkPhone,
+    //     LeadInformationCellPhone: response.data.CellPhone,
+    //     LeadInformationShippingAddress1: response.data.ShippingAddress1,
+    //     LeadInformationShippingCity: response.data.ShippingCity,
+    //     LeadInformationShippingState: response.data.ShippingState,
+    //     LeadInformationShippingZip: response.data.ShippingZip,
+    //     LeadInformationShippingCountry: response.data.ShippingCountry,
+    //     LeadInformationMonthlyBudget: response.data.MonthlyBudget,
+    //     LeadInformationServicesPrefered: response.data.ServicesPrefered,
+    //     LeadInformationBestContact: response.data.BestContact,
+    //     LeadInformationAwareOfTreatmentCosts: response.data.AwareOfTreatmentCosts,
+    //     LeadInformationResourcePlan: response.data.ResourcePlan
+    //   });
         
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
+    // })
+    // .catch(function (error) {
+    //   console.log(error,`error`);
+    // });
 
 
     /* Get Patien Child Profile Form data for default Field display */
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'getLeadParentChildProfile',
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
-      saveState({
-          PatientName: response.data.PatientName,
-          PatientDOB: response.data.PatientDOB,
-          PatientAge: response.data.PatientAge,
-          PatientGender: response.data.PatientGender,
-          PatientIsAdopted: response.data.IsAdopted,
-          PatientExpectToEnrollDate: response.data.ExpectToEnrollDate,
-          PatientBehaviors: response.data.Behaviors,
-          PatientEthinicity: response.data.Ethinicity,
-          PatientHeight: response.data.Height,
-          PatientWeight: response.data.Weight,
-          PatientEyeColor: response.data.EyeColor,
-          PatientHairColor: response.data.HairColor,
-          PatientShoeSize: response.data.ShoeSize,
-          PatientShirtSize: response.data.ShirtSize,
-          PatientWaistSize: response.data.WaistSize,
-          PatientReligion: response.data.Religion,
-          PatientRiskTimeline: response.data.RiskTimeline,
-          PatientIsRunaway: response.data.IsRunaway,
-          PatientRunawayOutcome: response.data.RunawayOutcome,
-          PatientHealthIssues: response.data.HealthIssues,
-          PatientAllergyHistory: response.data.AllergyHistory,
-          PatientIQ: response.data.Iq,
-          PatientPhysicalLimits: response.data.PhysicalLimits
-      });
+    // axios({
+    //   method: 'get',
+    //   url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+    //   params: {
+    //     tblName: 'tblLeads',
+    //     queryType: 'getLeadParentChildProfile',
+    //     LeadID: LeadID
+    //   }
+    // })
+    // .then(function (response) {
+    //   // console.log(response,`successfully Updating Lead information`);
+    //   console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
+    //   saveState({
+    //       PatientName: response.data.PatientName,
+    //       PatientDOB: response.data.PatientDOB,
+    //       PatientAge: response.data.PatientAge,
+    //       PatientGender: response.data.PatientGender,
+    //       PatientIsAdopted: response.data.IsAdopted,
+    //       PatientExpectToEnrollDate: response.data.ExpectToEnrollDate,
+    //       PatientBehaviors: response.data.Behaviors,
+    //       PatientEthinicity: response.data.Ethinicity,
+    //       PatientHeight: response.data.Height,
+    //       PatientWeight: response.data.Weight,
+    //       PatientEyeColor: response.data.EyeColor,
+    //       PatientHairColor: response.data.HairColor,
+    //       PatientShoeSize: response.data.ShoeSize,
+    //       PatientShirtSize: response.data.ShirtSize,
+    //       PatientWaistSize: response.data.WaistSize,
+    //       PatientReligion: response.data.Religion,
+    //       PatientRiskTimeline: response.data.RiskTimeline,
+    //       PatientIsRunaway: response.data.IsRunaway,
+    //       PatientRunawayOutcome: response.data.RunawayOutcome,
+    //       PatientHealthIssues: response.data.HealthIssues,
+    //       PatientAllergyHistory: response.data.AllergyHistory,
+    //       PatientIQ: response.data.Iq,
+    //       PatientPhysicalLimits: response.data.PhysicalLimits
+    //   });
         
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
+    // })
+    // .catch(function (error) {
+    //   console.log(error,`error`);
+    // });
     
-
-    /* Get Lead Insurance Form data for default Field display */
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'getLeadInsuranceFormData',
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
-      saveState({
-        InsuranceProvider: response.data.InsuranceProvider,
-        InsuranceType: response.data.InsuranceType,
-        InsurancePhone: response.data.InsurancePhone,
-        InsuranceMemberID: response.data.InsuranceMemberID,
-        InsuranceGroupID: response.data.InsuranceGroupID,
-        InsurancePolicyID: response.data.InsurancePolicyID
-      });
-        
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
-
-
-    /* Get Lead Self Harm History Form data for default Field display */
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'getLeadSelfHarmHistoryFormData',
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
-      saveState({
-        SelfHarmHistorySuicidal: response.data.Suicidal,
-        SelfHarmHistoryPastSuicidalDesc: response.data.PastSuicidalDesc,
-        SelfHarmHistorySelfHarmDesc: response.data.SelfHarmDesc,
-        SelfHarmHistorySuicideAttemptDesc: response.data.SuicideAttemptDesc,
-        SelfHarmHistorySuicideDocNotes: response.data.SuicideDocNotes,
-      });
-        
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
-
-
-    /* Get Lead Violence History Form data for default Field display */
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'getLeadViolenceHistoryFormData',
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Violence Data: '+ LeadID + JSON.stringify(response.data));
-      saveState({
-        ViolenceHistoryIsViolent: response.data.IsViolent,
-        HistoryViolence: response.data.HistoryViolence,
-        ViolenceHistoryArsonHistory: response.data.ArsonHistory,
-      });
-        
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
-
-    /* Get Lead Violence History Form data for default Field display */
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'getLeadLegalHistoryFormData',
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      console.log('Single Lead Legal History Data: '+ LeadID + JSON.stringify(response.data));
-      saveState({
-        LegalHistoryLegalDesc: response.data.LegalDesc,
-        LegalHistoryArrestedDesc: response.data.ArrestedDesc,
-        LegalHistoryProbationDesc: response.data.ProbationDesc,
-        LegalHistoryIsCourtOrdered: response.data.IsCourtOrdered,
-        LegalHistoryNextCourtDate: response.data.NextCourtDate,
-        LegalHistoryCourtOrderDesc: response.data.CourtOrderDesc,
-      });
-        
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
-
-  } /** End of Component Didmount **/
+  // }
 
   
   /** Update Lead Information **/
-  onUpdateLeadInformation = (e) => {
-    const { saveState } = this;
-    const LeadID = getURLParams('leadID');
-    saveState({ LeadID });
+  // onUpdateLeadInformation = (e) => {
+  //   const { saveState } = this;
+  //   const LeadID = getURLParams('leadID');
+  //   saveState({ LeadID });
 
-    /** Update Lead Information **/ 
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'updateLeadInfo',
-          LeadInformationCompanyName: this.state.LeadInformationCompanyName,
-          LeadInformationWorkPhone: this.state.LeadInformationWorkPhone,
-          LeadInformationCellPhone: this.state.LeadInformationCellPhone,
-          LeadInformationShippingAddress1: this.state.LeadInformationShippingAddress1,
-          LeadInformationShippingCity: this.state.LeadInformationShippingCity,
-          LeadInformationShippingState: this.state.LeadInformationShippingState,
-          LeadInformationShippingZip: this.state.LeadInformationShippingZip,
-          LeadInformationShippingCountry: this.state.LeadInformationShippingCountry,
-          LeadInformationMonthlyBudget: this.state.LeadInformationMonthlyBudget,
-          LeadInformationServicesPrefered: this.state.LeadInformationServicesPrefered,
-          LeadInformationBestContact: this.state.LeadInformationBestContact,
-          LeadInformationAwareOfTreatmentCosts: this.state.LeadInformationAwareOfTreatmentCosts,
-          LeadInformationResourcePlan: this.state.LeadInformationResourcePlan,
-          LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      console.log(response,`successfully Updating Lead information`);
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
+  //   /** Update Lead Information **/ 
+  //   axios({
+  //     method: 'get',
+  //     url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+  //     params: {
+  //       tblName: 'tblLeads',
+  //       queryType: 'updateLeadInfo',
+  //         LeadInformationCompanyName: this.state.LeadInformationCompanyName,
+  //         LeadInformationWorkPhone: this.state.LeadInformationWorkPhone,
+  //         LeadInformationCellPhone: this.state.LeadInformationCellPhone,
+  //         LeadInformationShippingAddress1: this.state.LeadInformationShippingAddress1,
+  //         LeadInformationShippingCity: this.state.LeadInformationShippingCity,
+  //         LeadInformationShippingState: this.state.LeadInformationShippingState,
+  //         LeadInformationShippingZip: this.state.LeadInformationShippingZip,
+  //         LeadInformationShippingCountry: this.state.LeadInformationShippingCountry,
+  //         LeadInformationMonthlyBudget: this.state.LeadInformationMonthlyBudget,
+  //         LeadInformationServicesPrefered: this.state.LeadInformationServicesPrefered,
+  //         LeadInformationBestContact: this.state.LeadInformationBestContact,
+  //         LeadInformationAwareOfTreatmentCosts: this.state.LeadInformationAwareOfTreatmentCosts,
+  //         LeadInformationResourcePlan: this.state.LeadInformationResourcePlan,
+  //         LeadID: LeadID
+  //     }
+  //   })
+  //   .then(function (response) {
+  //     console.log(response,`successfully Updating Lead information`);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error,`error`);
+  //   });
     
-  }
+  // }
 
   /** Update Patient Child Profile Info **/
-  onUpdateChildProfile = (e) => {
-    const { saveState } = this;
-    const LeadID = getURLParams('leadID');
-    saveState({ LeadID });
+  // onUpdateChildProfile = (e) => {
+  //   const { saveState } = this;
+  //   const LeadID = getURLParams('leadID');
+  //   saveState({ LeadID });
 
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'updateLeadParentChildProfile',
-          PatientName: this.state.PatientName,
-          PatientDOB: this.state.PatientDOB,
-          PatientAge: this.state.PatientAge,
-          PatientGender: this.state.PatientGender,
-          PatientIsAdopted: this.state.PatientIsAdopted,
-          PatientExpectToEnrollDate: this.state.PatientExpectToEnrollDate,
-          PatientBehaviors: this.state.PatientBehaviors,
-          PatientEthinicity: this.state.PatientEthinicity,
-          PatientHeight: this.state.PatientHeight,
-          PatientWeight: this.state.PatientWeight,
-          PatientEyeColor: this.state.PatientEyeColor,
-          PatientHairColor: this.state.PatientHairColor,
-          PatientShoeSize: this.state.PatientShoeSize,
-          PatientShirtSize: this.state.PatientShirtSize,
-          PatientWaistSize: this.state.PatientWaistSize,
-          PatientReligion: this.state.PatientReligion,
-          PatientRiskTimeline: this.state.PatientRiskTimeline,
-          PatientIsRunaway: this.state.PatientIsRunaway,
-          PatientRunawayOutcome: this.state.PatientRunawayOutcome,
-          PatientHealthIssues: this.state.PatientHealthIssues,
-          PatientAllergyHistory: this.state.PatientAllergyHistory,
-          PatientIQ: this.state.PatientIQ,
-          PatientPhysicalLimits: this.state.PatientPhysicalLimits,
-          LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      console.log(response,`successfully Updating Parent/Child Profile`);
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
+  //   axios({
+  //     method: 'get',
+  //     url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+  //     params: {
+  //       tblName: 'tblLeads',
+  //       queryType: 'updateLeadParentChildProfile',
+  //         PatientName: this.state.PatientName,
+  //         PatientDOB: this.state.PatientDOB,
+  //         PatientAge: this.state.PatientAge,
+  //         PatientGender: this.state.PatientGender,
+  //         PatientIsAdopted: this.state.PatientIsAdopted,
+  //         PatientExpectToEnrollDate: this.state.PatientExpectToEnrollDate,
+  //         PatientBehaviors: this.state.PatientBehaviors,
+  //         PatientEthinicity: this.state.PatientEthinicity,
+  //         PatientHeight: this.state.PatientHeight,
+  //         PatientWeight: this.state.PatientWeight,
+  //         PatientEyeColor: this.state.PatientEyeColor,
+  //         PatientHairColor: this.state.PatientHairColor,
+  //         PatientShoeSize: this.state.PatientShoeSize,
+  //         PatientShirtSize: this.state.PatientShirtSize,
+  //         PatientWaistSize: this.state.PatientWaistSize,
+  //         PatientReligion: this.state.PatientReligion,
+  //         PatientRiskTimeline: this.state.PatientRiskTimeline,
+  //         PatientIsRunaway: this.state.PatientIsRunaway,
+  //         PatientRunawayOutcome: this.state.PatientRunawayOutcome,
+  //         PatientHealthIssues: this.state.PatientHealthIssues,
+  //         PatientAllergyHistory: this.state.PatientAllergyHistory,
+  //         PatientIQ: this.state.PatientIQ,
+  //         PatientPhysicalLimits: this.state.PatientPhysicalLimits,
+  //         LeadID: LeadID
+  //     }
+  //   })
+  //   .then(function (response) {
+  //     console.log(response,`successfully Updating Parent/Child Profile`);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error,`error`);
+  //   });
+
+    
+
 
   }
 
   /** Update Lead Insurance **/
   onUpdateLeadInsurance = (e) => {
-    const { saveState } = this;
-    const LeadID = getURLParams('leadID');
-    saveState({ LeadID });
 
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'updateLeadInsurance',
-        InsuranceProvider: this.state.InsuranceProvider,
-        InsuranceType: this.state.InsuranceType,
-        InsurancePhone: this.state.InsurancePhone,
-        InsuranceMemberID: this.state.InsuranceMemberID,
-        InsuranceGroupID: this.state.InsuranceGroupID,
-        InsurancePolicyID: this.state.InsurancePolicyID,
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      console.log(response,`successfully Updating Lead Insurance`);
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
   }
 
   /** Update Self Harm History **/
   onUpdateSelfHarmHistory = (e) => {
-    const { saveState } = this;
-    const LeadID = getURLParams('leadID');
-    saveState({ LeadID });
 
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'updateLeadSelfHarmHistory',
-        SelfHarmHistorySuicidal: this.state.SelfHarmHistorySuicidal,
-        SelfHarmHistoryPastSuicidalDesc: this.state.SelfHarmHistoryPastSuicidalDesc,
-        SelfHarmHistorySelfHarmDesc: this.state.SelfHarmHistorySelfHarmDesc,
-        SelfHarmHistorySuicideAttemptDesc: this.state.SelfHarmHistorySuicideAttemptDesc,
-        SelfHarmHistorySuicideDocNotes: this.state.SelfHarmHistorySuicideDocNotes,
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      console.log(response,`successfully Updating Lead Self Harm History`);
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
-  }
-
-  /** Update Violence History **/
-  onUpdateViolenceHistory = (e) => {
-    const { saveState } = this;
-    const LeadID = getURLParams('leadID');
-    saveState({ LeadID });
-
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'updateLeadViolenceHistory',
-        ViolenceHistoryIsViolent: this.state.ViolenceHistoryIsViolent,
-        HistoryViolence: this.state.HistoryViolence,
-        ViolenceHistoryArsonHistory: this.state.ViolenceHistoryArsonHistory,
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      console.log(response,`successfully Updating Lead Violence History`);
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
   }
 
   /** Update Legal History **/
   onUpdateLegalHistory = (e) => {
-    const { saveState } = this;
-    const LeadID = getURLParams('leadID');
-    saveState({ LeadID });
 
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblLeads',
-        queryType: 'updateLeadLegalHistory',
-        LegalHistoryLegalDesc: this.state.LegalHistoryLegalDesc,
-        LegalHistoryArrestedDesc: this.state.LegalHistoryArrestedDesc,
-        LegalHistoryProbationDesc: this.state.LegalHistoryProbationDesc,
-        LegalHistoryIsCourtOrdered: this.state.LegalHistoryIsCourtOrdered,
-        LegalHistoryNextCourtDate: this.state.LegalHistoryNextCourtDate,
-        LegalHistoryCourtOrderDesc: this.state.LegalHistoryCourtOrderDesc,
-        LeadID: LeadID
-      }
-    })
-    .then(function (response) {
-      console.log(response,`successfully Updating Lead Violence History`);
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
+  }
+  /** Update Violence History **/
+  onUpdateViolenceHistory = (e) => {
+
   }
 
-  /** Update School History **/
+  /** Update Violence History **/
   onUpdateSchoolHistory = (e) => {
 
   }
 
-  /** Update Therapy History **/
-  onUpdateTherapyHistory = (e) => {
+  /** Update Violence History **/
+  onUpdateTheraphyHistory = (e) => {
 
   }
 
@@ -1132,129 +937,6 @@ export default class EditLead extends Component {
     }
   }
 
-  onChangeLeadInsuranceInput = (type, e) => {
-    // console.log('Field Type: '+type);
-    switch(type){
-      case 'EditInsuranceProvider':
-        // console.log('InsuranceProvider: '+e.value);
-          this.saveState({
-            InsuranceProvider: e.value
-          });
-        break;
-      case 'EditInsuranceType':
-        // console.log('InsuranceType: '+e.value);
-        this.saveState({
-          InsuranceType: e.value
-        });
-      break;
-      case 'EditInsurancePhone':
-        console.log('EditInsurancePhone; '+e.target.value);
-          this.saveState({
-            InsurancePhone: e.target.value
-          });
-        break;
-        case 'EditInsuranceMemberID':
-          this.saveState({
-            InsuranceMemberID: e.target.value
-          });
-        break;
-        case 'EditInsuranceGroupID':
-          this.saveState({
-            InsuranceGroupID: e.target.value
-          });
-        break;
-        case 'EditInsurancePolicyID':
-          this.saveState({
-            InsurancePolicyID: e.target.value
-          });
-        break;
-      }
-  }
-
-  onChangeSelfharmHistoryInput = (type, e) => {
-    switch(type){
-      case 'EditSuicidal':
-          this.saveState({
-            SelfHarmHistorySuicidal: e.target.value
-          });
-        break;
-      case 'EditPastSuicidalDesc':
-        this.saveState({
-          SelfHarmHistoryPastSuicidalDesc: e.target.value
-        });
-      break;
-      case 'EditSelfHarmDesc':
-        this.saveState({
-          SelfHarmHistorySelfHarmDesc: e.target.value
-        });
-      break;    
-      case 'EditSuicideAttemptDesc':
-        this.saveState({
-          SelfHarmHistorySuicideAttemptDesc: e.target.value
-        });
-      break;    
-      case 'EditSuicideDocNotes':
-        this.saveState({
-          SelfHarmHistorySuicideDocNotes: e.target.value
-        });
-      break;
-    }
-  }
-
-  onChangeViolenceHistoryOption = (type, e) => {
-    switch(type){
-      case 'EditIsViolent':
-          this.saveState({
-            ViolenceHistoryIsViolent: e.value
-          });
-        break;
-      case 'EditHistoryViolence':
-        this.saveState({
-          HistoryViolence: e.target.value
-        });
-      break;
-      case 'EditArsonHistory':
-        this.saveState({
-          ViolenceHistoryArsonHistory: e.target.value
-        });
-      break;
-    }
-  }
-
-  onChangeLegalHistoryOption = (type, e) => {
-    switch(type){
-      case 'EditLegalDesc':
-          this.saveState({
-            LegalHistoryLegalDesc: e.target.value
-          });
-        break;
-      case 'EditArrestedDesc':
-        this.saveState({
-          LegalHistoryArrestedDesc: e.target.value
-        });
-      break;
-      case 'EditProbationDesc':
-        this.saveState({
-          LegalHistoryProbationDesc: e.target.value
-        });
-      break;
-      case 'EditIsCourtOrdered':
-        this.saveState({
-          LegalHistoryIsCourtOrdered: e.value
-        });
-      break;
-      case 'EditNextCourtDate':
-        this.saveState({
-          LegalHistoryNextCourtDate: e
-        });
-      break;
-      case 'EditCourtOrderDesc':
-        this.saveState({
-          LegalHistoryCourtOrderDesc: e.target.value
-        });
-      break;
-    }
-  }
 
   onChangeInput = (type, e) => {
 
@@ -1287,8 +969,8 @@ export default class EditLead extends Component {
 
   render() {
 
-    const { onBack, onChangeInput,onLeadInformationChangeInput, onChangeParentChildProfileInput, onChangeLeadInsuranceInput, onChangeSelfharmHistoryInput, onChangeViolenceHistoryOption, onChangeLegalHistoryOption, onPrintView, onChangeDate, onChangeOption, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
-            onUpdateViolenceHistory, onUpdateLegalHistory, onUpdateSchoolHistory, onUpdateTherapyHistory, onUpdateSexualHistory, onUpdateDrugHistory, onUpdateEmergencyContact, 
+    const { onBack, onChangeInput,onLeadInformationChangeInput, onChangeParentChildProfileInput, onPrintView, onChangeDate, onChangeOption, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
+            onUpdateViolenceHistory, onUpdateLegalHistory, onUpdateSchoolHistory, onUpdateTheraphyHistory, onUpdateSexualHistory, onUpdateDrugHistory, onUpdateEmergencyContact, 
             onUpdateVerificationBenefits, onUpdateReferralInfo, onUpdateParentGuardianSponsorInfo, state: { LeadName, LeadID, LeadInfo } } = this;
             
     return (<>
@@ -1502,6 +1184,8 @@ export default class EditLead extends Component {
                 <Col className="mb-3" breakPoint={{ xs: 12 }}>
 
                   <Accordion>
+                  <LeadInformationForm /> 
+                  
                     {/* Lead information */}
                     {/* <AccordionItem uniqueKey={1} title="LEAD INFORMATION">
                         <Row className="mb-2">
@@ -1603,13 +1287,14 @@ export default class EditLead extends Component {
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLeadInformation} fullWidth> UPDATE/SAVE {this.state.FirstName} LEAD INFORMATION</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLeadInformation} fullWidth> UPDATE/SAVE Miller LEAD INFORMATION</Button>
                         </Col>
                       </Row>
                     </AccordionItem> */}
                     {/* End Lead information */}
 
 
+                    {/* <PatientChildprofileForm /> */}
                     {/* PATIENT/CHILD PROFILE */}
                     {/* <AccordionItem uniqueKey={2} title="PATIENT/CHILD PROFILE">
                       <Row className="mb-2">
@@ -1819,7 +1504,7 @@ export default class EditLead extends Component {
 
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateChildProfile} fullWidth> <i className="fa fa-floppy-o" aria-hidden="true"></i>UPDATE/SAVE {this.state.FirstName} PATIENT/CHILD PROFILE</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateChildProfile} fullWidth> <i className="fa fa-floppy-o" aria-hidden="true"></i>UPDATE/SAVE Miller PATIENT/CHILD PROFILE</Button>
                         </Col>
                       </Row>
                     </AccordionItem> */}
@@ -1831,18 +1516,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditInsuranceProvider">Insurance Provider</label>
                             <Input fullWidth size="Medium" className="EditInsuranceProvider">
-                              <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
-                                  switch(this.state.InsuranceProvider){
-                                    case '0':
-                                      InsuranceProviderStatus = 'No'
-                                        break;
-                                    case '1':
-                                      InsuranceProviderStatus = 'Yes'
-                                        break;    
-                                  }
-
-                                  return { value: value, label: label };
-                                })}  placeholder={InsuranceProviderStatus} value={this.state.InsuranceProvider} id="EditInsuranceProvider" name="EditInsuranceProvider" onChange ={onChangeLeadInsuranceInput.bind(this, 'EditInsuranceProvider')} />
+                              <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditInsuranceProvider" name="EditInsuranceProvider" onChange ={onChangeOption.bind(this, 'EditInsuranceProvider')} />
                             </Input>
                           </Col>
                         </Row>
@@ -1850,18 +1524,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditInsuranceType">Insurance Type</label>
                             <Input fullWidth size="Medium" className="EditInsuranceType">
-                              <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
-                                  switch(this.state.InsuranceType){
-                                    case '0':
-                                      InsuranceTypeStatus = 'No'
-                                        break;
-                                    case '1':
-                                      InsuranceTypeStatus = 'Yes'
-                                        break;    
-                                  }
-
-                                  return { value: value, label: label };
-                                })}  placeholder={InsuranceTypeStatus} value={this.state.InsuranceType} id="EditInsuranceType" name="EditInsuranceType" onChange ={onChangeLeadInsuranceInput.bind(this, 'EditInsuranceType')} />
+                              <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditInsuranceType" name="EditInsuranceType" onChange ={onChangeOption.bind(this, 'EditInsuranceType')} />
                             </Input>
                           </Col>
                         </Row>
@@ -1869,7 +1532,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditInsurancePhone">Insurance Phone</label>
                             <Input fullWidth size="Medium" className="EditInsurancePhone">
-                              <input type="text" placeholder={this.state.InsurancePhone} id="EditInsurancePhone" name="EditInsurancePhone" onChange ={onChangeLeadInsuranceInput.bind(this, 'EditInsurancePhone')}/>
+                              <input type="text" placeholder="" id="EditInsurancePhone" name="EditInsurancePhone" onChange ={onChangeInput.bind(this, 'EditInsurancePhone')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -1877,7 +1540,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditInsuranceMemberID">Insurance Member ID</label>
                             <Input fullWidth size="Medium" className="EditInsuranceMemberID">
-                              <input type="text" placeholder={this.state.InsuranceMemberID} id="EditInsuranceMemberID" name="EditInsuranceMemberID" onChange ={onChangeLeadInsuranceInput.bind(this, 'EditInsuranceMemberID')}/>
+                              <input type="text" placeholder="" id="EditInsuranceMemberID" name="EditInsuranceMemberID" onChange ={onChangeInput.bind(this, 'EditInsuranceMemberID')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -1885,7 +1548,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditInsuranceGroupID">Insurance Group ID</label>
                             <Input fullWidth size="Medium" className="EditInsuranceGroupID">
-                              <input type="text" placeholder={this.state.InsuranceGroupID} id="EditInsuranceGroupID" name="EditInsuranceGroupID" onChange ={onChangeLeadInsuranceInput.bind(this, 'EditInsuranceGroupID')}/>
+                              <input type="text" placeholder="" id="EditInsuranceGroupID" name="EditInsuranceGroupID" onChange ={onChangeInput.bind(this, 'EditInsuranceGroupID')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -1893,13 +1556,13 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditInsurancePolicyID">Insurance Policy ID</label>
                             <Input fullWidth size="Medium" className="EditInsurancePolicyID">
-                              <input type="text" placeholder={this.state.InsurancePolicyID} id="EditInsurancePolicyID" name="EditInsurancePolicyID" onChange ={onChangeLeadInsuranceInput.bind(this, 'EditInsurancePolicyID')}/>
+                              <input type="text" placeholder="" id="EditInsurancePolicyID" name="EditInsurancePolicyID" onChange ={onChangeInput.bind(this, 'EditInsurancePolicyID')}/>
                             </Input>
                           </Col>
                         </Row>
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
-                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLeadInsurance} fullWidth>  UPDATE/SAVE {this.state.FirstName} INSURANCE PROFILE</Button>
+                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLeadInsurance} fullWidth>  UPDATE/SAVE Miller INSURANCE PROFILE</Button>
                           </Col>
                         </Row>
                     </AccordionItem>
@@ -1911,7 +1574,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditSuicidal">Currently Suicidal?</label>
                           <Input fullWidth size="Medium" className="EditSuicidal">
-                            <input type="text" placeholder={this.state.SelfHarmHistorySuicidal} id="EditSuicidal" name="EditSuicidal" onChange ={onChangeSelfharmHistoryInput.bind(this, 'EditSuicidal')}/>
+                            <input type="text" placeholder="" id="EditSuicidal" name="EditSuicidal" onChange ={onChangeInput.bind(this, 'EditSuicidal')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -1919,7 +1582,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditPastSuicidalDesc">Past Verbal Expressions of Suicide?</label>
                           <Input fullWidth size="Medium" className="EditPastSuicidalDesc">
-                            <textarea type="text" placeholder={this.state.SelfHarmHistoryPastSuicidalDesc} id="EditPastSuicidalDesc" name="EditPastSuicidalDesc" onChange ={onChangeSelfharmHistoryInput.bind(this, 'EditPastSuicidalDesc')}/>
+                            <textarea type="text" placeholder="" id="EditPastSuicidalDesc" name="EditPastSuicidalDesc" onChange ={onChangeInput.bind(this, 'EditPastSuicidalDesc')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -1927,7 +1590,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditSelfHarmDesc">Physical Harm to Self, Such as Cutting, Eating disorder, etc.,?</label>
                           <Input fullWidth size="Medium" className="EditSelfHarmDesc">
-                            <textarea type="text" placeholder={this.state.SelfHarmHistorySelfHarmDesc} id="EditSelfHarmDesc" name="EditSelfHarmDesc" onChange ={onChangeSelfharmHistoryInput.bind(this, 'EditSelfHarmDesc')}/>
+                            <textarea type="text" placeholder="" id="EditSelfHarmDesc" name="EditSelfHarmDesc" onChange ={onChangeInput.bind(this, 'EditSelfHarmDesc')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -1935,7 +1598,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditSuicideAttemptDesc">Suicide Attempt(s)?</label>
                           <Input fullWidth size="Medium" className="EditSuicideAttemptDesc">
-                            <textarea type="text" placeholder={this.state.SelfHarmHistorySuicideAttemptDesc} id="EditSuicideAttemptDesc" name="EditSuicideAttemptDesc" onChange ={onChangeSelfharmHistoryInput.bind(this, 'EditSuicideAttemptDesc')}/>
+                            <textarea type="text" placeholder="" id="EditSuicideAttemptDesc" name="EditSuicideAttemptDesc" onChange ={onChangeInput.bind(this, 'EditSuicideAttemptDesc')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -1943,36 +1606,24 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditSuicideDocNotes">If Admitted to Hospital What did the Doctor(s) Report?</label>
                           <Input fullWidth size="Medium" className="EditSuicideDocNotes">
-                            <textarea type="text" placeholder={this.state.SelfHarmHistorySuicideDocNotes} id="EditSuicideDocNotes" name="EditSuicideDocNotes" onChange ={onChangeSelfharmHistoryInput.bind(this, 'EditSuicideDocNotes')}/>
+                            <textarea type="text" placeholder="" id="EditSuicideDocNotes" name="EditSuicideDocNotes" onChange ={onChangeInput.bind(this, 'EditSuicideDocNotes')}/>
                           </Input>
                         </Col>
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateSelfHarmHistory} fullWidth>   UPDATE/SAVE {this.state.FirstName} SELF HARM HISTORY</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateSelfHarmHistory} fullWidth>   UPDATE/SAVE Miller SELF HARM HISTORY</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
                     {/* END SELF HARM HISTORY */}
 
-                    {/* Start Violence HISTORY */}
                     <AccordionItem uniqueKey={5} title="VIOLENCE HISTORY">
                     <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                          <label htmlFor="EditIsViolent">Violent?</label>
-                          <Input fullWidth size="Medium" className="EditIsViolent">
-                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
-                                  switch(this.state.ViolenceHistoryIsViolent){
-                                    case '0':
-                                      IsViolentStatus = 'No'
-                                        break;
-                                    case '1':
-                                      IsViolentStatus = 'Yes'
-                                        break;    
-                                  }
-
-                                  return { value: value, label: label };
-                                })}  placeholder={IsViolentStatus} value={this.state.ViolenceHistoryIsViolent} id="EditIsViolent" name="EditIsViolent" onChange ={onChangeViolenceHistoryOption.bind(this, 'EditIsViolent')} />
+                          <label htmlFor="EditSuicidal">Violent?</label>
+                          <Input fullWidth size="Medium" className="EditInsuranceProvider">
+                            <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditInsuranceProvider" name="EditInsuranceProvider" onChange ={onChangeOption.bind(this, 'EditInsuranceProvider')} />
                           </Input>
                         </Col>
                       </Row>
@@ -1980,7 +1631,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditHistoryViolence">History of Violence</label>
                           <Input fullWidth size="Medium" className="EditHistoryViolence">
-                            <textarea type="text" placeholder={this.state.HistoryViolence} id="EditHistoryViolence" name="EditHistoryViolence" onChange ={onChangeViolenceHistoryOption.bind(this, 'EditHistoryViolence')}/>
+                            <textarea type="text" placeholder="" id="EditHistoryViolence" name="EditHistoryViolence" onChange ={onChangeInput.bind(this, 'EditHistoryViolence')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -1988,25 +1639,25 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditArsonHistory">Arson History</label>
                           <Input fullWidth size="Medium" className="EditArsonHistory">
-                            <textarea type="text" placeholder={this.state.ViolenceHistoryArsonHistory} id="EditArsonHistory" name="EditArsonHistory" onChange ={onChangeViolenceHistoryOption.bind(this, 'EditArsonHistory')}/>
+                            <textarea type="text" placeholder="" id="EditArsonHistory" name="EditArsonHistory" onChange ={onChangeInput.bind(this, 'EditArsonHistory')}/>
                           </Input>
                         </Col>
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateViolenceHistory} fullWidth>   UPDATE/SAVE {this.state.FirstName} VIOLENCE HISTORY</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateViolenceHistory} fullWidth>   UPDATE/SAVE Miller VIOLENCE HISTORY</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
-                    {/* End Violence HISTORY */}
 
-                    {/* Legal History  */}
+
+                    
                     <AccordionItem uniqueKey={6} title="LEGAL HISTORY">
                       <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditLegalDesc">Legal Issue History</label>
                             <Input fullWidth size="Medium" className="EditLegalDesc">
-                              <textarea type="text" placeholder={this.state.LegalHistoryLegalDesc} id="EditLegalDesc" name="EditLegalDesc" onChange ={onChangeLegalHistoryOption.bind(this, 'EditLegalDesc')}/>
+                              <textarea type="text" placeholder="" id="EditLegalDesc" name="EditLegalDesc" onChange ={onChangeInput.bind(this, 'EditLegalDesc')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2014,7 +1665,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditArrestedDesc">Arrest History</label>
                             <Input fullWidth size="Medium" className="EditArrestedDesc">
-                              <textarea type="text" placeholder={this.state.LegalHistoryArrestedDesc} id="EditArrestedDesc" name="EditArrestedDesc" onChange ={onChangeLegalHistoryOption.bind(this, 'EditArrestedDesc')}/>
+                              <textarea type="text" placeholder="" id="EditArrestedDesc" name="EditArrestedDesc" onChange ={onChangeInput.bind(this, 'EditArrestedDesc')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2022,7 +1673,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditProbationDesc">Probation History</label>
                             <Input fullWidth size="Medium" className="EditProbationDesc">
-                              <textarea type="text" placeholder={this.state.LegalHistoryProbationDesc} id="EditProbationDesc" name="EditProbationDesc" onChange ={onChangeLegalHistoryOption.bind(this, 'EditProbationDesc')} />
+                              <textarea type="text" placeholder="" id="EditProbationDesc" name="EditProbationDesc" onChange ={onChangeOption.bind(this, 'EditProbationDesc')} />
                             </Input>
                           </Col>
                         </Row>
@@ -2031,18 +1682,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditIsCourtOrdered">Court Order?</label>
                             <Input fullWidth size="Medium" className="EditIsCourtOrdered">
-                              <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
-                                  switch(this.state.LegalHistoryIsCourtOrdered){
-                                    case '0':
-                                      IsCourtOrderedStatus = 'No'
-                                        break;
-                                    case '1':
-                                      IsCourtOrderedStatus = 'Yes'
-                                        break;    
-                                  }
-
-                                  return { value: value, label: label };
-                                })}  placeholder={IsCourtOrderedStatus} value={this.state.LegalHistoryIsCourtOrdered} id="EditIsCourtOrdered" name="EditIsCourtOrdered" onChange ={onChangeLegalHistoryOption.bind(this, 'EditIsCourtOrdered')} />
+                              <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditIsCourtOrdered" name="EditIsCourtOrdered" onChange ={onChangeOption.bind(this, 'EditIsCourtOrdered')} />
                             </Input>
                           </Col>
                         </Row>
@@ -2051,7 +1691,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditNextCourtDate">Next Court Date</label>
                             <Input fullWidth size="Medium" className="EditNextCourtDate">
-                                <DatePicker id="EditNextCourtDate" name="EditNextCourtDate" selected={this.state.LegalHistoryNextCourtDate} value={this.state.LegalHistoryNextCourtDate} onChange={onChangeLegalHistoryOption.bind(this, 'EditNextCourtDate')} />
+                                <DatePicker id="EditNextCourtDate" name="EditNextCourtDate" selected="" value="" onChange={onChangeDate.bind(this, 'EditNextCourtDate')} />
                             </Input>
                           </Col>
                       </Row>
@@ -2060,14 +1700,14 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditCourtOrderDesc">Court Order History</label>
                             <Input fullWidth size="Medium" className="EditCourtOrderDesc">
-                              <textarea type="text" placeholder={this.state.LegalHistoryCourtOrderDesc} id="EditCourtOrderDesc" name="EditCourtOrderDesc" onChange ={onChangeLegalHistoryOption.bind(this, 'EditCourtOrderDesc')} />
+                              <textarea type="text" placeholder="" id="EditCourtOrderDesc" name="EditCourtOrderDesc" onChange ={onChangeOption.bind(this, 'EditCourtOrderDesc')} />
                             </Input>
                           </Col>
                         </Row>
 
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
-                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLegalHistory} fullWidth> UPDATE/SAVE {this.state.FirstName} LEGAL HISTORY</Button>
+                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLegalHistory} fullWidth> UPDATE/SAVE Miller LEGAL HISTORY</Button>
                           </Col>
                         </Row>
                     </AccordionItem>
@@ -2100,7 +1740,7 @@ export default class EditLead extends Component {
                         </Row>
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
-                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateTherapyHistory} fullWidth> UPDATE/SAVE {this.state.FirstName} LEGAL HISTORY</Button>
+                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateTheraphyHistory} fullWidth> UPDATE/SAVE Miller LEGAL HISTORY</Button>
                           </Col>
                         </Row>
                     </AccordionItem>
@@ -2170,7 +1810,7 @@ export default class EditLead extends Component {
 
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
-                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateSchoolHistory} fullWidth>UPDATE/SAVE {this.state.FirstName} SCHOOL HISTORY</Button>
+                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateSchoolHistory} fullWidth>UPDATE/SAVE Miller SCHOOL HISTORY</Button>
                           </Col>
                         </Row>
                     </AccordionItem>
@@ -2203,7 +1843,7 @@ export default class EditLead extends Component {
                         </Row>
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
-                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateDrugHistory} fullWidth>UPDATE/SAVE {this.state.FirstName} DRUG HISTORY</Button>
+                              <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateDrugHistory} fullWidth>UPDATE/SAVE Miller DRUG HISTORY</Button>
                           </Col>
                         </Row>
                     </AccordionItem>
@@ -2244,7 +1884,7 @@ export default class EditLead extends Component {
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateSexualHistory} fullWidth> UPDATE/SAVE {this.state.FirstName} SEXUAL HISTORY</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateSexualHistory} fullWidth> UPDATE/SAVE Miller SEXUAL HISTORY</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
@@ -2305,7 +1945,7 @@ export default class EditLead extends Component {
 
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateEmergencyContact} fullWidth>UPDATE/SAVE {this.state.FirstName} EMERGENCY CONTACT</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateEmergencyContact} fullWidth>UPDATE/SAVE Miller EMERGENCY CONTACT</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
@@ -2505,7 +2145,7 @@ export default class EditLead extends Component {
 
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateParentGuardianSponsorInfo} fullWidth>UPDATE/SAVE {this.state.FirstName} PARENT/GUARDIAN/SPONSOR INFO</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateParentGuardianSponsorInfo} fullWidth>UPDATE/SAVE Miller PARENT/GUARDIAN/SPONSOR INFO</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
@@ -2553,7 +2193,7 @@ export default class EditLead extends Component {
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateReferralInfo} fullWidth>  UPDATE/SAVE {this.state.FirstName} REFERRAL INFO</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateReferralInfo} fullWidth>  UPDATE/SAVE Miller REFERRAL INFO</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
@@ -2569,7 +2209,7 @@ export default class EditLead extends Component {
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateVerificationBenefits} fullWidth> SAVE Racheal {this.state.FirstName}'S LEAD PROFILE</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateVerificationBenefits} fullWidth> SAVE Racheal Miller'S LEAD PROFILE</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
