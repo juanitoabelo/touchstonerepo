@@ -44,6 +44,7 @@ const SelectStyled = styled(Select)`
  let InsuranceTypeStatus = '';
  let IsViolentStatus = '';
  let IsCourtOrderedStatus = '';
+ let AlcoholOrMarijuanaStatus = '';
 
 // const AwareOfTreatmentCost = [
 //   { value: '0', label: 'No' },
@@ -105,6 +106,11 @@ const GenderList = [
   { value: 'Transgender', label: 'Transgender' }
 ];
   
+const ReadingLevelList = [
+  { value: 'On Target', label: 'On Target' },
+  { value: 'Below', label: 'Below' },
+  { value: 'Above', label: 'Above' }
+];
 
 export default class EditLead extends Component {
   state = {
@@ -682,6 +688,84 @@ export default class EditLead extends Component {
       console.log(error,`error`);
     });
 
+
+    /* Get Lead therapy History Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadTherapyHistory',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Lead Therapy History Data: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        TherapyHistoryTherapyDesc: response.data.TherapyDesc,
+        TherapyHistoryMedDesc: response.data.MedDesc,
+        TherapyHistoryMentalIllnessDesc: response.data.MentalIllnessDesc,
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+    /* Get Lead School History Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadSchoolHistory',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Lead School History Data: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        SchoolHistorySchoolGrade: response.data.SchoolGrade,
+        SchoolHistoryChildReadingLevel: response.data.ChildReadingLevel,
+        SchoolHistorySchoolHelp: response.data.SchoolHelp,
+        SchoolHistoryIEPOr504: response.data.IEPOr504,
+        SchoolHistoryAreasRequiringHelp: response.data.AreasRequiringHelp,
+        SchoolHistorySchoolOnTrack: response.data.SchoolOnTrack,
+        SchoolHistoryExpelHistory: response.data.ExpelHistory,
+
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+
+    /* Get Lead Drug History Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadDrugHistory',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Lead Drug History Data test: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        DrugHistoryAlcoholOrMarijuana: response.data.AlcoholOrMarijuana,
+        DrugHistoryExperimentOrAbuse: response.data.ExperimentOrAbuse,
+        DrugHistoryDrugHistory: response.data.DrugHistory,
+
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+    
   } /** End of Component Didmount **/
 
   
@@ -882,14 +966,87 @@ export default class EditLead extends Component {
     });
   }
 
-  /** Update School History **/
-  onUpdateSchoolHistory = (e) => {
-
-  }
-
   /** Update Therapy History **/
   onUpdateTherapyHistory = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
 
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadTherapyHistory',
+        TherapyHistoryTherapyDesc: this.state.TherapyHistoryTherapyDesc,
+        TherapyHistoryMedDesc: this.state.TherapyHistoryMedDesc,
+        TherapyHistoryMentalIllnessDesc: this.state.TherapyHistoryMentalIllnessDesc,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log(response,`successfully Updating Lead Violence History`);
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+  }
+
+
+  /** Update School History **/
+  onUpdateSchoolHistory = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
+
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadSchoolHistory',
+        SchoolHistorySchoolGrade: this.state.SchoolHistorySchoolGrade,
+        SchoolHistoryChildReadingLevel: this.state.SchoolHistoryChildReadingLevel,
+        SchoolHistorySchoolHelp: this.state.SchoolHistorySchoolHelp,
+        SchoolHistoryIEPOr504: this.state.SchoolHistoryIEPOr504,
+        SchoolHistoryAreasRequiringHelp: this.state.SchoolHistoryAreasRequiringHelp,
+        SchoolHistorySchoolOnTrack: this.state.SchoolHistorySchoolOnTrack,
+        SchoolHistoryExpelHistory: this.state.SchoolHistoryExpelHistory,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log(response,`successfully Updating School History`);
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+  }
+
+  /** Update Drug History **/
+  onUpdateDrugHistory = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
+
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadDrugHistory',
+        DrugHistoryAlcoholOrMarijuana: this.state.DrugHistoryAlcoholOrMarijuana,
+        DrugHistoryExperimentOrAbuse: this.state.DrugHistoryExperimentOrAbuse,
+        DrugHistoryDrugHistory: this.state.DrugHistoryDrugHistory,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log(response,`successfully Updating Drug History`);
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
   }
 
   /** Update Sexual History **/
@@ -897,11 +1054,6 @@ export default class EditLead extends Component {
 
   }
   
-  /** Update Drug History **/
-  onUpdateDrugHistory = (e) => {
-
-  }
-
   /** Update Emergency Contact  **/
   onUpdateEmergencyContact = (e) => {
     
@@ -1256,6 +1408,89 @@ export default class EditLead extends Component {
     }
   }
 
+  onChangeTherapyHistoryOption = (type, e) => {
+    switch(type){
+      case 'EditTherapyDesc':
+          this.saveState({
+            TherapyHistoryTherapyDesc: e.target.value
+          });
+        break;
+        case 'EditMedDesc':
+          this.saveState({
+            TherapyHistoryMedDesc: e.target.value
+          });
+        break;
+        case 'EditMentalIllnessDesc':
+          this.saveState({
+            TherapyHistoryMentalIllnessDesc: e.target.value
+          });
+        break;   
+      }
+  }
+
+  onChangeSchoolHistoryOption = (type, e) => {
+    switch(type){
+      case 'EditSchoolGrade':
+          this.saveState({
+            SchoolHistorySchoolGrade: e.target.value
+          });
+        break;
+        case 'EditChildReadingLevel':
+          this.saveState({
+            SchoolHistoryChildReadingLevel: e.value
+          });
+        break;
+        case 'EditSchoolHelp':
+          this.saveState({
+            SchoolHistorySchoolHelp: e.target.value
+          });
+        break;   
+
+        case 'EditIEPOr504':
+          this.saveState({
+            SchoolHistoryIEPOr504: e.target.value
+          });
+        break;   
+
+        case 'EditAreasRequiringHelp':
+          this.saveState({
+            SchoolHistoryAreasRequiringHelp: e.target.value
+          });
+        break;   
+        case 'EditSchoolOnTrack':
+          this.saveState({
+            SchoolHistorySchoolOnTrack: e.target.value
+          });
+        break;   
+        case 'EditExpelHistory':
+          this.saveState({
+            SchoolHistoryExpelHistory: e.target.value
+          });
+        break;   
+        
+      }
+  }
+
+  onChangeDrugHistoryOption = (type, e) => {
+    switch(type){
+      case 'EditAlcoholOrMarijuana':
+          this.saveState({
+            DrugHistoryAlcoholOrMarijuana: e.value
+          });
+      break;
+      case 'EditExperimentOrAbuse':
+        this.saveState({
+          DrugHistoryExperimentOrAbuse: e.target.value
+        });
+      break;
+      case 'EditDrugHistory':
+        this.saveState({
+          DrugHistoryDrugHistory: e.target.value
+        });
+      break;    
+      }
+  }
+
   onChangeInput = (type, e) => {
 
   }
@@ -1287,8 +1522,8 @@ export default class EditLead extends Component {
 
   render() {
 
-    const { onBack, onChangeInput,onLeadInformationChangeInput, onChangeParentChildProfileInput, onChangeLeadInsuranceInput, onChangeSelfharmHistoryInput, onChangeViolenceHistoryOption, onChangeLegalHistoryOption, onPrintView, onChangeDate, onChangeOption, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
-            onUpdateViolenceHistory, onUpdateLegalHistory, onUpdateSchoolHistory, onUpdateTherapyHistory, onUpdateSexualHistory, onUpdateDrugHistory, onUpdateEmergencyContact, 
+    const { onBack, onChangeInput,onLeadInformationChangeInput, onChangeParentChildProfileInput, onChangeLeadInsuranceInput, onChangeSelfharmHistoryInput, onChangeViolenceHistoryOption, onChangeLegalHistoryOption, onChangeTherapyHistoryOption, onPrintView, onChangeDate, onChangeOption, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
+      onChangeSchoolHistoryOption, onChangeDrugHistoryOption, onUpdateViolenceHistory, onUpdateLegalHistory, onUpdateSchoolHistory, onUpdateTherapyHistory, onUpdateSexualHistory, onUpdateDrugHistory, onUpdateEmergencyContact, 
             onUpdateVerificationBenefits, onUpdateReferralInfo, onUpdateParentGuardianSponsorInfo, state: { LeadName, LeadID, LeadInfo } } = this;
             
     return (<>
@@ -1956,7 +2191,7 @@ export default class EditLead extends Component {
                     {/* END SELF HARM HISTORY */}
 
                     {/* Start Violence HISTORY */}
-                    <AccordionItem uniqueKey={5} title="VIOLENCE HISTORY">
+                    {/* <AccordionItem uniqueKey={5} title="VIOLENCE HISTORY">
                     <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditIsViolent">Violent?</label>
@@ -1997,11 +2232,11 @@ export default class EditLead extends Component {
                             <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateViolenceHistory} fullWidth>   UPDATE/SAVE {this.state.FirstName} VIOLENCE HISTORY</Button>
                         </Col>
                       </Row>
-                    </AccordionItem>
+                    </AccordionItem> */}
                     {/* End Violence HISTORY */}
 
                     {/* Legal History  */}
-                    <AccordionItem uniqueKey={6} title="LEGAL HISTORY">
+                    {/* <AccordionItem uniqueKey={6} title="LEGAL HISTORY">
                       <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditLegalDesc">Legal Issue History</label>
@@ -2070,15 +2305,15 @@ export default class EditLead extends Component {
                               <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLegalHistory} fullWidth> UPDATE/SAVE {this.state.FirstName} LEGAL HISTORY</Button>
                           </Col>
                         </Row>
-                    </AccordionItem>
+                    </AccordionItem> */}
 
-
-                    <AccordionItem uniqueKey={7} title="THERAPHY HISTORY">
+                    {/* THERAPY HISTORY  */}
+                    <AccordionItem uniqueKey={7} title="THERAPY HISTORY">
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditTherapyDesc">Therapy History</label>
                             <Input fullWidth size="Medium" className="EditTherapyDesc">
-                              <textarea type="text" placeholder="" id="EditTherapyDesc" name="EditTherapyDesc" onChange ={onChangeInput.bind(this, 'EditTherapyDesc')}/>
+                              <textarea type="text" placeholder={this.state.TherapyHistoryTherapyDesc} id="EditTherapyDesc" name="EditTherapyDesc" onChange ={onChangeTherapyHistoryOption.bind(this, 'EditTherapyDesc')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2086,7 +2321,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditMedDesc">Medications</label>
                             <Input fullWidth size="Medium" className="EditMedDesc">
-                              <textarea type="text" placeholder="" id="EditMedDesc" name="EditMedDesc" onChange ={onChangeInput.bind(this, 'EditMedDesc')}/>
+                              <textarea type="text" placeholder={this.state.TherapyHistoryMedDesc} id="EditMedDesc" name="EditMedDesc" onChange ={onChangeTherapyHistoryOption.bind(this, 'EditMedDesc')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2094,7 +2329,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditMentalIllnessDesc">Mental Illness History</label>
                             <Input fullWidth size="Medium" className="EditMentalIllnessDesc">
-                              <textarea type="text" placeholder="" id="EditMentalIllnessDesc" name="EditMentalIllnessDesc" onChange ={onChangeInput.bind(this, 'EditMentalIllnessDesc')}/>
+                              <textarea type="text" placeholder={this.state.TherapyHistoryMentalIllnessDesc} id="EditMentalIllnessDesc" name="EditMentalIllnessDesc" onChange ={onChangeTherapyHistoryOption.bind(this, 'EditMentalIllnessDesc')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2104,15 +2339,16 @@ export default class EditLead extends Component {
                           </Col>
                         </Row>
                     </AccordionItem>
+                    {/* End THERAPY HISTORY  */}
 
-
+                    {/* School HISTORY  */}
                     <AccordionItem uniqueKey={8} title="SCHOOL HISTORY">
                       
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditSchoolGrade">School Grade</label>
                           <Input fullWidth size="Medium" className="EditSchoolGrade">
-                            <textarea type="text" placeholder="" id="EditSchoolGrade" name="EditSchoolGrade" onChange ={onChangeOption.bind(this, 'EditSchoolGrade')} />
+                            <textarea type="text" placeholder={this.state.SchoolHistorySchoolGrade} id="EditSchoolGrade" name="EditSchoolGrade" onChange ={onChangeSchoolHistoryOption.bind(this, 'EditSchoolGrade')} />
                           </Input>
                         </Col>
                       </Row>
@@ -2121,7 +2357,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditChildReadingLevel">Reading Level</label>
                           <Input fullWidth size="Medium" className="EditChildReadingLevel">
-                            <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditChildReadingLevel" name="EditChildReadingLevel" onChange ={onChangeOption.bind(this, 'EditChildReadingLevel')} />
+                            <SelectStyled className="selectoption" options={ReadingLevelList} placeholder={this.state.SchoolHistoryChildReadingLevel} value="" id="EditChildReadingLevel" name="EditChildReadingLevel" onChange ={onChangeSchoolHistoryOption.bind(this, 'EditChildReadingLevel')} />
                           </Input>
                         </Col>
                       </Row>
@@ -2130,7 +2366,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditSchoolHelp">Additional Help Required in School</label>
                             <Input fullWidth size="Medium" className="EditSchoolHelp">
-                              <textarea type="text" placeholder="" id="EditSchoolHelp" name="EditSchoolHelp" onChange ={onChangeInput.bind(this, 'EditSchoolHelp')}/>
+                              <textarea type="text" placeholder={this.state.SchoolHistorySchoolHelp} id="EditSchoolHelp" name="EditSchoolHelp" onChange ={onChangeSchoolHistoryOption.bind(this, 'EditSchoolHelp')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2138,7 +2374,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditIEPOr504">IEP or 504?</label>
                             <Input fullWidth size="Medium" className="EditIEPOr504">
-                              <textarea type="text" placeholder="" id="EditIEPOr504" name="EditIEPOr504" onChange ={onChangeInput.bind(this, 'EditIEPOr504')}/>
+                              <textarea type="text" placeholder={this.state.SchoolHistoryIEPOr504} id="EditIEPOr504" name="EditIEPOr504" onChange ={onChangeSchoolHistoryOption.bind(this, 'EditIEPOr504')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2146,7 +2382,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditAreasRequiringHelp">Areas Requiring Help</label>
                             <Input fullWidth size="Medium" className="EditAreasRequiringHelp">
-                              <textarea type="text" placeholder="" id="EditAreasRequiringHelp" name="EditAreasRequiringHelp" onChange ={onChangeOption.bind(this, 'EditAreasRequiringHelp')} />
+                              <textarea type="text" placeholder={this.state.SchoolHistoryAreasRequiringHelp} id="EditAreasRequiringHelp" name="EditAreasRequiringHelp" onChange ={onChangeSchoolHistoryOption.bind(this, 'EditAreasRequiringHelp')} />
                             </Input>
                           </Col>
                         </Row>
@@ -2155,7 +2391,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditSchoolOnTrack">On Track or Behind in School</label>
                             <Input fullWidth size="Medium" className="EditSchoolOnTrack">
-                              <textarea type="text" placeholder="" id="EditSchoolOnTrack" name="EditSchoolOnTrack" onChange ={onChangeOption.bind(this, 'EditSchoolOnTrack')} />
+                              <textarea type="text" placeholder={this.state.SchoolHistorySchoolOnTrack} id="EditSchoolOnTrack" name="EditSchoolOnTrack" onChange ={onChangeSchoolHistoryOption.bind(this, 'EditSchoolOnTrack')} />
                             </Input>
                           </Col>
                         </Row>
@@ -2163,7 +2399,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditExpelHistory">Expelled from Schools or Facilities?</label>
                             <Input fullWidth size="Medium" className="EditExpelHistory">
-                              <textarea type="text" placeholder="" id="EditExpelHistory" name="EditExpelHistory" onChange ={onChangeOption.bind(this, 'EditExpelHistory')} />
+                              <textarea type="text" placeholder={this.state.SchoolHistoryExpelHistory} id="EditExpelHistory" name="EditExpelHistory" onChange ={onChangeSchoolHistoryOption.bind(this, 'EditExpelHistory')} />
                             </Input>
                           </Col>
                         </Row>
@@ -2174,14 +2410,26 @@ export default class EditLead extends Component {
                           </Col>
                         </Row>
                     </AccordionItem>
+                  {/* End School HISTORY  */}
 
-
+                    {/* DRUG HISTORY  */}
                     <AccordionItem uniqueKey={9} title="DRUG HISTORY">
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditAlcoholOrMarijuana">Alcohol or Marijuana Use?</label>
                             <Input fullWidth size="Medium" className="EditAlcoholOrMarijuana">
-                              <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditAlcoholOrMarijuana" name="EditAlcoholOrMarijuana" onChange ={onChangeOption.bind(this, 'EditAlcoholOrMarijuana')} />
+                              <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.DrugHistoryAlcoholOrMarijuana){
+                                    case '0':
+                                      AlcoholOrMarijuanaStatus = 'No'
+                                        break;
+                                    case '1':
+                                      AlcoholOrMarijuanaStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={AlcoholOrMarijuanaStatus} value={this.state.DrugHistoryAlcoholOrMarijuana} id="EditAlcoholOrMarijuana" name="EditAlcoholOrMarijuana" onChange ={onChangeDrugHistoryOption.bind(this, 'EditAlcoholOrMarijuana')} />
                             </Input>
                           </Col>
                         </Row>
@@ -2189,7 +2437,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditExperimentOrAbuse">Experimentation or Abuse?</label>
                             <Input fullWidth size="Medium" className="EditExperimentOrAbuse">
-                              <textarea type="text" placeholder="" id="EditExperimentOrAbuse" name="EditExperimentOrAbuse" onChange ={onChangeInput.bind(this, 'EditExperimentOrAbuse')}/>
+                              <textarea type="text" placeholder={this.state.DrugHistoryExperimentOrAbuse}  id="EditExperimentOrAbuse" name="EditExperimentOrAbuse" onChange ={onChangeDrugHistoryOption.bind(this, 'EditExperimentOrAbuse')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2197,7 +2445,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditDrugHistory">Drug History</label>
                             <Input fullWidth size="Medium" className="EditDrugHistory">
-                              <textarea type="text" placeholder="" id="EditDrugHistory" name="EditDrugHistory" onChange ={onChangeInput.bind(this, 'EditDrugHistory')}/>
+                              <textarea type="text" placeholder={this.state.DrugHistoryDrugHistory} id="EditDrugHistory" name="EditDrugHistory" onChange ={onChangeDrugHistoryOption.bind(this, 'EditDrugHistory')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2207,7 +2455,7 @@ export default class EditLead extends Component {
                           </Col>
                         </Row>
                     </AccordionItem>
-
+                    {/* END DRUG HISTORY  */}
                     
                     <AccordionItem uniqueKey={10} title="SEXUAL HISTORY">
                       <Row className="mb-2">
