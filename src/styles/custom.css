@@ -198,3 +198,49 @@ div.main-content {
 .expanded {
     max-height: inherit !important;
 }
+
+button {
+    background-color: #c8a447 !important;
+    border-color: #c8a447 !important;
+}
+button:hover {
+    border-color: #c8a447 !important;
+    opacity: 0.9;
+}
+
+header.main-header {
+    /* background-color: #222b45; */
+    background-color: #282b27;
+}
+header.main-header .user-name, header.main-header .user-title {
+    color: white;
+}
+
+aside.menu-sidebar {
+    /* background-color: #222b45; */
+    background-color: rgba(34,43,69,0.7);
+    
+}
+
+aside.menu-sidebar a {
+    color: white !important;
+}
+aside.menu-sidebar a:hover, aside.menu-sidebar a:hover .menu-icon, aside.menu-sidebar a .menu-icon:hover {
+    color: #c8a447 !important;
+}
+div.main-content {
+    background-color: rgba(34,43,69,0.3);
+}
+footer nav {
+    background-color: #282b27 !important;
+    color: #c8a447 !important;
+}
+/* Green: #0ed4ec 
+
+Gold: #c8a447
+Dark Gray: #282b27;
+*/
+
+.imageurl-form-control {
+    padding: .200rem .1rem !important;
+}

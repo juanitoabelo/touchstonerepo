@@ -151,7 +151,7 @@ export default class Index extends Component {
           {
             pageData.map(({ NetworkID, Name })=>{
               return (<tr key={NetworkID}>
-                <td>{Name}</td>
+                <td><a className="color-red text-decoration-none" href={"/network/edit-network?NetworkID=" + NetworkID}>{Name}</a></td>
               </tr>);
             })
           }

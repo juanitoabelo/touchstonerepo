@@ -241,7 +241,8 @@ export default class Index extends Component {
           {
             pageData.map(({ UserID, Name, EmailAddress, CompanyName, UserStatus })=>{
               return (<tr key={UserID}>
-                <td><a className="color-red text-decoration-none" href="/#" onClick={editViewProduct.bind(this, UserID)}>Edit/View</a></td>
+                <td><a className="color-red text-decoration-none" href={"/user/edit-user?UserID=" + UserID}>Edit/View</a></td>
+                {/* <td><a className="color-red text-decoration-none" href={"/network/edit-user?UserID=" + UserID} onClick={editViewProduct.bind(this, UserID)}>Edit/View</a></td> */}
                 <td>{Name}</td>
                 <td>{EmailAddress}</td>
                 <td>{CompanyName}</td>

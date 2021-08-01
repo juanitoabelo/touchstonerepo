@@ -108,7 +108,7 @@ const Header: React.FC<HeaderProps> = (props) => {
 
   
   return (
-    <LayoutHeader fixed>
+    <LayoutHeader fixed className="main-header">
       <HeaderStyle>
         <Actions
           size="Medium"

@@ -5,6 +5,7 @@ import Select from '@paljs/ui/Select';
 import styled from 'styled-components';
 import { Button } from '@paljs/ui/Button';
 import { InputGroup } from '@paljs/ui/Input';
+import { Checkbox } from '@paljs/ui/Checkbox';
 import { Container } from '@material-ui/core';
 import { Card, CardBody } from '@paljs/ui/Card';
 import { Accordion, AccordionItem } from '@paljs/ui/Accordion';
@@ -14,7 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import SEO from '../../components/SEO';
 import axios from 'axios';
-import { isLoggedIn } from '../../components/services/auth';
+import { isLoggedIn, getUser } from '../../components/services/auth';
 import { 
   getURLParams, leadStatus, leadDisposition, 
   leadCrisisScale, leadYesNo, leadUsers, objLeadInfo,
@@ -35,6 +36,8 @@ const SelectStyled = styled(Select)`
   margin-bottom: 0.25rem;
 `;
 
+console.log('User Id: '+getUser().userid);
+
 // const LeadInformationAwareOfTreatmentCostsStatus = '';
 
  let LeadInformationAwareOfTreatmentCostsStatus = 'Select Option';
@@ -45,31 +48,23 @@ const SelectStyled = styled(Select)`
  let IsViolentStatus = '';
  let IsCourtOrderedStatus = '';
  let AlcoholOrMarijuanaStatus = '';
+ let SexuallyActiveStatus = '';
 
-// const AwareOfTreatmentCost = [
-//   { value: '0', label: 'No' },
-//   { value: '1', label: 'Yes' }
-// ];
+ let GuardPGStatus = '';
+ let GuardPhysCustStatus = '';
+ let GuardLegalCustStatus = '';
+ let GuardSponsorStatus = '';
+ let GuardECStatus = '';
+ let IsEmergencyStatus = '';
+ let InitialDispositionStatus = '';
 
-// const RunawayList = [
-//   { value: '0', label: 'No' },
-//   { value: '1', label: 'Yes' }
-// ];
+ let SubstanceAbuseStatus = '';
+ let MentalHealthStatus = '';
+ let DualDiagnosisStatus = '';
 
-// const AdoptedList = [
-//   { value: '0', label: 'No' },
-//   { value: '1', label: 'Yes' }
-// ];
-
-// const IsCourtOrderedList = [
-//   { value: '0', label: 'No' },
-//   { value: '1', label: 'Yes' }
-// ];
-
-// const IsEmergencyList = [
-//   { value: '0', label: 'No' },
-//   { value: '1', label: 'Yes' }
-// ];
+ let CurrentInitialRep = '';
+ let CurrentAssignedAdvocate = '';
+ let CurrentDisposition = '';
 
 const InitialDispositionList = [
   { value: '0', label: 'None' },
@@ -114,6 +109,42 @@ const ReadingLevelList = [
 
 export default class EditLead extends Component {
   state = {
+
+    // Update Success States
+    UpdateMainLeadFormSuccessState: false,
+    UpdateLeadNotesFormSuccessState: false,
+    UpdateLeadInformationFormSuccessState: false,
+    UpdateParentChildProfileFormSuccessState: false,
+    UpdateInsuranceFormSuccessState: false,
+    UpdateSelfHarmHistoryFormSuccessState: false,
+    UpdateViolenceHistoryFormSuccessState: false,
+    UpdateLegalHistoryFormSuccessState: false,
+    UpdateTheraphyHistoryFormSuccessState: false,
+    UpdateSchoolHistoryFormSuccessState: false,
+    UpdateDrugHistoryFormSuccessState: false,
+    UpdateSexualHistoryFormSuccessState: false,
+    UpdateEmergencyContactFormSuccessState: false,
+    UpdateparentGuardianSponsorInfoFormSuccessState: false,
+    UpdateReferralFormSuccessState: false,
+    UpdateVerificationOfBenifitsFormSuccessState: false,  
+
+
+
+    // User List
+    UserAdminList: [],
+    
+    UserTodoList: [],
+    ToDoText: '', 
+    ToDoReminderDate: '',
+    ToDoUser: '',
+
+
+    IPAddress: '',
+    CampaignID:'',
+    CreatedDate:'',
+    TermsApprovedDate: '',
+    CampaignName: '',
+
     // main lead form state variables 
     Status: '',
     Disposition: '', 
@@ -146,11 +177,13 @@ export default class EditLead extends Component {
 
     // Patient Child Profile form state variables
     PatientName: '',
-    PatientDOB: new Date(),
+    // PatientDOB: new Date(),
+    PatientDOB: '',
     PatientAge: '',
     PatientGender: '',
     PatientIsAdopted: '',
-    PatientExpectToEnrollDate: new Date(),
+    // PatientExpectToEnrollDate: new Date(),
+    PatientExpectToEnrollDate: '',
     PatientBehaviors: '',
     PatientEthinicity: '',
     PatientHeight: '',
@@ -194,6 +227,7 @@ export default class EditLead extends Component {
     LegalHistoryArrestedDesc: '',
     LegalHistoryProbationDesc: '',
     LegalHistoryIsCourtOrdered: '',
+    //LegalHistoryNextCourtDate: new Date(),
     LegalHistoryNextCourtDate: '',
     LegalHistoryCourtOrderDesc: '',
 
@@ -248,6 +282,7 @@ export default class EditLead extends Component {
     GuardPhysCust: '',
     GuardEC: '',
     GuardPG: '',
+    // GuardDOB: new Date(),
     GuardDOB: '',
     GuardSSN: '',
     GuardJobTitle: '',
@@ -269,12 +304,15 @@ export default class EditLead extends Component {
     // Verification Upload form state variables
     PreAppFilePath: '',
 
+    // New Lead Notes
+    NewLeadNoteText : '',
+    LeadNoteData: [],
+
     LeadID: 0,
-
-
+    
 
     LeadName: 'Sample: RACHEAL MILLER',
-    ToDoReminderDate: new Date(),
+    
     
   };
 
@@ -286,6 +324,40 @@ export default class EditLead extends Component {
     const { saveState, state } = this;
 
     this.setState({
+
+      // Update Success States
+    UpdateMainLeadFormSuccessState: false,
+    UpdateLeadNotesFormSuccessState: false,
+    UpdateLeadInformationFormSuccessState: false,
+    UpdateParentChildProfileFormSuccessState: false,
+    UpdateInsuranceFormSuccessState: false,
+    UpdateSelfHarmHistoryFormSuccessState: false,
+    UpdateViolenceHistoryFormSuccessState: false,
+    UpdateLegalHistoryFormSuccessState: false,
+    UpdateTheraphyHistoryFormSuccessState: false,
+    UpdateSchoolHistoryFormSuccessState: false,
+    UpdateDrugHistoryFormSuccessState: false,
+    UpdateSexualHistoryFormSuccessState: false,
+    UpdateEmergencyContactFormSuccessState: false,
+    UpdateparentGuardianSponsorInfoFormSuccessState: false,
+    UpdateReferralFormSuccessState: false,
+    UpdateVerificationOfBenifitsFormSuccessState: false,  
+
+      // User List
+      UserAdminList: [],
+      
+      UserTodoList: [],
+      ToDoText: '', 
+      ToDoReminderDate: '',
+      ToDoUser: '',
+
+      IPAddress: '',
+      IPAddress: '',
+      CampaignID:'',
+      CreatedDate:'',
+      TermsApprovedDate: '',
+      CampaignName: '',
+
       // main lead form state variables 
       Status: '',
       Disposition: '', 
@@ -318,11 +390,13 @@ export default class EditLead extends Component {
 
       /* Patient Child Profile form state variables */
       PatientName: '',
-      PatientDOB: new Date(),
+      // PatientDOB: new Date(),
+      PatientDOB: '',
       PatientAge: '',
       PatientGender: '',
       PatientIsAdopted: '',
-      PatientExpectToEnrollDate: new Date(),
+      //PatientExpectToEnrollDate: new Date(),
+      PatientExpectToEnrollDate: '',
       PatientBehaviors: '',
       PatientEthinicity: '',
       PatientHeight: '',
@@ -366,6 +440,7 @@ export default class EditLead extends Component {
       LegalHistoryArrestedDesc: '',
       LegalHistoryProbationDesc: '',
       LegalHistoryIsCourtOrdered: '',
+      // LegalHistoryNextCourtDate: new Date(),
       LegalHistoryNextCourtDate: '',
       LegalHistoryCourtOrderDesc: '',
 
@@ -420,6 +495,7 @@ export default class EditLead extends Component {
       GuardPhysCust: '',
       GuardEC: '',
       GuardPG: '',
+      // GuardDOB: new Date(),
       GuardDOB: '',
       GuardSSN: '',
       GuardJobTitle: '',
@@ -441,8 +517,12 @@ export default class EditLead extends Component {
       // Verification Upload form state variables
       PreAppFilePath: '',
 
-      LeadID: 0,
+      // New Lead Notes
+      NewLeadNoteText : '',
+      LeadNoteData: [],
 
+      LeadID: 0,
+      
     })  
   }
 
@@ -459,7 +539,52 @@ export default class EditLead extends Component {
     const LeadID = getURLParams('leadID');
     saveState({ LeadID });
 
+    
+    /** Update DashBoard User To Do Item As Read**/
+    const ToDoID = getURLParams('ToDoID');
+    if(ToDoID != ""){
+      axios({
+        method: 'get',
+        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        params: {
+          tblName: 'tblToDo',
+          queryType: 'updateNewTodoItemDashBoardAsRead',
+          ToDoID: ToDoID
+        }
+      })
+      .then(function (response) {
+        console.log(response,`successfully Updated To Do Item List as Read`);
+      })
+      .catch(function (error) {
+        console.log(error,`error`);
+      });
+    }
+
+
     /** Get All Company Details **/
+    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+      params: {
+        tblName: 'tblUsers',
+        queryType: 'getUserAdminList'
+      }
+    })
+    .then(function (response) {
+      console.log('List Of Admin users: '+ JSON.stringify(response.data));
+      saveState({
+        UserAdminList: response.data
+      });
+       
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .then(function (response) {
+      // always executed
+      console.log(response,`successfull`);
+    });
+
+
+    /** Get All Main Leads Details **/
     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
       params: {
         tblName: 'tblLeads',
@@ -468,29 +593,33 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log('product id 2:'+prodId);
-      console.log('Single Lead Data: '+ JSON.stringify(response.data));
+       console.log('Single Lead Data: '+ JSON.stringify(response.data));
       saveState({
-
         AlcoholOrMarijuana: response.data.AlcoholOrMarijuana,
         IsSexuallyActive: response.data.IsSexuallyActive,
         IsViolent: response.data.IsViolent,
-        IsCourtOrdered: response.data.IsCourtOrdered,
+        // IsCourtOrdered: response.data.IsCourtOrdered,
+        IPAddress: response.data.IPAddress,
+
+        CreatedDate: response.data.CreatedDate,
+        CampaignName: response.data.CampaignName,
+        TermsApprovedDate: response.data.TermsApprovedDate,
         
-        
+        // Main Lead Form data
         Status: response.data.Status,
         Disposition: response.data.Disposition, 
-        CrisisScale: response.data.CrisisScale,
+        // CrisisScale: response.data.CrisisScale,
         InitialRep: response.data.InitialRep,
         AssignedAdvocate: response.data.AssignedAdvocate,
         FirstName: response.data.FirstName,
         LastName: response.data.LastName,
-        EmailAddress: response.data.EmailAddress,
+        Email: response.data.Email,
         HomePhone: response.data.HomePhone,
         SubstanceAbuse: response.data.SubstanceAbuse,
-        IsMentalHealth: response.data.IsMentalHealth,
-        DualDiagnosis: response.data.IsDD,
+        MentalHealth: response.data.MentalHealth,
+        DualDiagnosis: response.data.DualDiagnosis,
         Diagnosis: response.data.Diagnosis
+
       });
        
     })
@@ -514,8 +643,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
+      // console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
       saveState({
         LeadInformationCompanyName: response.data.CompanyName,
         LeadInformationWorkPhone: response.data.WorkPhone,
@@ -549,15 +677,15 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
+      // console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
+      console.log('Single getLeadParentChildProfile: '+ response.data.ExpectToEnrollDate);
       saveState({
           PatientName: response.data.PatientName,
-          PatientDOB: response.data.PatientDOB,
+          PatientDOB: response.data.PatientDOB != '' ? new Date(response.data.PatientDOB) : '',
           PatientAge: response.data.PatientAge,
           PatientGender: response.data.PatientGender,
           PatientIsAdopted: response.data.IsAdopted,
-          PatientExpectToEnrollDate: response.data.ExpectToEnrollDate,
+          PatientExpectToEnrollDate: response.data.ExpectToEnrollDate != '0000-00-00 00:00:00' ? new Date(response.data.ExpectToEnrollDate) : '',
           PatientBehaviors: response.data.Behaviors,
           PatientEthinicity: response.data.Ethinicity,
           PatientHeight: response.data.Height,
@@ -594,8 +722,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
+      // console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         InsuranceProvider: response.data.InsuranceProvider,
         InsuranceType: response.data.InsuranceType,
@@ -622,8 +749,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
+      // console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         SelfHarmHistorySuicidal: response.data.Suicidal,
         SelfHarmHistoryPastSuicidalDesc: response.data.PastSuicidalDesc,
@@ -649,8 +775,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
-      console.log('Single Lead Violence Data: '+ LeadID + JSON.stringify(response.data));
+      //console.log('Single Lead Violence Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         ViolenceHistoryIsViolent: response.data.IsViolent,
         HistoryViolence: response.data.HistoryViolence,
@@ -673,13 +798,14 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Legal History Data: '+ LeadID + JSON.stringify(response.data));
+     // console.log('Single Lead Legal History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         LegalHistoryLegalDesc: response.data.LegalDesc,
         LegalHistoryArrestedDesc: response.data.ArrestedDesc,
         LegalHistoryProbationDesc: response.data.ProbationDesc,
         LegalHistoryIsCourtOrdered: response.data.IsCourtOrdered,
-        LegalHistoryNextCourtDate: response.data.NextCourtDate,
+        // LegalHistoryNextCourtDate: new Date(response.data.NextCourtDate),
+        LegalHistoryNextCourtDate: response.data.NextCourtDate !='' ? new Date(response.data.NextCourtDate) : '',
         LegalHistoryCourtOrderDesc: response.data.CourtOrderDesc,
       });
         
@@ -700,7 +826,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Therapy History Data: '+ LeadID + JSON.stringify(response.data));
+    //  console.log('Single Lead Therapy History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         TherapyHistoryTherapyDesc: response.data.TherapyDesc,
         TherapyHistoryMedDesc: response.data.MedDesc,
@@ -752,12 +878,11 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Drug History Data test: '+ LeadID + JSON.stringify(response.data));
+      console.log('Single Lead Drug History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         DrugHistoryAlcoholOrMarijuana: response.data.AlcoholOrMarijuana,
         DrugHistoryExperimentOrAbuse: response.data.ExperimentOrAbuse,
-        DrugHistoryDrugHistory: response.data.DrugHistory,
-
+        DrugHistoryDrugHistory: response.data.DrugHistory
       });
         
     })
@@ -765,10 +890,336 @@ export default class EditLead extends Component {
       console.log(error,`error`);
     });
 
+    /* Get Lead Sexual History Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadSexualHistory',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Lead Sexual History Data: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        SexualHistoryIsSexuallyActive: response.data.IsSexuallyActive,
+        SexualHistoryRelHistory: response.data.RelHistory,
+        SexualHistoryDevianceHistory: response.data.DevianceHistory,
+        SexualHistoryInternetHistory: response.data.InternetHistory
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+
+    /* Get Lead Sexual History Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadEmergencyContact',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Lead Emergency Contact Data: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        EmergencyContactECName: response.data.ECName,
+        EmergencyContactECRelationship: response.data.ECRelationship,
+        EmergencyContactECPhone: response.data.ECPhone,
+        EmergencyContactECAddress: response.data.ECAddress,
+        EmergencyContactECCity: response.data.ECCity,
+        EmergencyContactECState: response.data.ECState,
+        EmergencyContactECZip: response.data.ECZip
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+
+    /* Get Lead Parent Guardian Sponsor Info Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadParentGuardianSponsorInfo',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Lead Parent Guardian Sponsor Info Data: '+  JSON.stringify(response.data.GuardDOB));
+      // if(JSON.stringify(response.data.GuardDOB) != new Date('0000-00-00 00:00:00')) {
+      //   console.log('Empty Date');
+      // } else {
+      //   console.log('Not Empty Date');
+      // }
+      saveState({
+        GuardRelationship: response.data.GuardRelationship,
+        GuardName: response.data.GuardName,
+        GuardAddress: response.data.GuardAddress,
+        GuardCity: response.data.GuardCity,
+        GuardState: response.data.GuardState,
+        GuardZip: response.data.GuardZip,
+        GuardHomePhone: response.data.GuardHomePhone,
+        GuardMobilePhone: response.data.GuardMobilePhone,
+        GuardEmail: response.data.GuardEmail,
+        GuardFax: response.data.GuardFax,
+        GuardMethod: response.data.GuardMethod,
+        GuardSponsor: response.data.GuardSponsor,
+        GuardLegalCust: response.data.GuardLegalCust,
+        GuardPhysCust: response.data.GuardPhysCust,
+        GuardEC: response.data.GuardEC,
+        GuardPG: response.data.GuardPG,
+        GuardDOB: response.data.GuardDOB != '0000-00-00 00:00:00' ? new Date(response.data.GuardDOB) : '',
+        GuardSSN: response.data.GuardSSN,
+        GuardJobTitle: response.data.GuardJobTitle,
+        GuardEmployer: response.data.GuardEmployer,
+        GuardWorkPhone: response.data.GuardWorkPhone,
+        GuardWorkEmail: response.data.GuardWorkEmail,
+        GuardWorkFax: response.data.GuardWorkFax,
+        GuardReligion: response.data.GuardReligion,
+        GuardRelDesc: response.data.GuardRelDesc
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+
+    /* Get Lead Referral Info Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadReferralInfo',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Referral Info Data: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        RefererralInfoInitialDisposition: response.data.InitialDisposition,
+        RefererralInfoHowHear: response.data.HowHear,
+        RefererralInfoRefSource: response.data.RefSource,
+        RefererralInfoRefReason: response.data.RefReason,
+        RefererralInfoIsEmergency: response.data.IsEmergency,
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+    /* Get Lead Verification Of Benefits Form data for default Field display */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'getLeadVerificationOfBenefits',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Verification Of Benefits Form Data: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        PreAppFilePath: response.data.PreAppFilePath
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
     
+    /* Get Lead Notes */
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeadNotes',
+        queryType: 'getLeadNotes',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('Single Lead Notes table Data: '+ LeadID + JSON.stringify(response.data));
+      saveState({
+        LeadNoteData: response.data
+      });
+        
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+
+
+    // /** Get All Company Details **/
+    // axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    //   params: {
+    //     tblName: 'tblToDo',
+    //     queryType: 'getToDoListFromDashBoarByUserId',
+    //     UserID: this.state.UserID !='' ? this.state.UserID : getUser().userid
+    //   }
+    // })
+    // .then(function (response) {
+    //   console.log('getToDoListFromDashBoarByUserId Data: '+ JSON.stringify(response.data));
+    //   saveState({
+    //    UserTodoList: response.data
+    //   });
+       
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    // })
+    // .then(function (response) {
+    //   // always executed
+    //   console.log(response,`successfull`);
+    // });
+
+
+    /** Get All Company Details **/
+    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+      params: {
+        tblName: 'tblToDo',
+        queryType: 'getToDoListFromSingleLeadEditPageById',
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log('getToDoListFromSingleLeadEditPageById Data: '+ JSON.stringify(response.data));
+      saveState({
+       UserTodoList: response.data
+      });
+       
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .then(function (response) {
+      // always executed
+      console.log(response,`successfull`);
+    });
+
+    /* Get Lead Verification Of Benefits Form data for default Field display */
+    // axios({
+    //   method: 'get',
+    //   url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+    //   params: {
+    //     tblName: 'tblLeads',
+    //     queryType: 'getLeadMainInformation',
+    //     LeadID: LeadID
+    //   }
+    // })
+    // .then(function (response) {
+    //   console.log('Single Verification Of Benefits Form Data: '+ LeadID + JSON.stringify(response.data));
+    //   saveState({
+    //     Status: response.data.Status,
+    //     Disposition: response.data.Disposition,
+    //     CrisisScale: response.data.CrisisScale,
+    //     InitialRep: response.data.InitialRep,
+    //     AssignedAdvocate: response.data.AssignedAdvocate,
+    //     FirstName: response.data.FirstName,
+    //     LastName: response.data.LastName,
+    //     Email: response.data.Email,
+    //     HomePhone: response.data.HomePhone,
+    //     SubstanceAbuse: response.data.SubstanceAbuse,
+    //     MentalHealth: response.data.MentalHealth,
+    //     DualDiagnosis: response.data.DualDiagnosis,
+    //     Diagnosis: response.data.Diagnosis
+    //   });
+        
+    // })
+    // .catch(function (error) {
+    //   console.log(error,`error`);
+    // });
+
   } /** End of Component Didmount **/
 
   
+  /** Add New Lead Note **/
+  onAddLeadNote = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
+
+    /** Update Lead Information **/ 
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeadNotes',
+        queryType: 'addNewLeadNotes',
+          EnteredBy: getUser().userid,
+          EnteredDate: new Date(),
+          NoteText: this.state.NewLeadNoteText,
+          // NoteType: this.state.FirstName,
+          // NoteStatus: this.state.LastName,
+          // StatusDate: this.state.Email,
+          LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      // console.log(response,`successfully Updating Lead Main information`);
+      saveState({
+        UpdateLeadNotesFormSuccessState: true
+      });
+
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+  }
+
+  /** Update Lead Main Information **/
+  onUpdateLeadMainInformation = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
+
+    /** Update Lead Information **/ 
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadMainInfo',
+          Status: this.state.Status,
+          Disposition: this.state.Disposition,
+          // CrisisScale: this.state.CrisisScale,
+          InitialRep: this.state.InitialRep,
+          AssignedAdvocate: this.state.AssignedAdvocate,
+          FirstName: this.state.FirstName,
+          LastName: this.state.LastName,
+          Email: this.state.Email,
+          HomePhone: this.state.HomePhone,
+          SubstanceAbuse: this.state.SubstanceAbuse,
+          MentalHealth: this.state.MentalHealth,
+          DualDiagnosis: this.state.DualDiagnosis,
+          Diagnosis: this.state.Diagnosis,
+          LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      // console.log(response,`successfully Updating Lead Main information`);
+      saveState({
+        UpdateMainLeadFormSuccessState: true
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+  }
+
+
   /** Update Lead Information **/
   onUpdateLeadInformation = (e) => {
     const { saveState } = this;
@@ -799,7 +1250,11 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Lead information`);
+      // console.log(response,`successfully Updating Lead information`);
+      saveState({
+        UpdateLeadInformationFormSuccessState: true
+      });
+
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -846,7 +1301,10 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Parent/Child Profile`);
+      // console.log(response,`successfully Updating Parent/Child Profile`);
+      saveState({
+        UpdateParentChildProfileFormSuccessState: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -876,7 +1334,10 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Lead Insurance`);
+      // console.log(response,`successfully Updating Lead Insurance`);
+      saveState({
+        UpdateInsuranceFormSuccessState: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -904,7 +1365,11 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Lead Self Harm History`);
+      // console.log(response,`successfully Updating Lead Self Harm History`);
+      saveState({
+        UpdateSelfHarmHistoryFormSuccessState: true
+      });
+
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -930,7 +1395,10 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Lead Violence History`);
+      // console.log(response,`successfully Updating Lead Violence History`);
+      saveState({
+        UpdateViolenceHistoryFormSuccessState: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -959,7 +1427,10 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Lead Violence History`);
+      // console.log(response,`successfully Updating Lead Violence History`);
+      saveState({
+        UpdateLegalHistoryFormSuccessState: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -985,7 +1456,10 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Lead Violence History`);
+      // console.log(response,`successfully Updating Lead Violence History`);
+      saveState({
+        UpdateTheraphyHistoryFormSuccessState: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -1016,7 +1490,10 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating School History`);
+      // console.log(response,`successfully Updating School History`);
+      saveState({
+        UpdateSchoolHistoryFormSuccessState: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -1042,7 +1519,10 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`successfully Updating Drug History`);
+      // console.log(response,`successfully Updating Drug History`);
+      saveState({
+        UpdateDrugHistoryFormSuccessState: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -1051,28 +1531,203 @@ export default class EditLead extends Component {
 
   /** Update Sexual History **/
   onUpdateSexualHistory = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
 
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadSexualHistory',
+        SexualHistoryIsSexuallyActive: this.state.SexualHistoryIsSexuallyActive,
+        SexualHistoryRelHistory: this.state.SexualHistoryRelHistory,
+        SexualHistoryDevianceHistory: this.state.SexualHistoryDevianceHistory,
+        SexualHistoryInternetHistory: this.state.SexualHistoryInternetHistory,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      // console.log(response,`successfully Updating Sexual History`);
+      saveState({
+        UpdateSexualHistoryFormSuccessState: true
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
   }
   
   /** Update Emergency Contact  **/
   onUpdateEmergencyContact = (e) => {
-    
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
+
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadEmergencyContact',
+        EmergencyContactECName: this.state.EmergencyContactECName,
+        EmergencyContactECRelationship: this.state.EmergencyContactECRelationship,
+        EmergencyContactECPhone: this.state.EmergencyContactECPhone,
+        EmergencyContactECAddress: this.state.EmergencyContactECAddress,
+        EmergencyContactECCity: this.state.EmergencyContactECCity,
+        EmergencyContactECState: this.state.EmergencyContactECState,
+        EmergencyContactECZip: this.state.EmergencyContactECZip,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      // console.log(response,`successfully Updating Emergency Contact`);
+      saveState({
+        UpdateEmergencyContactFormSuccessState: true
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
   }
   
   /** Update Verification Benefits **/
   onUpdateVerificationBenefits = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
 
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadVerificationOfBenefits',
+        PreAppFilePath: this.state.PreAppFilePath,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      // console.log(response,`successfully Updating Verification Benefits`);
+      saveState({
+        UpdateVerificationOfBenifitsFormSuccessState: true
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
   }
 
   /** Update Referral Info **/
   onUpdateReferralInfo = (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
 
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadReferralInfo',
+        RefererralInfoInitialDisposition: this.state.RefererralInfoInitialDisposition,
+        RefererralInfoHowHear: this.state.RefererralInfoHowHear,
+        RefererralInfoRefSource: this.state.RefererralInfoRefSource,
+        RefererralInfoRefReason: this.state.RefererralInfoRefReason,
+        RefererralInfoIsEmergency: this.state.RefererralInfoIsEmergency,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      // console.log(response,`successfully Updating Referral Info`);
+      saveState({
+        UpdateReferralFormSuccessState: true
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
   }
   
   /** Update Parent Guardian Sponsor Info **/
   onUpdateParentGuardianSponsorInfo= (e) => {
+    const { saveState } = this;
+    const LeadID = getURLParams('leadID');
+    saveState({ LeadID });
 
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblLeads',
+        queryType: 'updateLeadParentGuardianSponsorInfo',
+        GuardRelationship: this.state.GuardRelationship,
+        GuardName: this.state.GuardName,
+        GuardAddress: this.state.GuardAddress,
+        GuardCity: this.state.GuardCity,
+        GuardState: this.state.GuardState,
+        GuardZip: this.state.GuardZip,
+        GuardHomePhone: this.state.GuardHomePhone,
+        GuardMobilePhone: this.state.GuardMobilePhone,
+        GuardEmail: this.state.GuardEmail,
+        GuardFax: this.state.GuardFax,
+        GuardMethod: this.state.GuardMethod,
+        GuardSponsor: this.state.GuardSponsor,
+        GuardLegalCust: this.state.GuardLegalCust,
+        GuardPhysCust: this.state.GuardPhysCust,
+        GuardEC: this.state.GuardEC,
+        GuardPG: this.state.GuardPG,
+        GuardDOB: this.state.GuardDOB,
+        GuardSSN: this.state.GuardSSN,
+        GuardJobTitle: this.state.GuardJobTitle,
+        GuardEmployer: this.state.GuardEmployer,
+        GuardWorkPhone: this.state.GuardWorkPhone,
+        GuardWorkEmail: this.state.GuardWorkEmail,
+        GuardWorkFax: this.state.GuardWorkFax,
+        GuardReligion: this.state.GuardReligion,
+        GuardRelDesc: this.state.GuardRelDesc,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      // console.log(response,`successfully Parent Guardian Sponsor Info`);
+      saveState({
+        UpdateparentGuardianSponsorInfoFormSuccessState: true
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
   }
+
+
+
+  onAddToDo = (e) => {
+    const { saveState, state } = this;
+    const LeadID = getURLParams('leadID');
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblToDo',
+        queryType: 'addNewTodoSingleLeadEditPage',
+        ToDoReminderDate: state.ToDoReminderDate,
+        ToDoText: state.ToDoText,
+        ToDoUser: state.ToDoUser,
+        LeadID: LeadID
+      }
+    })
+    .then(function (response) {
+      console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
+      saveState({
+        UserTodoList: state.UserTodoList.filter(({ LeadID })=> LeadID != response.data)
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+};
 
   onChangeOption = (type, e) => {
     // const { LeadInfo } = this.state;
@@ -1491,6 +2146,374 @@ export default class EditLead extends Component {
       }
   }
 
+  onChangeSexualHistoryInput = (type, e) => {
+    switch(type){
+      case 'EditIsSexuallyActive':
+          this.saveState({
+            SexualHistoryIsSexuallyActive: e.value
+          });
+      break;
+      case 'EditRelHistory':
+        this.saveState({
+          SexualHistoryRelHistory: e.target.value
+        });
+      break;
+      case 'EditDevianceHistory':
+        this.saveState({
+          SexualHistoryDevianceHistory: e.target.value
+        });
+      break;    
+      case 'EditInternetHistory':
+        this.saveState({
+          SexualHistoryInternetHistory: e.target.value
+        });
+      break;    
+      }
+  }
+
+  onChangeEmergencyContactInput = (type, e) => {
+    switch(type){
+      case 'EditECName':
+          this.saveState({
+            EmergencyContactECName: e.target.value
+          });
+      break;
+      case 'EditECRelationship':
+        this.saveState({
+          EmergencyContactECRelationship: e.target.value
+        });
+      break;
+      case 'EditECPhone':
+        this.saveState({
+          EmergencyContactECPhone: e.target.value
+        });
+      break;    
+      case 'EditECAddress':
+        this.saveState({
+          EmergencyContactECAddress: e.target.value
+        });
+      break;   
+      case 'EditECCity':
+        this.saveState({
+          EmergencyContactECCity: e.target.value
+        });
+      break;
+      case 'EditECState':
+        this.saveState({
+          EmergencyContactECState: e.target.value
+        });
+      break;
+      case 'EditECZip':
+        this.saveState({
+          EmergencyContactECZip: e.target.value
+        });
+      break;    
+      }
+  }
+
+  onChangeParentGuardianSponsorInfoInput = (type, e) => {
+    switch(type){
+      case 'EditGuardRelationship':
+          this.saveState({
+            GuardRelationship: e.target.value
+          });
+      break;
+      case 'EditGuardName':
+        this.saveState({
+          GuardName: e.target.value
+        });
+      break;
+      case 'EditGuardAddress':
+        this.saveState({
+          GuardAddress: e.target.value
+        });
+      break;    
+      case 'EditGuardCity':
+        this.saveState({
+          GuardCity: e.target.value
+        });
+      break;   
+      case 'EditGuardState':
+        this.saveState({
+          GuardState: e.target.value
+        });
+      break;
+      case 'EditGuardZip':
+        this.saveState({
+          GuardZip: e.target.value
+        });
+      break;
+      case 'EditGuardHomePhone':
+        this.saveState({
+          GuardHomePhone: e.target.value
+        });
+      break;    
+      case 'EditGuardMobilePhone':
+        this.saveState({
+          GuardMobilePhone: e.target.value
+        });
+      break;    
+      case 'EditGuardEmail':
+        this.saveState({
+          GuardEmail: e.target.value
+        });
+      break;    
+      case 'EditGuardFax':
+        this.saveState({
+          GuardFax: e.target.value
+        });
+      break;    
+      case 'EditGuardMethod':
+        this.saveState({
+          GuardMethod: e.target.value
+        });
+      break;    
+      case 'EditGuardSponsor':
+        this.saveState({
+          GuardSponsor: e.value
+        });
+      break;    
+      case 'EditGuardLegalCust':
+        this.saveState({
+          GuardLegalCust: e.value
+        });
+      break;    
+      case 'EditGuardPhysCust':
+        this.saveState({
+          GuardPhysCust: e.value
+        });
+      break;    
+      case 'EditGuardEC':
+        this.saveState({
+          GuardEC: e.value
+        });
+      break;    
+      case 'EditGuardPG':
+        this.saveState({
+          GuardPG: e.value
+        });
+      break;    
+      case 'EditGuardDOB':
+        this.saveState({
+          GuardDOB: e
+        });
+      break;    
+      case 'EditGuardSSN':
+        this.saveState({
+          GuardSSN: e.target.value
+        });
+      break;    
+      case 'EditGuardJobTitle':
+        this.saveState({
+          GuardJobTitle: e.target.value
+        });
+      break;    
+      case 'EditGuardEmployer':
+        this.saveState({
+          GuardEmployer: e.target.value
+        });
+      break;    
+      case 'EditGuardWorkPhone':
+        this.saveState({
+          GuardWorkPhone: e.target.value
+        });
+      break;    
+      case 'EditGuardWorkEmail':
+        this.saveState({
+          GuardWorkEmail: e.target.value
+        });
+      break;    
+      case 'EditGuardWorkFax':
+        this.saveState({
+          GuardWorkFax: e.target.value
+        });
+      break;    
+      case 'EditGuardReligion':
+        this.saveState({
+          GuardReligion: e.target.value
+        });
+      break;    
+      case 'EditGuardRelDesc':
+        this.saveState({
+          GuardRelDesc: e.target.value
+        });
+      break;    
+      }
+  }
+
+  onChangeReferralInfoInput = (type, e) => {
+    switch(type){
+      case 'EditInitialDisposition':
+          this.saveState({
+            RefererralInfoInitialDisposition: e.value
+          });
+      break; 
+      case 'EditHowHear':
+          this.saveState({
+            RefererralInfoHowHear: e.target.value
+          });
+      break; 
+      case 'EditRefSource':
+          this.saveState({
+            RefererralInfoRefSource: e.target.value
+          });
+      break; 
+      case 'EditRefReason':
+          this.saveState({
+            RefererralInfoRefReason: e.target.value
+          });
+      break; 
+      case 'EditIsEmergency':
+          this.saveState({
+            RefererralInfoIsEmergency: e.value
+          });
+      break; 
+    } 
+  }
+
+  onChangeVerificationBenefitsInput = (type, e) => {
+    switch(type){
+      case 'EditPreAppFilePath':
+          this.saveState({
+            PreAppFilePath: e.target.value
+          });
+      break; 
+    }
+  }
+
+  onChangeMainLeadOption  = (type, e) => {
+    switch(type){
+      case 'Status':
+          this.saveState({
+            Status: e.value
+          });
+      break; 
+      case 'Disposition':
+        console.log('type EditDisposition:'+type);
+          this.saveState({
+            Disposition: e.value
+          });
+      break; 
+      // case 'CrisisScale':
+      //     this.saveState({
+      //       CrisisScale: e.value
+      //     });
+      // break; 
+      case 'InitialRep':
+          this.saveState({
+            InitialRep: e.value
+          });
+      break; 
+      case 'AssignedAdvocate':
+          this.saveState({
+            AssignedAdvocate: e.value
+          });
+      break; 
+      case 'FirstName':
+          this.saveState({
+            FirstName: e.target.value
+          });
+      break; 
+      case 'LastName':
+          this.saveState({
+            LastName: e.target.value
+          });
+      break; 
+      case 'Email':
+          this.saveState({
+            Email: e.target.value
+          });
+      break; 
+      case 'HomePhone':
+          this.saveState({
+            HomePhone: e.target.value
+          });
+      break; 
+      case 'SubstanceAbuse':
+          this.saveState({
+            SubstanceAbuse: e.value
+          });
+      break; 
+      case 'MentalHealth':
+          this.saveState({
+            MentalHealth: e.value
+          });
+      break; 
+      case 'DualDiagnosis':
+          this.saveState({
+            DualDiagnosis: e.value
+          });
+      break; 
+      case 'Diagnosis':
+          this.saveState({
+            Diagnosis: e.target.value
+          });
+      break; 
+    }
+  }
+
+   
+   onChangeLeadNotesInput  = (type, e) => {
+    switch(type){
+      case 'NewLeadNoteText':
+          this.saveState({
+            NewLeadNoteText: e.target.value
+          });
+      break; 
+    }
+  }
+
+  onChangeTodoItemOption = (type, e) => {
+    console.log('Type: '+type);
+    switch(type){
+      case 'NewLeadNotes':
+        console.log('Type: '+e.target.value);
+          this.saveState({
+            ToDoText: e.target.value
+          });
+      break; 
+      case 'ToDoReminderDate':
+        console.log('Value: '+e);
+          this.saveState({
+            ToDoReminderDate: e
+          });
+      break; 
+      case 'ToDoUser':
+        console.log('Value: '+e.value);
+          this.saveState({
+            ToDoUser: e.value
+          });
+      break; 
+    }
+  }
+
+
+  // Set the To Do Item to Done
+  onSetToDoneToDoList = (todoListId) => {
+    console.log("updateToDoListToDone value: "+todoListId);
+    const { saveState, state } = this;
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+          tblName: 'tblToDo',
+          queryType: 'updateToDoListToDone',
+          ToDoID: todoListId
+      }
+    })
+    .then(function (response) {
+      console.log(response,`Deleted Company Insurance successfull`);
+      saveState({
+        UserTodoList: state.UserTodoList.filter(({ ToDoID })=> ToDoID != todoListId)
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+  };
+
+
+
   onChangeInput = (type, e) => {
 
   }
@@ -1516,15 +2539,18 @@ export default class EditLead extends Component {
     this.saveState(stateLess);
   }
 
+  
   onBack = () => {}
 
   onPrintView = () => {}
 
-  render() {
 
-    const { onBack, onChangeInput,onLeadInformationChangeInput, onChangeParentChildProfileInput, onChangeLeadInsuranceInput, onChangeSelfharmHistoryInput, onChangeViolenceHistoryOption, onChangeLegalHistoryOption, onChangeTherapyHistoryOption, onPrintView, onChangeDate, onChangeOption, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
-      onChangeSchoolHistoryOption, onChangeDrugHistoryOption, onUpdateViolenceHistory, onUpdateLegalHistory, onUpdateSchoolHistory, onUpdateTherapyHistory, onUpdateSexualHistory, onUpdateDrugHistory, onUpdateEmergencyContact, 
-            onUpdateVerificationBenefits, onUpdateReferralInfo, onUpdateParentGuardianSponsorInfo, state: { LeadName, LeadID, LeadInfo } } = this;
+  render() {
+    
+    const { onBack, onChangeInput, onChangeMainLeadOption, onLeadInformationChangeInput, onChangeParentChildProfileInput, onChangeLeadInsuranceInput, onChangeSelfharmHistoryInput, onChangeViolenceHistoryOption, onChangeLegalHistoryOption, onChangeTherapyHistoryOption, onPrintView, onChangeDate, onChangeOption, onUpdateLeadMainInformation, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
+      onChangeSchoolHistoryOption, onChangeDrugHistoryOption, onChangeSexualHistoryInput, onChangeEmergencyContactInput, onChangeParentGuardianSponsorInfoInput, onChangeReferralInfoInput, onChangeVerificationBenefitsInput, onChangeLeadNotesInput,
+      onUpdateViolenceHistory, onUpdateLegalHistory, onUpdateSchoolHistory, onUpdateTherapyHistory, onUpdateSexualHistory, onUpdateDrugHistory, onUpdateEmergencyContact, 
+      onUpdateVerificationBenefits, onUpdateReferralInfo, onUpdateParentGuardianSponsorInfo, onAddLeadNote, onSetToDoneToDoList, onAddToDo, onChangeTodoItemOption, state: { LeadName, LeadID, LeadInfo } } = this;
             
     return (<>
       <SEO title="View/Edit Lead" />
@@ -1544,58 +2570,82 @@ export default class EditLead extends Component {
             <Container>
               <Row className="justify-content-center align-items-center mb-5">
                 <Col breakPoint={{ xs: 12 }}>
-                  {/* <h2 className="text-center mb-5">View/Edit {this.state.FirstName} {this.state.LastName} {LeadName} ({LeadID})</h2> */}
-                  <h2 className="text-center mb-5">View/Edit {this.state.FirstName} {this.state.LastName} ({LeadID})</h2>
+                  <h2 className="text-center mb-5">View/Edit: {this.state.FirstName} {this.state.LastName} ({LeadID})</h2>
                   <p className="text-center">
-                    Child: <i>{this.state.PatientName}</i><br/>
-                    {this.state.PatientGender}{this.state.PatientAge}{this.state.IsAdopted}
-                    <span className="d-block text-danger">{this.state.IsDrugUse}{this.state.IsSexuallyActive}</span>
-                    <span className="d-block text-danger">{this.state.IsViolent}{this.state.IsCourtOrdered}</span>
+                    
+                   <span className="d-block">Child: <i>{this.state.PatientName}</i></span>
+                   <i><span className="d-block">{this.state.PatientGender? this.state.PatientGender+ ', age ':'Age '} 
+                    {this.state.PatientAge>= 1 ? this.state.PatientAge+', ' : 'n/a, '} 
+                    {this.state.IsAdopted == 1 ? 'adopted' : 'not adopted'} </span>
 
-                    {/* Child: <i>{LeadInfo.ParentName}</i><br/>
-                    {LeadInfo.PatientGender}{LeadInfo.PatientAge}{LeadInfo.IsAdopted}
-                    <span className="d-block text-danger">{LeadInfo.IsDrugUse}{LeadInfo.IsSexuallyActive}</span>
-                    <span className="d-block text-danger">{LeadInfo.IsViolent}{LeadInfo.IsCourtOrdered}</span> */}
+                    <span className="d-block text-danger">{this.state.IsDrugUse == 1 ? 'Drugs/alcohol, ' : 'No drugs/alcohol, '} 
+                    {this.state.IsSexuallyActive == 1 ? 'sexually active' : 'not sexually active'}</span>
+
+                    <span className="d-block text-danger">{this.state.IsViolent == 1 ? 'Displayed violence, ' : 'Not displayed violence, '} 
+                    {this.state.LegalHistoryIsCourtOrdered == 1 ? 'court ordered': 'not court ordered'}</span></i>
                   </p>
+                  
                 </Col> 
                 <Col breakPoint={{ xs: 12 }}>  
+                { this.state.UpdateMainLeadFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated</div> : null }
                   <Row className="mb-2">
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="Status">Status:</label>
-                      <SelectStyled options={leadStatus} placeholder={this.state.Status} value={this.state.Status} id="Status" name="Status" onChange ={onChangeOption.bind(this, 'Status')} />
+                      <SelectStyled options={leadStatus} placeholder={this.state.Status} value={this.state.Status} id="Status" name="Status" onChange ={onChangeMainLeadOption.bind(this, 'Status')} />
                     </Col>
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="Disposition">Disposition:</label>
-                      <SelectStyled options={leadDisposition} placeholder={this.state.Disposition} value={this.state.Disposition} id="Disposition" name="Disposition" onChange ={onChangeOption.bind(this,'Disposition')} />
+                      <SelectStyled options={leadDisposition.map(({ value, label }) => { 
+                                if(value == this.state.Disposition){
+                                  CurrentDisposition = label;
+                                }
+                                return { value: value, label: label };
+                                })}  
+                                placeholder={CurrentDisposition} value={this.state.Disposition} id="Disposition" name="Disposition" onChange ={onChangeMainLeadOption.bind(this,'Disposition')} />
                     </Col>
                   </Row>
-                  <Row className="mb-2">
+                  {/* <Row className="mb-2">
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
-                      <label htmlFor="CrisisScale">CrisisScale:</label>
-                      <SelectStyled options={leadCrisisScale} placeholder={this.state.CrisisScale} value={this.state.CrisisScale} id="CrisisScale" name="CrisisScale" onChange ={onChangeOption.bind(this, 'CrisisScale')} />
+                      <label htmlFor="CrisisScale">Crisis Scale:</label>
+                      <SelectStyled options={leadCrisisScale} placeholder={this.state.CrisisScale} value={this.state.CrisisScale} id="CrisisScale" name="CrisisScale" onChange ={onChangeMainLeadOption.bind(this, 'CrisisScale')} />
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Row className="mb-2">
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="InitialRep">Initial Rep:</label>
-                      <SelectStyled options={leadUsers} placeholder={this.state.InitialRep} value={this.state.InitialRep} id="InitialRep" name="InitialRep" onChange ={onChangeOption.bind(this, 'InitialRep')} />
+                      <SelectStyled options={this.state.UserAdminList.map(({ UserID, FirstName, LastName }) => { 
+                                if(UserID == this.state.InitialRep){
+                                  CurrentInitialRep = FirstName +' '+LastName;
+                                }
+                                return { value: UserID, label: FirstName+ ' '+LastName };
+
+                                })}  
+                                placeholder={CurrentInitialRep} value={this.state.InitialRep} id="InitialRep" name="InitialRep" onChange={onChangeMainLeadOption.bind(this, 'InitialRep')} />
+                      
                     </Col> 
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="AssignedAdvocate">Assigned Advocate:</label>
-                      <SelectStyled options={leadUsers} placeholder={this.state.AssignedAdvocate} value={this.state.AssignedAdvocate} id="AssignedAdvocate" name="AssignedAdvocate" onChange ={onChangeOption.bind(this, 'AssignedAdvocate')} />
+                      <SelectStyled options={this.state.UserAdminList.map(({ UserID, FirstName, LastName }) => { 
+                                if(UserID == this.state.AssignedAdvocate){
+                                  CurrentAssignedAdvocate = FirstName +' '+LastName;
+                                }
+                                return { value: UserID, label: FirstName+ ' '+LastName };
+
+                                })}  
+                                placeholder={CurrentAssignedAdvocate} value={this.state.AssignedAdvocate} id="AssignedAdvocate" name="AssignedAdvocate" onChange ={onChangeMainLeadOption.bind(this, 'AssignedAdvocate')} />
                     </Col>
                   </Row>
                   <Row className="mb-2">
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="FirstName">First Name:</label>
                       <Input fullWidth size="Medium" className="Name">
-                        <input type="text" placeholder={this.state.FirstName} id="FirstName" name="FirstName" onChange ={onChangeInput.bind(this, 'FirstName')}/>
+                        <input type="text" placeholder={this.state.FirstName} id="FirstName" name="FirstName" onChange ={onChangeMainLeadOption.bind(this, 'FirstName')}/>
                       </Input>
                     </Col>
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="LastName">Last Name:</label>
                       <Input fullWidth size="Medium" className="Name">
-                        <input type="text" placeholder={this.state.LastName} id="LastName" name="LastName" onChange ={onChangeInput.bind(this, 'LastName')}/>
+                        <input type="text" placeholder={this.state.LastName} id="LastName" name="LastName" onChange ={onChangeMainLeadOption.bind(this, 'LastName')}/>
                       </Input>
                     </Col>
                   </Row>
@@ -1603,41 +2653,71 @@ export default class EditLead extends Component {
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="Email">Email:</label>
                       <Input fullWidth size="Medium" className="Name">
-                        <input type="text" placeholder={this.state.Email} id="Email" name="Email" onChange ={onChangeInput.bind(this, 'Email')}/>
+                        <input type="text" placeholder={this.state.Email} id="Email" name="Email" onChange ={onChangeMainLeadOption.bind(this, 'Email')}/>
                       </Input>
                     </Col>
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="HomePhone">Home Phone:</label>
                       <Input fullWidth size="Medium" className="Name">
-                        <input type="text" placeholder={this.state.HomePhone} id="HomePhone" name="HomePhone" onChange ={onChangeInput.bind(this, 'HomePhone')}/>
+                        <input type="text" placeholder={this.state.HomePhone} id="HomePhone" name="HomePhone" onChange ={onChangeMainLeadOption.bind(this, 'HomePhone')}/>
                       </Input>
                     </Col>
                   </Row>
                   <Row className="mb-2">
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="SubstanceAbuse">Substance Abuse?:</label>
-                      <SelectStyled options={leadYesNo} placeholder={this.state.SubstanceAbuse} value={this.state.SubstanceAbuse} id="SubstanceAbuse" name="SubstanceAbuse" onChange ={onChangeOption.bind(this, 'SubstanceAbuse')} />
+                      <SelectStyled options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.SubstanceAbuse){
+                                    case '0':
+                                      SubstanceAbuseStatus = 'No'
+                                        break;
+                                    case '1':
+                                      SubstanceAbuseStatus = 'Yes'
+                                        break;    
+                                  }
+                                  return { value: value, label: label };
+                                })} placeholder={SubstanceAbuseStatus} value={this.state.SubstanceAbuse} id="SubstanceAbuse" name="SubstanceAbuse" onChange ={onChangeMainLeadOption.bind(this, 'SubstanceAbuse')} />
                     </Col>
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="MentalHealth">Mental Health:</label>
-                      <SelectStyled options={leadYesNo} placeholder={this.state.MentalHealth} value={this.state.MentalHealth} id="MentalHealth" name="MentalHealth" onChange ={onChangeOption.bind(this, 'MentalHealth')} />
+                      <SelectStyled options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.MentalHealth){
+                                    case '0':
+                                      MentalHealthStatus = 'No'
+                                        break;
+                                    case '1':
+                                      MentalHealthStatus = 'Yes'
+                                        break;    
+                                  }
+                                  return { value: value, label: label };
+                                })} placeholder={MentalHealthStatus} value={this.state.MentalHealth} id="MentalHealth" name="MentalHealth" onChange ={onChangeMainLeadOption.bind(this, 'MentalHealth')} />
                     </Col>
                   </Row>
                   <Row className="mb-2">
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="DualDiagnosis">Dual Diagnosis:</label>
-                      <SelectStyled options={leadYesNo} placeholder={this.state.DualDiagnosis} value={this.state.DualDiagnosis} id="DualDiagnosis" name="DualDiagnosis" onChange ={onChangeOption.bind(this, 'DualDiagnosis')} />
+                      <SelectStyled options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.DualDiagnosis){
+                                    case '0':
+                                      DualDiagnosisStatus = 'No'
+                                        break;
+                                    case '1':
+                                      DualDiagnosisStatus = 'Yes'
+                                        break;    
+                                  }
+                                  return { value: value, label: label };
+                                })} placeholder={DualDiagnosisStatus} value={this.state.DualDiagnosis} id="DualDiagnosis" name="DualDiagnosis" onChange ={onChangeMainLeadOption.bind(this, 'DualDiagnosis')} />
                     </Col>
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                       <label htmlFor="Diagnosis">Diagnosis:</label>
                       <Input fullWidth size="Medium" className="Name">
-                        <input type="text" placeholder={this.state.Diagnosis} id="Diagnosis" name="Diagnosis" onChange ={onChangeInput.bind(this, 'Diagnosis')}/>
+                        <input type="text" placeholder={this.state.Diagnosis} id="Diagnosis" name="Diagnosis" onChange={onChangeMainLeadOption.bind(this, 'Diagnosis')}/>
                       </Input>
                     </Col>
                   </Row>
                   <Row className="mb-4">
                     <Col breakPoint={{ xs: 12, md: 6 }} className="mb-5">
-                        <Button status="Success" type="button" shape="SemiRound" fullWidth className="text-uppercase">SAVE {LeadName}'s LEAD PROFILE</Button>
+                        <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLeadMainInformation} fullWidth className="text-uppercase">SAVE {this.state.FirstName.toUpperCase()}'s LEAD PROFILE</Button>
                     </Col>
                   </Row>
                   <Row className="mb-4">
@@ -1664,10 +2744,11 @@ export default class EditLead extends Component {
                 </Col>
                 <Col breakPoint={{ xs: 12 }}>
                   <p className="text-center">
-                    Campaign: {this.state.Campaign}<br/>
-                    Signup Date: {this.state.SignUpDate}<br/>
-                    IP Address: {this.state.IPAddress}<br/>
-                    Terms Accepted: {this.state.TermsAccepted}<br/>
+                  <span className="d-block">Campaign: {this.state.CampaignName}</span> 
+                    <span className="d-block">Signup Date: {this.state.CreatedDate}</span>
+                    <span className="d-block">IP Address: {this.state.IPAddress}</span>
+                    {/* <span className="d-block">Terms Accepted: { this.state.TermsApprovedDate != null ? this.state.TermsApprovedDate : "<span className='text-danger'>Not Accepted</span> <span classname='text-danger' onClick={onUpdateDrugHistory}><i class='fa fa-paper-plane-o'></i> Mark Terms Accepted</span>"}</span> */}
+                    <span className="d-block">Terms Accepted: { this.state.TermsApprovedDate != null ? this.state.TermsApprovedDate : ""}</span>
                   </p>
                 </Col>
               </Row>
@@ -1677,25 +2758,26 @@ export default class EditLead extends Component {
 
         <Card>
           <CardBody>
-
-          
           <Container>
             <Row className="justify-content-center align-items-left mb-5">
               <Col breakPoint={{ xs: 12 }}>
                 <h2 className="text-left mb-5">LEAD NOTES</h2>
               </Col>
               <Col breakPoint={{ xs: 12 }}>
+              
+              { this.state.UpdateLeadNotesFormSuccessState ? <div className="text-center text-success mb-4">Successfully Added New Note</div> : null }
+
                 <Row className="mb-2">
                   <Col breakPoint={{ xs: 12 }}>
                     <label htmlFor="NewLeadNotes">Add a new lead note for {stringFirstCharCapitalized(this.state.FirstName.toLowerCase())} {stringFirstCharCapitalized(this.state.LastName.toLowerCase())}</label>
                   </Col>
                   <Col breakPoint={{ xs: 12, md: 10 }} className="mb-2">
-                    <Input fullWidth size="Medium" className="Name">
-                      <input type="text" placeholder='' id="NewLeadNotes" name="NewLeadNotes" onChange ={onChangeInput.bind(this, 'NewLeadNotes')}/>
+                    <Input fullWidth size="Medium" className="Name"> 
+                      <input type="text" placeholder='' id="NewLeadNoteText" name="NewLeadNoteText" onChange ={onChangeLeadNotesInput.bind(this, 'NewLeadNoteText')}/>
                     </Input>
                   </Col>
                   <Col breakPoint={{ xs: 12, md: 2 }}>
-                    <Button status="Warning" type="button" shape="SemiRound" fullWidth className="text-uppercase">+ ADD NOTE</Button>
+                    <Button status="Warning" type="button" shape="SemiRound" onClick={onAddLeadNote} fullWidth className="text-uppercase">+ ADD NOTE</Button>
                   </Col>
                 </Row>
                 <Row className="justify-content-left align-items-left mb-5">
@@ -1712,11 +2794,15 @@ export default class EditLead extends Component {
                         </tr>
                       </thead>
                       <tbody>
+                      {this.state.LeadNoteData.map(({ EnteredBy, EnteredDate, NoteText }) => { 
+                        return (
                         <tr> 
-                          <td scope="col"></td>
-                          <td></td>
-                          <td></td>
+                          <td scope="col">{EnteredBy}</td>
+                          <td>{EnteredDate}</td>
+                          <td>{NoteText}</td>
                         </tr>
+                        );
+                        })}
                       </tbody>
                     </table>
                   </Col>
@@ -1738,7 +2824,8 @@ export default class EditLead extends Component {
 
                   <Accordion>
                     {/* Lead information */}
-                    {/* <AccordionItem uniqueKey={1} title="LEAD INFORMATION">
+                    <AccordionItem uniqueKey={1} title="LEAD INFORMATION">
+                        { this.state.UpdateLeadInformationFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Lead information</div> : null }
                         <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditCompanyName">Company Name</label>
@@ -1841,12 +2928,13 @@ export default class EditLead extends Component {
                             <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLeadInformation} fullWidth> UPDATE/SAVE {this.state.FirstName} LEAD INFORMATION</Button>
                         </Col>
                       </Row>
-                    </AccordionItem> */}
+                    </AccordionItem>
                     {/* End Lead information */}
 
 
                     {/* PATIENT/CHILD PROFILE */}
-                    {/* <AccordionItem uniqueKey={2} title="PATIENT/CHILD PROFILE">
+                     <AccordionItem uniqueKey={2} title="PATIENT/CHILD PROFILE">
+                     { this.state.UpdateParentChildProfileFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Patien/Child Profile </div> : null }
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                           <label htmlFor="EditPatientName">Full Name</label>
@@ -1857,11 +2945,11 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                           <label htmlFor="EditPatientDOB">Date of Birth</label>
                           <Input fullWidth size="Medium" className="EditPatientDOB">
-                              <DatePicker id="EditPatientDOB" name="EditPatientDOB" placeholder={this.state.PatientDOB} selected={this.state.PatientDOB} value={this.state.PatientDOB}  onChange={onChangeParentChildProfileInput.bind(this, 'EditPatientDOB')} />
+                              <DatePicker id="EditPatientDOB" name="EditPatientDOB" selected={this.state.PatientDOB} onChange={onChangeParentChildProfileInput.bind(this, 'EditPatientDOB')} />
                           </Input>
                         </Col>
                       </Row>
-
+                               
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                         <label htmlFor="EditPatientAge">Age</label>
@@ -1875,8 +2963,6 @@ export default class EditLead extends Component {
                             <SelectStyled className="selectoption" options={GenderList} placeholder={this.state.PatientGender} value="" id="EditPatientGender" name="EditPatientGender" onChange ={onChangeParentChildProfileInput.bind(this, 'EditPatientGender')} />
                           </Input>
                         </Col>
-                      </Row>
-                      <Row className="mb-2">
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                         <label htmlFor="EditIsAdopted">Adopted</label>
                           <Input fullWidth size="Medium" className="EditIsAdopted">
@@ -1894,12 +2980,10 @@ export default class EditLead extends Component {
                                 })}  placeholder={PatientIsAdoptedStatus}  value={this.state.PatientIsAdopted} id="EditIsAdopted" name="EditIsAdopted" onChange ={onChangeParentChildProfileInput.bind(this, 'EditIsAdopted')} />
                           </Input>
                         </Col>
-                      </Row>
-                      <Row className="mb-2">
-                        <Col breakPoint={{ xs: 12 }} className="mb-2">
+                        <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                           <label htmlFor="EditExpectToEnrollDate">Expect To Enroll Date</label>
                           <Input fullWidth size="Medium" className="EditExpectToEnrollDate">
-                              <DatePicker id="EditExpectToEnrollDate" name="EditExpectToEnrollDate" placeholder={this.state.PatientExpectToEnrollDate} selected={this.state.PatientExpectToEnrollDate} value={this.state.PatientExpectToEnrollDate} onChange={onChangeParentChildProfileInput.bind(this, 'EditExpectToEnrollDate')} />
+                              <DatePicker id="EditExpectToEnrollDate" name="EditExpectToEnrollDate"  selected={this.state.PatientExpectToEnrollDate} onChange={onChangeParentChildProfileInput.bind(this, 'EditExpectToEnrollDate')} />
                           </Input>
                         </Col>
                       </Row>
@@ -2051,17 +3135,18 @@ export default class EditLead extends Component {
                           </Input>
                         </Col>
                       </Row>
-
+                   
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateChildProfile} fullWidth> <i className="fa fa-floppy-o" aria-hidden="true"></i>UPDATE/SAVE {this.state.FirstName} PATIENT/CHILD PROFILE</Button>
                         </Col>
                       </Row>
-                    </AccordionItem> */}
+                    </AccordionItem> 
                     {/* END PATIENT/CHILD PROFILE */}
 
                     {/* INSURANCE */}
                     <AccordionItem uniqueKey={3} title="INSURANCE">
+                    { this.state.UpdateInsuranceFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Insurance</div> : null }
                       <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditInsuranceProvider">Insurance Provider</label>
@@ -2142,6 +3227,7 @@ export default class EditLead extends Component {
 
                     {/* SELF HARM HISTORY */}
                     <AccordionItem uniqueKey={4} title="SELF HARM HISTORY">
+                    { this.state.UpdateSelfHarmHistoryFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Self Harm History</div> : null }
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditSuicidal">Currently Suicidal?</label>
@@ -2191,7 +3277,8 @@ export default class EditLead extends Component {
                     {/* END SELF HARM HISTORY */}
 
                     {/* Start Violence HISTORY */}
-                    {/* <AccordionItem uniqueKey={5} title="VIOLENCE HISTORY">
+                    <AccordionItem uniqueKey={5} title="VIOLENCE HISTORY">
+                    { this.state.UpdateViolenceHistoryFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Violence Harm History</div> : null }
                     <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditIsViolent">Violent?</label>
@@ -2232,11 +3319,12 @@ export default class EditLead extends Component {
                             <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateViolenceHistory} fullWidth>   UPDATE/SAVE {this.state.FirstName} VIOLENCE HISTORY</Button>
                         </Col>
                       </Row>
-                    </AccordionItem> */}
+                    </AccordionItem>
                     {/* End Violence HISTORY */}
 
                     {/* Legal History  */}
-                    {/* <AccordionItem uniqueKey={6} title="LEGAL HISTORY">
+                    <AccordionItem uniqueKey={6} title="LEGAL HISTORY">
+                    { this.state.UpdateLegalHistoryFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Legal History</div> : null }
                       <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditLegalDesc">Legal Issue History</label>
@@ -2286,7 +3374,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditNextCourtDate">Next Court Date</label>
                             <Input fullWidth size="Medium" className="EditNextCourtDate">
-                                <DatePicker id="EditNextCourtDate" name="EditNextCourtDate" selected={this.state.LegalHistoryNextCourtDate} value={this.state.LegalHistoryNextCourtDate} onChange={onChangeLegalHistoryOption.bind(this, 'EditNextCourtDate')} />
+                                <DatePicker id="EditNextCourtDate" name="EditNextCourtDate" selected={this.state.LegalHistoryNextCourtDate} onChange={onChangeLegalHistoryOption.bind(this, 'EditNextCourtDate')} />
                             </Input>
                           </Col>
                       </Row>
@@ -2305,10 +3393,11 @@ export default class EditLead extends Component {
                               <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateLegalHistory} fullWidth> UPDATE/SAVE {this.state.FirstName} LEGAL HISTORY</Button>
                           </Col>
                         </Row>
-                    </AccordionItem> */}
+                    </AccordionItem>
 
                     {/* THERAPY HISTORY  */}
                     <AccordionItem uniqueKey={7} title="THERAPY HISTORY">
+                    { this.state.UpdateTheraphyHistoryFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Therapy History</div> : null }
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditTherapyDesc">Therapy History</label>
@@ -2343,7 +3432,7 @@ export default class EditLead extends Component {
 
                     {/* School HISTORY  */}
                     <AccordionItem uniqueKey={8} title="SCHOOL HISTORY">
-                      
+                    { this.state.UpdateSchoolHistoryFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated School History</div> : null }
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditSchoolGrade">School Grade</label>
@@ -2414,6 +3503,7 @@ export default class EditLead extends Component {
 
                     {/* DRUG HISTORY  */}
                     <AccordionItem uniqueKey={9} title="DRUG HISTORY">
+                    { this.state.UpdateDrugHistoryFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated</div> : null }
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditAlcoholOrMarijuana">Alcohol or Marijuana Use?</label>
@@ -2457,12 +3547,25 @@ export default class EditLead extends Component {
                     </AccordionItem>
                     {/* END DRUG HISTORY  */}
                     
+                    {/* SEXUAL HISTORY  */}
                     <AccordionItem uniqueKey={10} title="SEXUAL HISTORY">
+                    { this.state.UpdateSexualHistoryFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Sexual History</div> : null }
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditIsSexuallyActive">Sexually Active?</label>
                           <Input fullWidth size="Medium" className="EditIsSexuallyActive">
-                            <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditIsSexuallyActive" name="EditIsSexuallyActive" onChange ={onChangeOption.bind(this, 'EditIsSexuallyActive')} />
+                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.SexualHistoryIsSexuallyActive){
+                                    case '0':
+                                      SexuallyActiveStatus = 'No'
+                                        break;
+                                    case '1':
+                                      SexuallyActiveStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={SexuallyActiveStatus} value={this.state.SexualHistoryIsSexuallyActive} id="EditIsSexuallyActive" name="EditIsSexuallyActive" onChange ={onChangeSexualHistoryInput.bind(this, 'EditIsSexuallyActive')} />
                           </Input>
                         </Col>
                       </Row>
@@ -2470,7 +3573,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditRelHistory">Sexual Relationship History</label>
                           <Input fullWidth size="Medium" className="EditRelHistory">
-                            <textarea type="text" placeholder="" id="EditRelHistory" name="EditRelHistory" onChange ={onChangeInput.bind(this, 'EditRelHistory')}/>
+                            <textarea type="text" placeholder={this.state.SexualHistoryRelHistory} id="EditRelHistory" name="EditRelHistory" onChange ={onChangeSexualHistoryInput.bind(this, 'EditRelHistory')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2478,7 +3581,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditDevianceHistory">Sexual Deviance History</label>
                           <Input fullWidth size="Medium" className="EditDevianceHistory">
-                            <textarea type="text" placeholder="" id="EditDevianceHistory" name="EditDevianceHistory" onChange ={onChangeInput.bind(this, 'EditDevianceHistory')}/>
+                            <textarea type="text" placeholder={this.state.SexualHistoryDevianceHistory} id="EditDevianceHistory" name="EditDevianceHistory" onChange ={onChangeSexualHistoryInput.bind(this, 'EditDevianceHistory')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2486,7 +3589,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditInternetHistory">Sexual Internet History</label>
                           <Input fullWidth size="Medium" className="EditInternetHistory">
-                            <textarea type="text" placeholder="" id="EditInternetHistory" name="EditInternetHistory" onChange ={onChangeInput.bind(this, 'EditInternetHistory')}/>
+                            <textarea type="text" placeholder={this.state.SexualHistoryInternetHistory} id="EditInternetHistory" name="EditInternetHistory" onChange ={onChangeSexualHistoryInput.bind(this, 'EditInternetHistory')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2496,20 +3599,24 @@ export default class EditLead extends Component {
                         </Col>
                       </Row>
                     </AccordionItem>
+                    {/* END SEXUAL HISTORY  */}
 
 
+                    {/* EMERGENCY CONTACT  */}            
                     <AccordionItem uniqueKey={13} title="EMERGENCY CONTACT">
+                    { this.state.UpdateEmergencyContactFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Emergency Contact</div> : null }
+
                     <Row className="mb-2">
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                           <label htmlFor="EditECName">Name</label>
                           <Input fullWidth size="Medium" className="EditECName">
-                            <input type="text" placeholder="" id="EditECName" name="EditECName" onChange ={onChangeInput.bind(this, 'EditECName')}/>
+                            <input type="text" placeholder={this.state.EmergencyContactECName} id="EditECName" name="EditECName" onChange ={onChangeEmergencyContactInput.bind(this, 'EditECName')}/>
                           </Input>
                         </Col>
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                           <label htmlFor="EditECRelationship">Relationship</label>
                           <Input fullWidth size="Medium" className="EditECRelationship">
-                            <input type="text" placeholder="" id="EditECRelationship" name="EditECRelationship" onChange ={onChangeInput.bind(this, 'EditECRelationship')}/>
+                            <input type="text" placeholder={this.state.EmergencyContactECRelationship} id="EditECRelationship" name="EditECRelationship" onChange ={onChangeEmergencyContactInput.bind(this, 'EditECRelationship')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2517,7 +3624,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                           <label htmlFor="EditECPhone">Phone</label>
                           <Input fullWidth size="Medium" className="EditECPhone">
-                            <input type="text" placeholder="" id="EditECPhone" name="EditECPhone" onChange ={onChangeInput.bind(this, 'EditECPhone')}/>
+                            <input type="text" placeholder={this.state.EmergencyContactECPhone} id="EditECPhone" name="EditECPhone" onChange ={onChangeEmergencyContactInput.bind(this, 'EditECPhone')}/>
                           </Input>
                         </Col>
                         <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2"></Col>
@@ -2526,27 +3633,27 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditECAddress">Address</label>
                           <Input fullWidth size="Medium" className="EditECAddress">
-                            <input type="text" placeholder="" id="EditECAddress" name="EditECAddress" onChange ={onChangeInput.bind(this, 'EditECAddress')}/>
+                            <input type="text" placeholder={this.state.EmergencyContactECAddress} id="EditECAddress" name="EditECAddress" onChange ={onChangeEmergencyContactInput.bind(this, 'EditECAddress')}/>
                           </Input>
                         </Col>
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12, md: 4 }} className="mb-2">
-                          <label htmlFor="EditShippingCity">City</label>
-                          <Input fullWidth size="Medium" className="EditShippingCity">
-                            <input type="text" placeholder="" id="EditShippingCity" name="EditShippingCity" onChange ={onChangeInput.bind(this, 'EditShippingCity')}/>
+                          <label htmlFor="EditECCity">City</label>
+                          <Input fullWidth size="Medium" className="EditECCity">
+                            <input type="text" placeholder={this.state.EmergencyContactECCity} id="EditECCity" name="EditECCity" onChange ={onChangeEmergencyContactInput.bind(this, 'EditECCity')}/>
                           </Input>
                         </Col>
                         <Col breakPoint={{ xs: 12, md: 4 }} className="mb-2">
-                          <label htmlFor="EditShippingCity">State</label>
-                          <Input fullWidth size="Medium" className="EditShippingCity">
-                            <input type="text" className="mx-2" placeholder="" id="EditShippingState" name="EditShippingState" onChange ={onChangeInput.bind(this, 'EditShippingState')}/>
+                          <label htmlFor="EditECState">State</label>
+                          <Input fullWidth size="Medium" className="EditECState">
+                            <input type="text" className="mx-2" placeholder={this.state.EmergencyContactECState} id="EditECState" name="EditECState" onChange ={onChangeEmergencyContactInput.bind(this, 'EditECState')}/>
                           </Input>
                         </Col>
                         <Col breakPoint={{ xs: 12, md: 4 }} className="mb-2">
-                          <label htmlFor="EditShippingCity">Zip</label>
-                          <Input fullWidth size="Medium" className="EditShippingCity">
-                            <input type="text" placeholder="" id="EditShippingZip" name="EditShippingZip" onChange ={onChangeInput.bind(this, 'EditShippingZip')}/>
+                          <label htmlFor="EditECZip">Zip</label>
+                          <Input fullWidth size="Medium" className="EditECZip">
+                            <input type="text" placeholder={this.state.EmergencyContactECZip} id="EditECZip" name="EditECZip" onChange ={onChangeEmergencyContactInput.bind(this, 'EditECZip')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2557,20 +3664,22 @@ export default class EditLead extends Component {
                         </Col>
                       </Row>
                     </AccordionItem>
+                    {/* END EMERGENCY CONTACT  */}            
 
-
+                    {/* PARENT/GUARDIAN/SPONSOR INFO  */}
                     <AccordionItem uniqueKey={14} title="PARENT/GUARDIAN/SPONSOR INFO">
+                    { this.state.UpdateparentGuardianSponsorInfoFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Parent Guardian Info</div> : null }
                         <Row className="mb-2">
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardRelationship">Relationship</label>
                             <Input fullWidth size="Medium" className="EditGuardRelationship">
-                              <input type="text" placeholder="" id="EditGuardRelationship" name="EditGuardRelationship" onChange ={onChangeInput.bind(this, 'EditGuardRelationship')}/>
+                              <input type="text" placeholder={this.state.GuardRelationship} id="EditGuardRelationship" name="EditGuardRelationship" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardRelationship')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardName">Name</label>
                             <Input fullWidth size="Medium" className="EditGuardName">
-                              <input type="text" placeholder="" id="EditGuardName" name="EditGuardName" onChange ={onChangeInput.bind(this, 'EditGuardName')}/>
+                              <input type="text" placeholder={this.state.GuardName} id="EditGuardName" name="EditGuardName" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardName')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2578,7 +3687,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12 }} className="mb-2">
                             <label htmlFor="EditGuardAddress">Address</label>
                             <Input fullWidth size="Medium" className="EditGuardAddress">
-                              <input type="text" placeholder="" id="EditGuardAddress" name="EditGuardAddress" onChange ={onChangeInput.bind(this, 'EditGuardAddress')}/>
+                              <input type="text" placeholder={this.state.GuardAddress} id="EditGuardAddress" name="EditGuardAddress" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardAddress')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2587,19 +3696,19 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 4 }} className="mb-2">
                             <label htmlFor="EditGuardCity">City</label>
                             <Input fullWidth size="Medium" className="EditGuardCity">
-                              <input type="text" placeholder="" id="EditGuardCity" name="EditGuardCity" onChange ={onChangeInput.bind(this, 'EditGuardCity')}/>
+                              <input type="text" placeholder={this.state.GuardCity} id="EditGuardCity" name="EditGuardCity" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardCity')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 4 }} className="mb-2">
                             <label htmlFor="EditGuardState">State</label>
                             <Input fullWidth size="Medium" className="EditGuardState">
-                              <input type="text" className="mx-2" placeholder="" id="EditGuardState" name="EditGuardState" onChange ={onChangeInput.bind(this, 'EditGuardState')}/>
+                              <input type="text" className="mx-2" placeholder={this.state.GuardState} id="EditGuardState" name="EditGuardState" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardState')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 4 }} className="mb-2">
                             <label htmlFor="EditGuardZip">Zip</label>
                             <Input fullWidth size="Medium" className="EditGuardZip">
-                              <input type="text" placeholder="" id="EditGuardZip" name="EditGuardZip" onChange ={onChangeInput.bind(this, 'EditGuardZip')}/>
+                              <input type="text" placeholder={this.state.GuardZip} id="EditGuardZip" name="EditGuardZip" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardZip')}/>
                             </Input>
                           </Col>
                         </Row>
@@ -2608,13 +3717,13 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardHomePhone">Home Phone</label>
                             <Input fullWidth size="Medium" className="EditGuardHomePhone">
-                              <input type="text" placeholder="" id="EditGuardHomePhone" name="EditGuardHomePhone" onChange ={onChangeInput.bind(this, 'EditGuardHomePhone')}/>
+                              <input type="text" placeholder={this.state.GuardHomePhone} id="EditGuardHomePhone" name="EditGuardHomePhone" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardHomePhone')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardMobilePhone">Mobile Phone</label>
                             <Input fullWidth size="Medium" className="EditGuardMobilePhone">
-                              <input type="text" placeholder="" id="EditGuardMobilePhone" name="EditGuardMobilePhone" onChange ={onChangeInput.bind(this, 'EditGuardMobilePhone')}/>
+                              <input type="text" placeholder={this.state.GuardMobilePhone} id="EditGuardMobilePhone" name="EditGuardMobilePhone" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardMobilePhone')}/>
                             </Input>
                           </Col>
                       </Row>
@@ -2623,13 +3732,13 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardEmail">Email</label>
                             <Input fullWidth size="Medium" className="EditGuardEmail">
-                              <input type="text" placeholder="" id="EditGuardEmail" name="EditGuardEmail" onChange ={onChangeInput.bind(this, 'EditGuardEmail')}/>
+                              <input type="text" placeholder={this.state.GuardEmail} id="EditGuardEmail" name="EditGuardEmail" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardEmail')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardFax">Fax</label>
                             <Input fullWidth size="Medium" className="EditGuardFax">
-                              <input type="text" placeholder="" id="EditGuardFax" name="EditGuardFax" onChange ={onChangeInput.bind(this, 'EditGuardFax')}/>
+                              <input type="text" placeholder={this.state.GuardFax} id="EditGuardFax" name="EditGuardFax" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardFax')}/>
                             </Input>
                           </Col>
                       </Row>
@@ -2638,13 +3747,24 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardMethod">Preferred Contact Method</label>
                             <Input fullWidth size="Medium" className="EditGuardMethod">
-                              <input type="text" placeholder="" id="EditGuardMethod" name="EditGuardMethod" onChange ={onChangeInput.bind(this, 'EditGuardMethod')}/>
+                              <input type="text" placeholder={this.state.GuardMethod} id="EditGuardMethod" name="EditGuardMethod" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardMethod')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardSponsor">Sponsor</label>
                             <Input fullWidth size="Medium" className="EditGuardSponsor">
-                            <SelectStyled className="selectoption" options={InitialDispositionList} placeholder="" value="" id="EditGuardSponsor" name="EditGuardSponsor" onChange ={onChangeOption.bind(this, 'EditGuardSponsor')} />
+                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.GuardSponsor){
+                                    case '0':
+                                      GuardSponsorStatus = 'No'
+                                        break;
+                                    case '1':
+                                      GuardSponsorStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={GuardSponsorStatus} value={this.state.GuardSponsor} id="EditGuardSponsor" name="EditGuardSponsor" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardSponsor')} />
                           </Input> 
                           </Col>
                       </Row>
@@ -2653,13 +3773,35 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardLegalCust">Legal Cust.</label>
                             <Input fullWidth size="Medium" className="EditGuardLegalCust">
-                            <SelectStyled className="selectoption" options={InitialDispositionList} placeholder="" value="" id="EditGuardLegalCust" name="EditGuardLegalCust" onChange ={onChangeOption.bind(this, 'EditGuardLegalCust')} />
+                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.GuardLegalCust){
+                                    case '0':
+                                      GuardLegalCustStatus = 'No'
+                                        break;
+                                    case '1':
+                                      GuardLegalCustStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={GuardLegalCustStatus} value={this.state.GuardLegalCust} id="EditGuardLegalCust" name="EditGuardLegalCust" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardLegalCust')} />
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardPhysCust">Physical Cust.</label>
                             <Input fullWidth size="Medium" className="EditGuardPhysCust">
-                            <SelectStyled className="selectoption" options={InitialDispositionList} placeholder="" value="" id="EditGuardPhysCust" name="EditGuardPhysCust" onChange ={onChangeOption.bind(this, 'EditGuardPhysCust')} />
+                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.GuardPhysCust){
+                                    case '0':
+                                      GuardPhysCustStatus = 'No'
+                                        break;
+                                    case '1':
+                                      GuardPhysCustStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={GuardPhysCustStatus} value={this.state.GuardPhysCust} id="EditGuardPhysCust" name="EditGuardPhysCust" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardPhysCust')} />
                           </Input> 
                           </Col>
                       </Row>
@@ -2668,13 +3810,35 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardEC">Emergency Contact</label>
                             <Input fullWidth size="Medium" className="EditGuardEC">
-                            <SelectStyled className="selectoption" options={InitialDispositionList} placeholder="" value="" id="EditGuardEC" name="EditGuardEC" onChange ={onChangeOption.bind(this, 'EditGuardEC')} />
+                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.GuardEC){
+                                    case '0':
+                                      GuardECStatus = 'No'
+                                        break;
+                                    case '1':
+                                      GuardECStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={GuardECStatus} value={this.state.GuardEC} id="EditGuardEC" name="EditGuardEC" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardEC')} />
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardPG">Parent Guardian</label>
                             <Input fullWidth size="Medium" className="EditGuardPG">
-                            <SelectStyled className="selectoption" options={InitialDispositionList} placeholder="" value="" id="EditGuardPG" name="EditGuardPG" onChange ={onChangeOption.bind(this, 'EditGuardPG')} />
+                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.GuardPG){
+                                    case '0':
+                                      GuardPGStatus = 'No'
+                                        break;
+                                    case '1':
+                                      GuardPGStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={GuardPGStatus} value={this.state.GuardPG} id="EditGuardPG" name="EditGuardPG" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardPG')} />
                           </Input> 
                           </Col>
                       </Row>
@@ -2683,13 +3847,13 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardDOB">DOB</label>
                             <Input fullWidth size="Medium" className="EditGuardDOB">
-                            <DatePicker id="EditGuardDOB" name="EditGuardDOB" selected="" value="" onChange={onChangeDate.bind(this, 'EditGuardDOB')} />
+                            <DatePicker id="EditGuardDOB" name="EditGuardDOB" selected={this.state.GuardDOB}  onChange={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardDOB')} />
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardSSN">SSN</label>
                             <Input fullWidth size="Medium" className="EditGuardSSN">
-                            <SelectStyled className="selectoption" options={InitialDispositionList} placeholder="" value="" id="EditGuardSSN" name="EditGuardSSN" onChange ={onChangeOption.bind(this, 'EditGuardSSN')} />
+                            <input type="text" placeholder={this.state.GuardSSN} id="EditGuardSSN" name="EditGuardSSN" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardSSN')}/>
                           </Input> 
                           </Col>
                       </Row>
@@ -2698,13 +3862,13 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardJobTitle">Job Title</label>
                             <Input fullWidth size="Medium" className="EditGuardJobTitle">
-                              <input type="text" placeholder="" id="EditGuardJobTitle" name="EditGuardJobTitle" onChange ={onChangeInput.bind(this, 'EditGuardJobTitle')}/>
+                              <input type="text" placeholder={this.state.GuardJobTitle} id="EditGuardJobTitle" name="EditGuardJobTitle" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardJobTitle')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardEmployer">Employer</label>
                             <Input fullWidth size="Medium" className="EditGuardEmployer">
-                              <input type="text" placeholder="" id="EditGuardEmployer" name="EditGuardEmployer" onChange ={onChangeInput.bind(this, 'EditGuardEmployer')}/>
+                              <input type="text" placeholder={this.state.GuardEmployer} id="EditGuardEmployer" name="EditGuardEmployer" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardEmployer')}/>
                             </Input>
                           </Col>
                       </Row>
@@ -2713,13 +3877,13 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardWorkPhone">Work Phone</label>
                             <Input fullWidth size="Medium" className="EditGuardWorkPhone">
-                              <input type="text" placeholder="" id="EditGuardWorkPhone" name="EditGuardWorkPhone" onChange ={onChangeInput.bind(this, 'EditGuardWorkPhone')}/>
+                              <input type="text" placeholder={this.state.GuardWorkPhone} id="EditGuardWorkPhone" name="EditGuardWorkPhone" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardWorkPhone')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardWorkEmail">Work Email</label>
                             <Input fullWidth size="Medium" className="EditGuardWorkEmail">
-                              <input type="text" placeholder="" id="EditGuardWorkEmail" name="EditGuardWorkEmail" onChange ={onChangeInput.bind(this, 'EditGuardWorkEmail')}/>
+                              <input type="text" placeholder={this.state.GuardWorkEmail} id="EditGuardWorkEmail" name="EditGuardWorkEmail" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardWorkEmail')}/>
                             </Input>
                           </Col>
                       </Row>
@@ -2728,7 +3892,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2">
                             <label htmlFor="EditGuardWorkFax">Work Fax</label>
                             <Input fullWidth size="Medium" className="EditGuardWorkFax">
-                              <input type="text" placeholder="" id="EditGuardWorkFax" name="EditGuardWorkFax" onChange ={onChangeInput.bind(this, 'EditGuardWorkFax')}/>
+                              <input type="text" placeholder={this.state.GuardWorkFax} id="EditGuardWorkFax" name="EditGuardWorkFax" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardWorkFax')}/>
                             </Input>
                           </Col>
                           <Col breakPoint={{ xs: 12, md: 6 }} className="mb-2"></Col>
@@ -2737,7 +3901,7 @@ export default class EditLead extends Component {
                           <Col breakPoint={{ xs: 12}} className="mb-2">
                             <label htmlFor="EditGuardReligion">Religious Pref</label>
                             <Input fullWidth size="Medium" className="EditGuardReligion">
-                              <input type="text" placeholder="" id="EditGuardReligion" name="EditGuardReligion" onChange ={onChangeInput.bind(this, 'EditGuardReligion')}/>
+                              <input type="text" placeholder={this.state.GuardReligion} id="EditGuardReligion" name="EditGuardReligion" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardReligion')}/>
                             </Input>
                           </Col>
                       </Row>
@@ -2746,7 +3910,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditGuardRelDesc">Relationship Description</label>
                           <Input fullWidth size="Medium" className="EditGuardRelDesc">
-                            <textarea type="text" placeholder="" id="EditGuardRelDesc" name="EditGuardRelDesc" onChange ={onChangeInput.bind(this, 'EditGuardRelDesc')}/>
+                            <textarea type="text" placeholder={this.state.GuardRelDesc} id="EditGuardRelDesc" name="EditGuardRelDesc" onChange ={onChangeParentGuardianSponsorInfoInput.bind(this, 'EditGuardRelDesc')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2757,13 +3921,39 @@ export default class EditLead extends Component {
                         </Col>
                       </Row>
                     </AccordionItem>
+                    {/* END PARENT/GUARDIAN/SPONSOR INFO  */}
 
+                    {/* REFERRAL INFO  */}
                     <AccordionItem uniqueKey={15} title="REFERRAL INFO">
+                    { this.state.UpdateReferralFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated Referral Info</div> : null }
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditInitialDisposition">Source</label>
                           <Input fullWidth size="Medium" className="EditInitialDisposition">
-                            <SelectStyled className="selectoption" options={InitialDispositionList} placeholder="" value="" id="EditInitialDisposition" name="EditInitialDisposition" onChange ={onChangeOption.bind(this, 'EditInitialDisposition')} />
+                            <SelectStyled className="selectoption" options={InitialDispositionList.map(({ value, label }) => { 
+                                  switch(this.state.RefererralInfoInitialDisposition){
+                                    case '0':
+                                      InitialDispositionStatus = 'None'
+                                        break;
+                                    case '4':
+                                      InitialDispositionStatus = 'Missed Call'
+                                        break;    
+                                    case '5':
+                                      InitialDispositionStatus = 'Form Fill'
+                                        break;    
+                                    case '6':
+                                      InitialDispositionStatus = 'Phone Call'
+                                        break;    
+                                    case '7':
+                                      InitialDispositionStatus = 'Accepted Call'
+                                        break;    
+                                    case '8':
+                                      InitialDispositionStatus = 'Voicemail'
+                                        break;        
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={InitialDispositionStatus}  value={this.state.RefererralInfoInitialDisposition} id="EditInitialDisposition" name="EditInitialDisposition" onChange ={onChangeReferralInfoInput.bind(this, 'EditInitialDisposition')} />
                           </Input> 
                         </Col>
                       </Row>
@@ -2771,7 +3961,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditHowHear">How did they hear about us?</label>
                           <Input fullWidth size="Medium" className="EditHowHear">
-                            <textarea type="text" placeholder="" id="EditHowHear" name="EditHowHear" onChange ={onChangeInput.bind(this, 'EditHowHear')}/>
+                            <textarea type="text" placeholder={this.state.RefererralInfoHowHear} id="EditHowHear" name="EditHowHear" onChange ={onChangeReferralInfoInput.bind(this, 'EditHowHear')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2779,7 +3969,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditRefSource">Referral Source</label>
                           <Input fullWidth size="Medium" className="EditRefSource">
-                            <textarea type="text" placeholder="" id="EditRefSource" name="EditRefSource" onChange ={onChangeInput.bind(this, 'EditRefSource')}/>
+                            <textarea type="text" placeholder={this.state.RefererralInfoRefSource} id="EditRefSource" name="EditRefSource" onChange ={onChangeReferralInfoInput.bind(this, 'EditRefSource')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2787,7 +3977,7 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditRefReason">Reason for Referral</label>
                           <Input fullWidth size="Medium" className="EditRefReason">
-                            <textarea type="text" placeholder="" id="EditRefReason" name="EditRefReason" onChange ={onChangeInput.bind(this, 'EditRefReason')}/>
+                            <textarea type="text" placeholder={this.state.RefererralInfoRefReason} id="EditRefReason" name="EditRefReason" onChange ={onChangeReferralInfoInput.bind(this, 'EditRefReason')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2795,7 +3985,18 @@ export default class EditLead extends Component {
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditIsEmergency">Emergency?</label>
                           <Input fullWidth size="Medium" className="EditIsEmergency">
-                            <SelectStyled className="selectoption" options={leadYesNo} placeholder="" value="" id="EditIsEmergency" name="EditIsEmergency" onChange ={onChangeOption.bind(this, 'EditIsEmergency')} />
+                            <SelectStyled className="selectoption" options={leadYesNo.map(({ value, label }) => { 
+                                  switch(this.state.RefererralInfoIsEmergency){
+                                    case '0':
+                                      IsEmergencyStatus = 'No'
+                                        break;
+                                    case '1':
+                                      IsEmergencyStatus = 'Yes'
+                                        break;    
+                                  }
+
+                                  return { value: value, label: label };
+                                })} placeholder={IsEmergencyStatus} value={this.state.RefererralInfoIsEmergency} value="" id="EditIsEmergency" name="EditIsEmergency" onChange ={onChangeReferralInfoInput.bind(this, 'EditIsEmergency')} />
                           </Input>
                         </Col>
                       </Row>
@@ -2805,13 +4006,16 @@ export default class EditLead extends Component {
                         </Col>
                       </Row>
                     </AccordionItem>
+                    {/* REFERRAL INFO  */}
 
+                    {/* VERIFICATION OF BENEFITS UPLOAD  */}
                     <AccordionItem uniqueKey={16} title="VERIFICATION OF BENEFITS UPLOAD">
+                    { this.state.UpdateVerificationOfBenifitsFormSuccessState ? <div className="text-center text-success mb-4">Successfully Updated</div> : null }
                     <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
                           <label htmlFor="EditPreAppFilePath">Verification of Benefits File</label>
                           <Input fullWidth size="Medium" className="EditPreAppFilePath">
-                            <input type="text" placeholder="" id="EditPreAppFilePath" name="EditPreAppFilePath" onChange ={onChangeInput.bind(this, 'EditPreAppFilePath')}/>
+                            <input type="text" placeholder={this.state.PreAppFilePath} id="EditPreAppFilePath" name="EditPreAppFilePath" onChange ={onChangeVerificationBenefitsInput.bind(this, 'EditPreAppFilePath')}/>
                           </Input>
                         </Col>
                       </Row>
@@ -2821,8 +4025,7 @@ export default class EditLead extends Component {
                         </Col>
                       </Row>
                     </AccordionItem>
-
-
+                    {/* VERIFICATION OF BENEFITS UPLOAD  */}
 
                   </Accordion>
                 </Col>
@@ -2847,11 +4050,25 @@ export default class EditLead extends Component {
                 </Col>
                 <Col breakPoint={{ xs: 12 }} className="mb-2">
                   <Input fullWidth size="Medium" className="Name">
-                    <input type="text" placeholder='' id="NewLeadNotes" name="NewLeadNotes" onChange ={onChangeInput.bind(this, 'NewLeadNotes')}/>
+                    <input type="text" placeholder='' id="NewLeadNotes" name="NewLeadNotes" onChange ={onChangeTodoItemOption.bind(this, 'NewLeadNotes')}/>
                   </Input>
                 </Col>
+                <Col className="col-lg-3">
+                  <label htmlFor="ToDoReminderDate">Reminder Date:</label>
+                  <Input fullWidth size="Medium" className="notes">
+                    <DatePicker id="ToDoReminderDate" name="ToDoReminderDate" selected={this.state.ToDoReminderDate}  onChange={onChangeTodoItemOption.bind(this, 'ToDoReminderDate')} />
+                  </Input>
+                </Col>
+                <Col className="col-lg-3">
+                  <label htmlFor="ToDoUser">User:</label>
+                  {/* <SelectStyled options={leadAdmins} placeholder={this.state.ToDoUser} value={this.state.ToDoUser} id="ToDoUser" name="ToDoUser" onChange ={onChangeTodoItemOption.bind(this, 'ToDoUser')} /> */}
+                  <Select options={this.state.UserAdminList.map(({ UserID, FullName }) => { 
+                                  return { value: UserID, label: FullName };
+                                })} placeholder={this.state.ToDoUser} value={this.state.ToDoUser.value} id="ToDoUser" name="ToDoUser" onChange ={onChangeTodoItemOption.bind(this, 'ToDoUser')} />
+                </Col>
                 <Col breakPoint={{ xs: 12, md: 3 }}>
-                  <Button status="Warning" type="button" shape="SemiRound" fullWidth className="text-uppercase">+ ADD NOTE</Button>
+                <label htmlFor="ToDoReminderDates">&nbsp;</label>
+                  <Button status="Warning" type="button" shape="SemiRound" onClick={onAddToDo} fullWidth className="text-uppercase">+ ADD NOTE</Button>
                 </Col>
               </Row>
               <Row className="justify-content-left align-items-left mb-5">
@@ -2862,29 +4079,27 @@ export default class EditLead extends Component {
                   <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th scope="col">ENTERED BY</th>
-                        <th scope="col">DATE</th>
-                        <th scope="col">NOTE</th>
+                      <th scope="col">TO DO ITEM</th>
+                        <th scope="col">DATE CREATED</th>
+                        <th scope="col">DUE DATE</th>
+                        <th scope="col">STATUS</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr> 
-                        <td scope="col"></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
+                      
+                    {this.state.UserTodoList.map(({ ToDoID, UserID, ToDoText, CreatedDate,FinishedDate, ReminderDate, Status, ClientID, LeadID, IsRead, FirstName, LastName, HomePhone, Disposition, LastModifiedDate }) => { 
+
+                      return (
+                          <tr> 
+                            <td scope="col">{ToDoText}</td>
+                            <td>{CreatedDate}</td>
+                            <td>{FinishedDate}</td>
+                            <td><Checkbox status="Dangerd" name="setToDone" onChange={onSetToDoneToDoList.bind(this,ToDoID)}></Checkbox></td>
+                          </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
-                </Col>
-                <Col className="col-lg-3">
-                  <label htmlFor="ToDoReminderDate">Reminder Date:</label>
-                  <Input fullWidth size="Medium" className="notes">
-                    <DatePicker id="ToDoReminderDate" name="ToDoReminderDate" selected={this.state.ToDoReminderDate} value={this.state.ToDoReminderDate} onChange={onChangeDate.bind(this, 'ToDoReminderDate')} />
-                  </Input>
-                </Col>
-                <Col className="col-lg-3">
-                  <label htmlFor="ToDoUser">User:</label>
-                  <SelectStyled options={leadAdmins} placeholder={this.state.ToDoUser} value={this.state.ToDoUser} id="ToDoUser" name="ToDoUser" onChange ={onChangeOption.bind(this, 'ToDoUser')} />
                 </Col>
                 <Col className="col-lg-3">
                   <label htmlFor="submitButtons">&nbsp;</label>

@@ -4,8 +4,9 @@ import Row from '@paljs/ui/Row';
 import Select from '@paljs/ui/Select';
 import styled from 'styled-components';
 import { Button } from '@paljs/ui/Button';
-
+import { Link } from 'gatsby';
 import { InputGroup } from '@paljs/ui/Input';
+import { Checkbox } from '@paljs/ui/Checkbox';
 
 import { Container, Input } from '@material-ui/core';
 import { Card, CardBody } from '@paljs/ui/Card';
@@ -14,7 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 
 import SEO from '../components/SEO';
-import { isLoggedIn } from "../components/services/auth"
+import { isLoggedIn, getUser } from "../components/services/auth"
 
 import { 
   getURLParams, leadStatus, leadDisposition, 
@@ -49,7 +50,10 @@ export default class Home extends Component  {
     ToDoText: '', 
     ToDoReminderDate: '',
     ToDoUser: '',
-
+    UserID: '',
+    UserTodoList: [],
+    TodoListItem: '',
+    ToDoUserListId: '',
   };
 
   componentWillUnmount(){
@@ -58,7 +62,10 @@ export default class Home extends Component  {
       ToDoText: '', 
       ToDoReminderDate: '',
       ToDoUser: '',
-
+      UserID: '',
+      UserTodoList: [],
+      TodoListItem: '',
+      ToDoUserListId: '',
     })  
   }
 
@@ -91,6 +98,31 @@ export default class Home extends Component  {
        console.log(response,`successfull`);
      });
 
+
+     /** Get All Company Details **/
+     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+      params: {
+        tblName: 'tblToDo',
+        queryType: 'getToDoListFromDashBoarByUserId',
+        UserID: this.state.UserID !='' ? this.state.UserID : getUser().userid
+      }
+    })
+    .then(function (response) {
+      console.log('getToDoListFromDashBoarByUserId Data: '+ JSON.stringify(response.data));
+      saveState({
+       UserTodoList: response.data
+      });
+       
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .then(function (response) {
+      // always executed
+      console.log(response,`successfull`);
+    });
+
+
   }
 
 
@@ -98,154 +130,88 @@ export default class Home extends Component  {
       this.setState(obj);
     }
 
-/*
-    searchMe = () => {
-      const { saveState, state: { searchFor, searchBy } } = this;
-      this.setState({
-        data: [],
-        tempData: [],
-        searchBy: 'Name',
-        searchFor: '',
-        error: false,
-        errorMsg: '',
-        perpage: 10,
-        current: 0,
-        pagination: 1,
-        togglePName: true,
-        loader: 'Loading!!!'
-      });
-      axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
-        params: {
-          searchFor: searchFor,
-          searchBy: searchBy,
-          tblName: 'tblProducts',
-          queryType: 'searchType'
-        }
-      })
-      .then(function ({ data }) {
-        let error = false;
-        let errorMsg = '';
-        if(data.length <= 0) {
-          error = true;
-          errorMsg = __noProduct;
-        }
-        saveState({
-          data,
-          tempData: data,
-          error,
-          errorMsg
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-        saveState({
-          error: 'error'
-        });
-      });
-    }
-    display = ({ data, loader, error, errorMsg, current, perpage, pagination }) => {
-      const { pageFunc, pageFuncLimit, sortCol, onChangeDropdown, manipulateData, resetMe } = this;
-      const advanceSearchBy = [
-        { value: 'ProductName', label: 'SERVICE NAME' },
-        { value: 'CompanyName', label: 'Company' },
-        { value: 'ProductStatus', label: 'STATUS' }
-      ];
-      if(data !== undefined && data.length > 0) {
-        const pageData = data.slice(current, current+perpage);
-        const max = (Math.floor(data.length/perpage)) + (Math.floor(data.length%perpage)>0 ? 1 : 0);
-        return (<div>
-          <AdvanceSearch dropdown={advanceSearchBy} searchMe={manipulateData} resetMe={resetMe} />
-          <table className="table table-striped table-hover">
-            <thead>
-                <tr>
-                  <th scope="col">ACTION</th>
-                  <th scope="col" onClick={sortCol.bind(this, 'ProductName')}>SERVICE NAME</th>
-                  <th scope="col" onClick={sortCol.bind(this, 'CompanyName')}>Company</th>
-                  <th scope="col" onClick={sortCol.bind(this, 'ProductStatus')}>STATUS</th>
-                </tr>
-            </thead>
-            <tbody>
-            {
-              pageData.map(({ ProductID, ProductName, CompanyName, ProductStatus, CompanyID })=>{
-                return (<tr key={ProductID}>
-                  <td>
-                    <Link className="color-red text-decoration-none" to={"/product/edit-product?prodId="+ProductID+"&companyId="+CompanyID}>Edit/View</Link>
-                    </td>
-                  <td>{ProductName}</td>
-                  <td>{CompanyName}</td>
-                  <td>{ProductStatus}</td>
-                </tr>);
-              })
-            }
-            </tbody>
-        </table>
-          <nav aria-label="Page navigation example">
-          <Container>
-              <Row>
-                <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 8 }}>
-                <ul class="pagination">
-                    <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'first', perpage, max, 0)}>«</a></li>
-                    <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'prev', perpage, max, 0)}>‹</a></li>
-                    {paginateLimit(max, pageFuncLimit, pagination)}
-                    <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'next', perpage, max, 0)}>›</a></li>
-                    <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'last', perpage, max, 0)}>»</a></li>
-                </ul>
-                </Col>
-                <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 4 }}>
-                    <SelectStyled options={perPageLimitList}  placeholder={perpage} value={perpage} id="perPage" name="perPage" onChange ={onChangeDropdown.bind(this)} />
-                </Col>
-              </Row>
-           </Container>
-          </nav>
-      </div>);
-      }
-      if (error) {
-        switch(errorMsg) {
-          case __noProduct:
-            return (
-            <div>
-              <AdvanceSearch dropdown={advanceSearchBy} searchMe={manipulateData} resetMe={resetMe} />
-              <table className="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">ACTION</th>
-                    <th scope="col">SERVICE NAME</th>
-                    <th scope="col">Company</th>
-                    <th scope="col">STATUS</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            );
-          default: 
-            break;
-        }
-      }
-      return loader;
-    }
-
-*/
-
 
   onAddToDo = (e) => {
+    const { saveState, state } = this;
     axios({
       method: 'get',
       url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblToDo',
-        queryType: 'addNewTodo',
-        ToDoReminderDate: this.state.ToDoReminderDate,
-        ToDoText: this.state.ToDoText,
-        ToDoUser: this.state.ToDoUser,
+        queryType: 'addNewTodoDashBoard',
+        ToDoReminderDate: state.ToDoReminderDate,
+        ToDoText: state.ToDoText,
+        ToDoUser: state.ToDoUser,
       }
     })
     .then(function (response) {
-      console.log(response,`New Product Info successfully Added`);
+      console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
+      saveState({
+        UserTodoList: state.UserTodoList.filter(({ ToDoID })=> ToDoID != response.data)
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
     });
 };
+
+  onSearchToDoItemListByUserId = (e) => {
+    const { saveState } = this;
+    /** Get All Company Details **/
+    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+      params: {
+        tblName: 'tblToDo',
+        queryType: 'getToDoListFromDashBoarByUserId',
+        UserID: this.state.ToDoUserListId
+      }
+    })
+    .then(function (response) {
+      console.log('onSearchToDoItemListByUserId Data: '+ JSON.stringify(response.data));
+      saveState({
+       UserTodoList: response.data
+      });
+       
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .then(function (response) {
+      // always executed
+      console.log(response,`successfull`);
+    });
+  }
+
+  onChangeToDoUserListOption = (e) => {
+    console.log('To Do Text: '+e.value);
+    this.saveState({
+      ToDoUserListId: e.value
+    });
+  }
+
+  // Set the To Do Item to Done
+   onSetToDoneToDoList = (todoListId) => {
+    console.log("updateToDoListToDone value: "+todoListId);
+    const { saveState, state } = this;
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+          tblName: 'tblToDo',
+          queryType: 'updateToDoListToDone',
+          ToDoID: todoListId
+      }
+    })
+    .then(function (response) {
+      console.log(response,`Deleted Company Insurance successfull`);
+      saveState({
+        UserTodoList: state.UserTodoList.filter(({ ToDoID })=> ToDoID != todoListId)
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+  };
+
 
   onChangeOption = (e) => {
     console.log('To Do Text: '+e.value);
@@ -268,7 +234,7 @@ export default class Home extends Component  {
 
 
   render() {
-    const { onChangeInput, onChangeDate, onChangeOption,onAddToDo,  state } = this;
+    const { onChangeInput, onChangeDate, onChangeOption,onAddToDo, onChangeToDoUserListOption, onSearchToDoItemListByUserId, onSetToDoneToDoList, state } = this;
   return (
     <>
     <div className="content-wrapper px-4 py-4">
@@ -317,10 +283,10 @@ export default class Home extends Component  {
                 <Col className="col-lg-3">
                   <Select options={state.UserAdminList.map(({ UserID, FullName }) => { 
                                   return { value: UserID, label: FullName };
-                                })} placeholder={state.ToDoUser} value={state.ToDoUser.value} id="ToDoUser" name="ToDoUser" onChange ={onChangeOption.bind(this)} />
+                                })} placeholder={state.ToDoUserListId} value={state.ToDoUserListId.value} id="ToDoUserListId" name="ToDoUserListId" onChange ={onChangeToDoUserListOption.bind(this)} />
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 3 }}>
-                  <Button status="Warning" type="button" shape="SemiRound" fullWidth className="text-uppercase">+ VIEW TO DO LIST</Button>
+                  <Button status="Warning" type="button" shape="SemiRound" onClick={onSearchToDoItemListByUserId} fullWidth className="text-uppercase">+ VIEW TO DO LIST</Button>
                 </Col>
               </Row>
 
@@ -339,32 +305,56 @@ export default class Home extends Component  {
                       </tr>
                     </thead>
                     <tbody>
+                      
+                      {this.state.UserTodoList.map(({ ToDoID, UserID, ToDoText, CreatedDate,FinishedDate, ReminderDate, Status, ClientID, LeadID, IsRead, FirstName, LastName, HomePhone, Disposition, LastModifiedDate }) => { 
+                          let LeadFullName = '';
+                          let isWithLead = false;
+                          let disposition = '';
+                           console.log('LastModifiedDate; '+LastModifiedDate);
+                          //  let lastModifiedDate = LastModifiedDate != ? new Date(LastModifiedDate) : '';
+                          { if(LeadID != 0){
+                              // To do: Loop the list of Lead Information with the LeadId
+                              LeadFullName = FirstName +' '+LastName+' '+HomePhone;
+                              isWithLead = true;
+                            } else {
+                              // To do: Display 'N/A'
+                              LeadFullName = 'N/A';
+                              isWithLead = false;
+                            }
+                          }
+
+                         // Disposition Condition 
+                         if(Disposition == 6){
+                            disposition = 'Phone Call';
+                         } else if(Disposition == 4){
+                            disposition = 'Missed Call';
+                         } else if(Disposition==5){
+                            disposition = 'Form Fill';
+                         } else {
+                            disposition = 'None';
+                         }
+
+                        return (
                       <tr> 
-                        <td scope="col"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td scope="col">{LeadFullName}</td>
+                        <td>
+                          {/* { isWithLead ? <Link className="color-red text-decoration-none" name="todolistitem" value={ToDoID} onClick={onReadAddToDo.bind(this)} to={"/leads/edit-lead/?leadID="+LeadID+'&ToDoID='+ToDoID}>{ToDoText}</Link> :  ToDoText } */}
+                          { IsRead == 0 && isWithLead == true ? <Link className="color-red text-decoration-none font-weight-bold" name="todolistitem" to={"/leads/edit-lead/?leadID="+LeadID+'&ToDoID='+ToDoID}>{ToDoText}</Link> : '' }
+                          { IsRead == 1 && isWithLead == true ? <Link className="color-red  text-decoration-none" to={"/leads/edit-lead/?leadID="+LeadID+'&ToDoID='+ToDoID}>{ToDoText}</Link> : '' }
+                          { isWithLead == false ? ToDoText : '' }
+                        </td>
+                        <td>{disposition}</td>
+                        <td>{CreatedDate}</td>
+                        <td>{ReminderDate}</td>
+                        <td>{LastModifiedDate}</td>
+                        <td>
+                          <Checkbox status="Dangerd" name="setToDone" onChange={onSetToDoneToDoList.bind(this,ToDoID)}></Checkbox></td>
                       </tr>
+                      );
+                    })}
                     </tbody>
                   </table>
                 </Col>
-                {/* <Col className="col-lg-3">
-                  <label htmlFor="ToDoReminderDate">Reminder Date:</label>
-                  <InputGroup fullWidth size="Medium" className="notes">
-                    <DatePicker id="ToDoReminderDate" name="ToDoReminderDate" selected={LeadInfo.ToDoReminderDate} value={LeadInfo.ToDoReminderDate} onChange={onChangeDate.bind(this, 'ToDoReminderDate')} />
-                  </InputGroup>
-                </Col>
-                <Col className="col-lg-3">
-                  <label htmlFor="ToDoUser">User:</label>
-                  <Select options={leadAdmins} placeholder={LeadInfo.ToDoUser.label} value={LeadInfo.ToDoUser.value} id="ToDoUser" name="ToDoUser" onChange ={onChangeOption.bind(this, 'ToDoUser')} />
-                </Col>
-                <Col className="col-lg-3">
-                  <label htmlFor="submitButtons">&nbsp;</label>
-                  <Button id="submitButtons" status="Warning" type="button" shape="SemiRound" fullWidth className="submitButtons text-uppercase">UPDATE/SAVE TO DO'S</Button>
-                </Col> */}
               </Row>
             </Col>
           </Row>

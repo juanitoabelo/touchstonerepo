@@ -221,7 +221,7 @@ export default function Login() {
     })
     .then(function (response) {
       //  console.log('Data Company Id: '+ response.data.username);
-      handleLogin({username:response.data.username, password: response.data.password, companyid: response.data.companyid } );
+      handleLogin({username:response.data.username, password: response.data.password, companyid: response.data.companyid, userid:response.data.userid } );
 
       const isBrowser = typeof window !== "undefined"
       if (isLoggedIn() && isBrowser) {

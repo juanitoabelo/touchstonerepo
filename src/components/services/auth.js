@@ -8,12 +8,13 @@ export const getUser = () =>
 const setUser = user =>
 isBrowser() && window.localStorage.setItem("gatsbyUser", JSON.stringify(user))
 
-export const handleLogin = ({ username, password, companyid }) => {
+export const handleLogin = ({ username, password, companyid, userid }) => {
   if ( username  && password) {
     return setUser({
       username: username,
       email: password,
       companyid: companyid,
+      userid: userid,
     })
   }
   return false

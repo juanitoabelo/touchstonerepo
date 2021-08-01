@@ -167,8 +167,8 @@ export default class Index extends Component {
           {
             pageData.map(({ InsuranceID, Name })=>{
               return (<tr key={InsuranceID}>
-                <td>{InsuranceID}</td>
-                <td>{Name}</td>
+                <td><a className="color-red text-decoration-none" href={"/insurance/edit-insurance?InsuranceID=" + InsuranceID}>{InsuranceID}</a></td>
+                <td><a className="color-red text-decoration-none" href={"/insurance/edit-insurance?InsuranceID=" + InsuranceID}>{Name}</a></td>
               </tr>);
             })
           }

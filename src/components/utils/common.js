@@ -215,9 +215,18 @@ export const leadStatus = [
 export const leadDisposition = [
   { value:'0', label: 'None'},
   { value:'1', label: 'SP (Self Pay)'},
+  { value:'2', label: 'NFU (Needs Followup)'},
   { value:'3', label: 'NS (Needs Scholarship)'},
+
+  { value:'4', label: 'RL (Revisit Later)'},
+  { value:'5', label: 'TY (Too Young)'},
+  { value:'6', label: 'TO (Too Old)'},
+
   { value:'7', label: 'M (Medicaid)'},
   { value:'8', label: 'PI (Private Insurance)'},
+
+  { value:'9', label: 'L (Location)'},
+
   { value:'10', label: 'NC (No Call)'}
 ];
 export const leadCrisisScale = [
