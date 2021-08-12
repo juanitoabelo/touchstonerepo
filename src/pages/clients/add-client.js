@@ -119,7 +119,8 @@ export default class AddClient extends Component {
       BillCountry: '',
       CardNum: '',
       CardCode: '',
-      isSaved : false
+      isSaved : false,
+      IPAddress: ''
   }
 
   componentWillUnmount(){
@@ -142,7 +143,8 @@ export default class AddClient extends Component {
       BillCountry: '',
       CardNum: '',
       CardCode: '',
-      isSaved : false
+      isSaved : false,
+      IPAddress: ''
     })
   }
 
@@ -197,6 +199,25 @@ export default class AddClient extends Component {
       console.log(response,`successfull`);
     });
 
+
+     /** Get users IP Address **/
+     axios.get('https://geolocation-db.com/json/')
+     .then(function (response) {
+        console.log('Users Geolocation Data: '+ JSON.stringify(response.data));
+       saveState({
+         IPAddress: response.data.IPv4
+       });
+       
+     })
+     .catch(function (error) {
+       console.log(error);
+     })
+     .then(function (response) {
+       // always executed
+       console.log(response,`successfull`);
+     });
+
+
   }
 
   saveState = (data) => {
@@ -227,7 +248,16 @@ export default class AddClient extends Component {
         BillZip: this.state.BillZip,
         BillCountry: this.state.BillCountry,
         CardNum: this.state.CardNum,
-        CardCode: this.state.CardCode
+        CardCode: this.state.CardCode,
+        IPAddress: this.state.IPAddress,
+        PublisherID: 0,
+        OrderURL: window.location.href,
+        ClickID: 0,
+        ReferCompanyID: 0,
+        LandingPageID: 0,
+        LeadID: 0,
+
+
       }
     })
     .then(function (response) {

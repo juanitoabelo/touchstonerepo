@@ -1086,7 +1086,7 @@ export default class EditLead extends Component {
     // });
 
 
-    /** Get All Company Details **/
+    /** Get All Leads To Do List By Lead id **/
     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
       params: {
         tblName: 'tblToDo',

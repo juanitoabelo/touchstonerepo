@@ -317,7 +317,7 @@ export default class EditProduct extends Component  {
                                   } 
                                   return (
                                     <tr> 
-                                      <td><Link to={"/product/edit-campaign?productID="+this.state.ProductId+"&campaignID="+CampaignID}>View/Edit</Link></td>
+                                      <td><Link className="color-red" to={"/product/edit-campaign?productID="+this.state.ProductId+"&campaignID="+CampaignID}>View/Edit</Link></td>
                                       <td>{CampaignID}</td>
                                       <td>{CampaignName}</td>
                                       <td>{CampaignType}</td>
@@ -329,8 +329,8 @@ export default class EditProduct extends Component  {
                         </table>
                       </Col>
                       <Col className="col-lg-12">
-                        <ButtonLink status="SUCCESS" onClick={() => navigate('/product/add-campaign?ProductID='+this.state.ProductId+'&CompanyID='+this.state.CompanyId)} fullWidth shape="Rectangle">Add Campaign</ButtonLink>
-                      </Col>
+                        <ButtonLink status="Success" type="button" shape="SemiRound" onClick={() => navigate('/product/add-campaign?ProductID='+this.state.ProductId+'&CompanyID='+this.state.CompanyId)} fullWidth shape="Rectangle">Add Campaign</ButtonLink>
+                      </Col> 
                     </Row>
                     
                   </Container>
@@ -363,9 +363,10 @@ export default class EditProduct extends Component  {
                       </Col>
                       <Col className="col-lg-12 mb-3">Type:</Col>
                       <Col className="col-lg-4">
-                        <ButtonLink status="SUCCESS" onClick={onSaveFulfillment} fullWidth shape="Rectangle">Add Fulfillment</ButtonLink>
+                        <ButtonLink status="Success" type="button" shape="SemiRound" onClick={onSaveFulfillment} fullWidth shape="Rectangle">Add Fulfillment</ButtonLink>
                       </Col>
                       <Col className="col-lg-4">
+                        <label>&nbsp;</label>
                       <SelectStyled options={fulfillmentlist}  placeholder='Select Fulfillment List' id="Fulfillment" name="Fulfillment"  onChange={onChangeFulfillmentOption.bind(this)}  />
                       </Col>
                       <Col className="col-lg-4"></Col>
@@ -401,7 +402,7 @@ export default class EditProduct extends Component  {
                       </Col>
                       <Col className="col-lg-12 mb-3">Account:</Col>
                       <Col className="col-lg-4">
-                        <ButtonLink status="SUCCESS" onClick={onSaveMerchant} fullWidth shape="Rectangle">Add Merchant</ButtonLink>
+                        <ButtonLink status="Success" type="button" shape="SemiRound" onClick={onSaveMerchant} fullWidth shape="Rectangle">Add Merchant</ButtonLink>
                       </Col>
                       <Col className="col-lg-4">
                       <SelectStyled options={fulfillmentlist}  placeholder='Select Merchant Account List' id="Merchant" name="Merchant"  onChange={onChangeMerchantOption.bind(this)}  />

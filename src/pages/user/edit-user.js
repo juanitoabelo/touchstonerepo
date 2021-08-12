@@ -652,7 +652,7 @@ return true;
 
                   <Row className="mb-5">
                     <Col breakPoint={{ xs: 12 }}>
-                        <User name={this.state.FullName} />
+                        <User title="Manger" name={this.state.FullName} image="url('/icons/icon-72x72.png')" />
                     </Col>
                   </Row>
                   

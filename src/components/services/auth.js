@@ -23,6 +23,10 @@ export const isLoggedIn = () => {
   const user = getUser()
   return !!user.username
 }
+export const isLoggedInUserID = () => {
+  const user = getUser()
+  return user.userid
+}
 export const logout = () => {
   setUser({})
 }

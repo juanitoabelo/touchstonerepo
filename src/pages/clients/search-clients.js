@@ -222,9 +222,9 @@ export default class SearchClients extends Component {
             })=>{
               return (<tr key={ClientID}>
                 <td>{Date}</td>
-                <td><a className="color-red text-decoration-none" href={"/product/edit-product?leadID=" + ClientID}>{FirstName}</a></td>
-                <td><a className="color-red text-decoration-none" href={"/product/edit-product?leadID=" + ClientID}>{LastName}</a></td>
-                <td><a className="color-red text-decoration-none" href={"/product/edit-product?leadID=" + ClientID}>{EmailAddress}</a></td>
+                <td><a className="color-red text-decoration-none" href={"/clients/edit-client?ClientID=" + ClientID}>{FirstName}</a></td>
+                <td><a className="color-red text-decoration-none" href={"/clients/edit-client?ClientID=" + ClientID}>{LastName}</a></td>
+                <td><a className="color-red text-decoration-none" href={"/clients/edit-client?ClientID=" + ClientID}>{EmailAddress}</a></td>
                 <td>{HomePhone}</td>
                 <td>{Service}</td>
               </tr>);
