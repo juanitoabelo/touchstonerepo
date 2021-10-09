@@ -161,7 +161,7 @@ div.main-content {
 
 .main-content > div,
 .main-content .content-wrapper > div  {
-    height: 84vh;
+    /* height: 84vh; */
 }
 
 

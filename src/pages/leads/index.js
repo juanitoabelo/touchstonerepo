@@ -33,14 +33,16 @@ const isBrowser = typeof window !== "undefined";
 export default class Index extends Component {
   state = {
     status: 'Active',
-    company: {
-      label: 'All',
-      value: 0
-    },
-    searchBy: {
-      label: 'Email',
-      value: 'EmailAddress'
-    },
+    // company: {
+    //   label: 'All',
+    //   value: 0
+    // },
+    company: 0,
+    // searchBy: {
+    //   label: 'Email',
+    //   value: 'EmailAddress'
+    // },
+    searchBy: 'EmailAddress',
     searchFor: '',
     selected: {
       ...defaultSelected,
@@ -53,17 +55,76 @@ export default class Index extends Component {
     errorMsg: '',
     perpage: 10,
     current: 0,
-    pagination: 1
+    pagination: 1,
+    CompanyTypeData: []
   }
+
+  componentWillUnmount(){
+    this.setState({
+      status: 'Active',
+      // company: {
+      //   label: 'All',
+      //   value: 0
+      // },
+      // searchBy: {
+      //   label: 'Email',
+      //   value: 'EmailAddress'
+      // },
+      searchBy: '',
+      searchFor: '',
+      searchFor: '',
+      selected: {
+        ...defaultSelected,
+        "Active": "Info"
+      },
+      data: [],
+      tempData: [],
+      loader: '',
+      error: false,
+      errorMsg: '',
+      perpage: 10,
+      current: 0,
+      pagination: 1,
+      CompanyTypeData: []
+    })
+  }
+
+
   componentDidMount() {
     if (!isLoggedIn() && isBrowser) {
       window.location.href="/";
     }  
+
+    const { saveState, state } = this;
+    /** Get All Company Type Details **/
+    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+      params: {
+        tblName: 'tblCompanyType',
+        queryType: 'getAllCompanyType'
+      }
+    })
+    .then(function (response) {
+       console.log('Company Type Data: '+ JSON.stringify(response.data));
+      saveState({
+        CompanyTypeData: response.data
+      });
+       
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .then(function (response) {
+      // always executed
+      console.log(response,`successfull`);
+    });
+
+
   }
   saveState = (obj) => {
     this.setState(obj);
   }
   onChangeDropdown = (type, e) => {
+    //  console.log('search: '+e);
     this.saveState({
       [type]: {
         label: e.label,
@@ -78,6 +139,7 @@ export default class Index extends Component {
   }
   selStatus = (e) => {
     const target = e.target.value;
+    console.log(target);
     this.saveState({
       selected: {
         ...defaultSelected,
@@ -87,21 +149,27 @@ export default class Index extends Component {
     });
   }
   onSearchLeads = () => {
-    const { state: { company, searchBy, searchFor, status }, saveState } = this;
+    // const { state: { company, searchBy, searchFor, status }, saveState } = this;
+    const { saveState, state } = this;
     saveState({
       loader: 'Loading!!!',
       error: false,
       errorMsg: '',
       data: []
     });
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',{
+    // axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',{
+    axios.get('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', {  
       params: {
         tblName: 'tblLeads',
         queryType: 'searchLeadsByCompanyForBy',
-        company: company.value,
-        searchBy: searchBy.value,
-        searchFor: searchFor,
-        status: status
+        // company: company.value,
+        // searchBy: searchBy.value,
+        company: this.state.company,
+        searchBy: this.state.searchBy,
+        // searchFor: searchFor,
+        searchFor: this.state.searchFor,
+        // status: status
+        status: this.state.status
       }
     })
     .then(({ data })=>{
@@ -235,13 +303,45 @@ export default class Index extends Component {
     });
     this.saveState({ data: data, ...toggling });
   }
-  onChangeDropdown = (e) => {
+
+
+  // Search fields On Change Function 
+  onChangeDropdown = (type, e) => {
+    //  console.log('search: '+e.value);
+     console.log(e.value);
     this.saveState({
       perpage: e.value,
       current: 0,
-      pagination: 1
+      pagination: 1,
     });
+
   }
+
+  
+  onChangeDropdownOption = (type, e) => {
+    // console.log('search: '+e.value);
+    // console.log('Tyepe'+ type); 
+
+    switch(type){
+      case 'SearchBy':
+        if(e.value!=""){
+          this.saveState({
+            searchBy: e.value
+          });
+        }
+      break; 
+      case 'CompanyID':
+        if(e.value!=""){
+          this.saveState({
+            company: e.value
+          });
+        }
+      break; 
+    }
+
+    
+}
+
   manipulateData = ({ query, queryBy }) => {
     const filteredData = this.state.tempData.filter((item)=>{
       switch(queryBy) {
@@ -349,12 +449,12 @@ export default class Index extends Component {
         <Container>
           <Row>
             <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 8 }}>
-              <ul class="pagination">
-                  <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'first', perpage, max, 0)}>«</a></li>
-                  <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'prev', perpage, max, 0)}>‹</a></li>
+              <ul className="pagination">
+                  <li className="page-item"><a href="/#" className="page-link" onClick={pageFunc.bind(this,'first', perpage, max, 0)}>«</a></li>
+                  <li className="page-item"><a href="/#" className="page-link" onClick={pageFunc.bind(this,'prev', perpage, max, 0)}>‹</a></li>
                   {paginateLimit(max, pageFuncLimit, pagination)}
-                  <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'next', perpage, max, 0)}>›</a></li>
-                  <li class="page-item"><a href="/#" class="page-link" onClick={pageFunc.bind(this,'last', perpage, max, 0)}>»</a></li>
+                  <li className="page-item"><a href="/#" className="page-link" onClick={pageFunc.bind(this,'next', perpage, max, 0)}>›</a></li>
+                  <li className="page-item"><a href="/#" className="page-link" onClick={pageFunc.bind(this,'last', perpage, max, 0)}>»</a></li>
               </ul>
             </Col>
             <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 4 }}>
@@ -396,7 +496,7 @@ export default class Index extends Component {
     return loader;
   }
   render() {
-    const { onSearchLeads, selStatus, onChangeDropdown, onChangeInputText, display, state } = this;
+    const { onSearchLeads, selStatus, onChangeDropdown, onChangeDropdownOption, onChangeInputText, display, state } = this;
     const { selected, company, searchBy, searchFor } = state;
     return (
       <>
@@ -423,18 +523,24 @@ export default class Index extends Component {
                             <Button className="mx-1" status={selected.Active} type="button" shape="square" onClick={selStatus.bind(this)} value="Active">Active</Button>
                             <Button className="mx-1" status={selected.Referred} type="button" shape="square" onClick={selStatus.bind(this)} value="Referred">Referred</Button>
                             <Button className="mx-1" status={selected.Deactivated} type="button" shape="square" onClick={selStatus.bind(this)} value="Deactivated">Deactivated</Button>
-                            <Button className="mx-1" status={selected.Admin} type="button" shape="square" onClick={selStatus.bind(this)} value="Admin">Admin</Button>
+                            <Button className="mx-1" status={selected.Admin} type="button" shape="square" onClick={selStatus.bind(this)} value="Business Admin">Admin</Button>
                             <Button className="mx-1" status={selected.All} type="button" shape="square" onClick={selStatus.bind(this)} value="All">All</Button>
                           </Col>
                           </Row>
                           <Row>
                             <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 4 }}>
                               <label htmlFor="CompanyID">Company</label>
-                              <SelectStyled options={searchByCompanyId}  placeholder={company.label} value={company.value} id="CompanyID" name="CompanyID" onChange ={onChangeDropdown.bind(this, `company`)} />
+                              {/* <SelectStyled options={searchByCompanyId}  placeholder={company.label} value={company.value} id="CompanyID" name="CompanyID" onChange ={onChangeDropdown.bind(this, `company`)} /> */}
+                              <SelectStyled options={state.CompanyTypeData.map(({ CompanyTypeID, CompanyTypeDesc }) => { 
+                                  return { value: CompanyTypeID, label: CompanyTypeDesc };
+                                })}  placeholder="All" id="CompanyID" name="CompanyID" onChange ={onChangeDropdownOption.bind(this,'CompanyID')}  />
                             </Col>
                             <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 4 }}>
                               <label htmlFor="SearchBy">Search By</label>
-                              <SelectStyled options={searchByOptions}  placeholder={searchBy.label} value={searchBy.value} id="SearchBy" name="SearchBy" onChange ={onChangeDropdown.bind(this, `searchBy`)} />
+                              {/* <SelectStyled options={searchByOptions}  placeholder={searchBy.label} value={searchBy.value} id="SearchBy" name="SearchBy" onChange ={onChangeDropdown.bind(this, `searchBy`)} /> */}
+                              <SelectStyled options={searchByOptions.map(({ value, label }) => { 
+                                  return { value: value, label: label };
+                                })}  placeholder={state.CompanyTypeDescription} id="SearchBy" name="SearchBy" onChange ={onChangeDropdownOption.bind(this,'SearchBy')}  />
                             </Col>
                             <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 4 }}>
                             <label htmlFor="SearchVal">Search For</label>

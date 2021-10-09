@@ -1,9 +1,12 @@
 import Select from '@paljs/ui/Select';
 import { InputGroup } from '@paljs/ui/Input';
 import { Card, CardBody } from '@paljs/ui/Card';
-import { ButtonLink } from '@paljs/ui/Button';
+
 import { Button } from '@paljs/ui/Button';
-import { navigate } from 'gatsby';
+
+import FormData from 'form-data';
+
+
 import Col from '@paljs/ui/Col';
 import Row from '@paljs/ui/Row';
 import React, { Component } from 'react';
@@ -11,12 +14,19 @@ import styled from 'styled-components';
 import SEO from '../../components/SEO';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
-import { useForm } from "react-hook-form"
+// import { useForm } from "react-hook-form"
 import User from '@paljs/ui/User';
 import { isLoggedIn } from "../../components/services/auth"
 import { getURLParams } from '../../components/utils/common';
 
+import Figure from 'react-bootstrap/Figure'
 import ProgressBar from 'react-bootstrap/ProgressBar'
+
+
+import Uploady, {useBatchProgressListener, useBatchAddListener, useBatchFinishListener, useBatchCancelledListener, useBatchAbortListener, useItemProgressListener} from "@rpldy/uploady";
+import UploadButton from "@rpldy/upload-button";
+import UploadPreview from "@rpldy/upload-preview";
+
 
 
 const Input = styled(InputGroup)`
@@ -78,7 +88,8 @@ export default class EditUser extends Component {
     AuthorBio: '',
     CRMID: '',
     loaded: 0,
-    selectedFile: null
+    selectedFile: null,
+    userImageProfile: '/profile-avatar.png'
   }
   
   componentWillUnmount(){
@@ -109,7 +120,8 @@ export default class EditUser extends Component {
       AuthorBio: '',
       CRMID: '',
       loaded: 0,
-      selectedFile: null
+      selectedFile: null,
+      userImageProfile: '/profile-avatar.png'
     })
   }
   componentDidMount() {
@@ -122,7 +134,7 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblUsers',
         queryType: 'getUserById',
@@ -164,7 +176,7 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblCompany',
         queryType: 'getAllCompanyInfo'
@@ -188,7 +200,7 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblDepartments',
         queryType: 'getAllDepartments'
@@ -213,7 +225,7 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblPermissions',
         queryType: 'getAllPermission'
@@ -238,7 +250,7 @@ export default class EditUser extends Component {
       /** Get All User Permissions Details **/
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
         params: {
           tblName: 'tblUserPermissions',
           queryType: 'getUserPermissionByUserID',
@@ -260,6 +272,29 @@ export default class EditUser extends Component {
         console.log(response,`successfull`);
       });
 
+
+      // Get Current User Profile Image On page Load
+      axios({
+        method: 'get',
+        url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+        params: {
+          tblName: 'tblUsers',
+          queryType: 'getuserProfileImage',
+          UserID: UserID,
+        }
+      })
+      .then(function (response) {
+        console.log(response,`getting User profile Image successfully 1`+response.data.ImageURL);
+          saveState({
+            userImageProfile: response.data.ImageURL
+          });
+      })
+      .catch(function (error) {
+        console.log(error,`error`);
+      });
+
+
+
   }
 
   saveState = (data) => {
@@ -271,7 +306,7 @@ export default class EditUser extends Component {
     const UserID = getURLParams('UserID');
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblUsers',
         queryType: 'addNewUserList',
@@ -301,7 +336,7 @@ export default class EditUser extends Component {
     const UserID = getURLParams('UserID');
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblUsers',
         queryType: 'updateAdminProfile',
@@ -342,7 +377,7 @@ export default class EditUser extends Component {
     }
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblUsers',
         queryType: 'updateUserPassword',
@@ -371,7 +406,7 @@ export default class EditUser extends Component {
     }
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblUsers',
         queryType: 'updateUserPermission',
@@ -393,7 +428,7 @@ export default class EditUser extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
       params: {
         tblName: 'tblUserPermissions',
         queryType: 'deleteUserPermission',
@@ -526,49 +561,91 @@ export default class EditUser extends Component {
  }
 
  onChangeFileHandler = (e) => {
+  
+  const { saveState, state } = this;
   const UserID = getURLParams('UserID');
+  
   console.log(e.target.files[0]);
   console.log("File Name: "+e.target.files[0].name);
-  const data = new FormData();
-  data.append('file', this.state.selectedFile);
 
-      var files = e.target.files
-      if(this.maxSelectFile(e) && this.checkMimeType(e) && this.checkMimeType(e)){ 
-      // if return true allow to setState
-         this.setState({
-        //  selectedFile: files,
-         selectedFile: e.target.files[0],
-        loaded: 0,
-      })
-   }
+  let formData = new FormData();
+  // formData.append('file', e.target.files[0]);
+   formData.append('file', e.target.files[0], e.target.files[0].name);
+   formData.append('tblName', 'tblUsers');
+   formData.append('queryType', 'uploadProfileImage');
+   formData.append('UserID', UserID);
+   formData.append('FileName', e.target.files[0].name);
+  
+    
+  //     var files = e.target.files
+  //     if(this.maxSelectFile(e) && this.checkMimeType(e) && this.checkMimeType(e)){ 
+  //     // if return true allow to setState
+  //        this.setState({
+  //         selectedFile: e.target.files[0].name,
+  //         loaded: 0,
+  //     })
+  //  }
 
-    axios({
-      method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      params: {
-        tblName: 'tblUsers',
-        queryType: 'uploadProfileImage',
-        UserID: UserID,
-      },
-      data,
-      onUploadProgress: ProgressEvent => {
-        console.log("File Uploaded: "+e.target.files[0]);
-            this.setState({
-              loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
-          })
-      }
+  axios.post('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', formData, {
+    headers: {
+      'accept': 'application/json',
+      'Accept-Language': 'en-US,en;q=0.8',
+      //  'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+       'Content-Type': 'multipart/form-data'
+    },
+    onUploadProgress: ProgressEvent => {
+      console.log("File Uploaded: "+e.target.files[0]);
+      console.log(ProgressEvent.loaded / ProgressEvent.total*100);
+          this.setState({
+            loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+        })
+    }
+  }).then((response) => {
+    //handle success
+    console.log(response,`Uploaded Profile Image successfully`);
+    //Calling the getuserProfileImage() function to preview profile image
+    this.getuserProfileImage(e);
 
-    })
-    .then(function (response) {
-      console.log(response,`Updated User Permission successfully`);
-    })
-    .catch(function (error) {
-      console.log(error,`error`);
-    });
-
+  }).catch((error) => {
+    //handle error
+    console.log(error,`error`);
+  });
 
 
 }
+
+// Get Current User Profile Image
+getuserProfileImage = (e) => {
+  const { saveState, state } = this;
+  const UserID = getURLParams('UserID');
+  axios({
+    method: 'get',
+    url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+    params: {
+      tblName: 'tblUsers',
+      queryType: 'getuserProfileImage',
+      UserID: UserID,
+    }
+  })
+  .then(function (response) {
+    console.log(response,`getting User profile Image successfully`);
+    this.saveState({
+      userImageProfile: response.data.ImageURL
+    });
+  })
+  .catch(function (error) {
+    console.log(error,`error`);
+  });
+
+}
+
+
+onUploadFileHandler = (e) => {
+  const { saveState, state } = this;
+  const UserID = getURLParams('UserID');
+  
+}
+
  
 
 /** Below are for File Uploading Functions **/
@@ -631,14 +708,26 @@ return true;
 
 }
 
+filterBySize = (file) => {
+  //filter out images larger than 5MB
+  return file.size <= 5242880;
+};
+
+//must be rendered inside <Uploady>
+LogProgress = () => {
+  useItemProgressListener((item) => {
+      console.log(`>>>>> (hook) File ${item.file.name} completed: ${item.completed}`);
+  });
+
+  return null;
+}
 
   render(){
-    const { state, onAdddUser, onChangeStatus, onChangeDepartmentOptions, onChangeCompanyOption, onChangeDropdown, onUpdateAdminProfile, onUpdateUserPassword, onChangePassword, onUpdateUserPermission, deleteUserPermission, onChangeFileHandler } = this;
+    const { state, onAdddUser, onChangeStatus, onChangeDepartmentOptions, onChangeCompanyOption, onChangeDropdown, onUpdateAdminProfile, onUpdateUserPassword, onChangePassword, onUpdateUserPermission, deleteUserPermission, onChangeFileHandler, filterBySize, LogProgress, getuserProfileImage } = this;
     return (
       <>
         <SEO title="View/Edit User" />
         <div className="content-wrapper px-4 py-4">
-
         
         <Card>
             <CardBody>
@@ -652,7 +741,18 @@ return true;
 
                   <Row className="mb-5">
                     <Col breakPoint={{ xs: 12 }}>
-                        <User title="Manger" name={this.state.FullName} image="url('/icons/icon-72x72.png')" />
+                        {/* <User title="Manger" name={this.state.FullName} image="url('/icons/icon-72x72.png')" /> */}
+                        <Figure className="mb-4">
+                                  <Figure.Image
+                                    width={72}
+                                    height={72}
+                                    alt={this.state.FullName}
+                                    src={this.state.userImageProfile}
+                                  />
+                                  <Figure.Caption className="text-center">
+                                    <strong>{this.state.FullName}</strong>
+                                  </Figure.Caption>
+                                </Figure>
                     </Col>
                   </Row>
                   
@@ -664,14 +764,14 @@ return true;
                         <Row>
 
                         <Col breakPoint={{ xs: 12 }}>
-                            <div class='form-group '>
+                            <div className='form-group '>
                               <label htmlFor=""><strong>{this.state.FirstName} {this.state.LastName}'s Author/Profile URL</strong></label>
-                              <label form='EditUser' for='ProfileURL' className='d-block d-md-none'>View Your Profile</label>
+                              <label form='EditUser' htmlFor='ProfileURL' className='d-block d-md-none'>View Your Profile</label>
                               <span className='fntsz14 pdb25 form-control d-none d-md-block'>{this.state.AuthorURL }<span className='pdl6 pdr6'>&ndash;</span> <i className='fntsz13 pdr1'>Preview Your Profile Page</i><a href={this.state.AuthorURL} target='_blank' className='faHlp fa-eye'></a></span>
                             </div>
                           </Col>
                           <Col breakPoint={{ xs: 12 }}>
-                          <label form='EditUser' for='ArticlesURL' className=''><strong>{this.state.FirstName} {this.state.LastName}'s Articles</strong></label>
+                          <label form='EditUser' htmlFor='ArticlesURL' className=''><strong>{this.state.FirstName} {this.state.LastName}'s Articles</strong></label>
                           <span className='fntsz14 pdb25 form-control d-none d-md-block'> {this.state.AuthorURL+'Articles/'} <span className='pdl6 pdr6'>&ndash;</span> <i className='fntsz13 pdr1'>Preview Your Articles</i><a href={this.state.AuthorURL+'Articles/'} target='_blank' className='faHlp fa-eye'></a></span>
                           <span className='fntsz14 pdb25 form-control d-block d-md-none'>Preview Your Articles <a href={this.state.AuthorURL+'Articles/'} target='_blank' className='faHlp fa-eye'></a></span>
                           </Col>
@@ -680,7 +780,7 @@ return true;
                           
                           <Col breakPoint={{ xs: 12 }}>
                             <label htmlFor="CompanyID">Company</label> 
-                            <SelectStyled options={state.CompanyData.map(({ companyId, companyName }) => { 
+                            <SelectStyled options={state.CompanyData.map(({ companyId, companyName }) => {
                               if(this.state.CompanyID == companyId){
                                 CompanyNameString = companyName;
                               }
@@ -716,52 +816,63 @@ return true;
                             </Col>
                             <Col breakPoint={{ xs: 12 }}>
                               <div className="form-group">
-                                <label form='EditTwitterURL' for="EditTwitterURL" className="">{this.state.FirstName}'s Twitter Profile</label> 
+                                <label htmlFor="EditTwitterURL" className="">{this.state.FirstName}'s Twitter Profile</label> 
                                 <Input fullWidth size="Medium" className="EditTwitterURL">
-                                  <input form='EditUser' type='url' className='text-input form-control' id="EditTwitterURL" name='EditTwitterURL' value={this.state.TwitterURL} placeholder='https://twitter.com/myUsername' onChange ={onChangeStatus.bind(this, 'EditTwitterURL')} />
+                                  <input type='url' className='text-input form-control' id="EditTwitterURL" name='EditTwitterURL' value={this.state.TwitterURL} placeholder='https://twitter.com/myUsername' onChange ={onChangeStatus.bind(this, 'EditTwitterURL')} />
                                 </Input>
                               </div>
                             </Col>
                             <Col breakPoint={{ xs: 12 }}>
-                              <div class="form-group">
-                                <label form='EditFacebookURL' for="EditFacebookURL" className="">{this.state.FirstName}'s Facebook Profile</label>  
+                              <div className="form-group">
+                                <label htmlFor="EditFacebookURL" className="">{this.state.FirstName}'s Facebook Profile</label>  
                                 <Input fullWidth size="Medium" className="EditFacebookURL">
-                                  <input form='EditUser' type='url' className='text-input form-control' id="EditFacebookURL" name='EditFacebookURL' value={this.state.FacebookURL} placeholder='https://www.facebook.com/myUsername' onChange ={onChangeStatus.bind(this, 'FacebookURL')} />
+                                  <input type='url' className='text-input form-control' id="EditFacebookURL" name='EditFacebookURL' value={this.state.FacebookURL} placeholder='https://www.facebook.com/myUsername' onChange ={onChangeStatus.bind(this, 'FacebookURL')} />
                                 </Input>
                               </div> 
                             </Col>
                             <Col breakPoint={{ xs: 12 }}>
-                              <div class="form-group">
-                                <label form='EditGPlusURL' for="EditGPlusURL" className="">{this.state.FirstName}'s Google+ Profile</label>
+                              <div className="form-group">
+                                <label htmlFor="EditGPlusURL" className="">{this.state.FirstName}'s Google+ Profile</label>
                                 <Input fullWidth size="Medium" className="EditGPlusURL">
-                                  <input form='EditUser' type='url' className='text-input form-control' id="EditGPlusURL" name='EditGPlusURL' value={this.state.GPlusURL} placeholder='https://plus.google.com/+myUsername' onChange ={onChangeStatus.bind(this, 'GPlusURL')}/>
+                                  <input type='url' className='text-input form-control' id="EditGPlusURL" name='EditGPlusURL' value={this.state.GPlusURL} placeholder='https://plus.google.com/+myUsername' onChange ={onChangeStatus.bind(this, 'GPlusURL')}/>
                                 </Input>
                               </div>
                             </Col>
                             <Col breakPoint={{ xs: 12 }}><hr className="my-4"></hr></Col>     
 
                             <Col breakPoint={{ xs: 12 }}>
-                              <div class="form-group">
-                                <label form='EditImageURL' for="EditImageURL" className="">{this.state.FirstName}'s Profile Image</label>
-                                <input type="file" name="EditImageURL" onChange={this.onChangeFileHandler} className='text-input form-control imageurl-form-control' id="EditImageURL" name='EditImageURL' value={this.state.ImageURL} />
+                              <div className="form-group">
+                                <label htmlFor="EditImageURL" className="">{this.state.FirstName}'s Profile Image</label>
+                                <input type="file" name="EditImageURL" onChange={this.onChangeFileHandler} className='text-input form-control imageurl-form-control' id="EditImageURL" name='EditImageURL' />
+                                {/* {this.state.ImageURL} */}
                               </div>
                             </Col>
                             <Col breakPoint={{ xs: 12 }}>
-                                <div class="form-group">
-                                  <ProgressBar striped variant="success" color="success" now={50} value={this.state.loaded} className="py-3">{Math.round(this.state.loaded,2) }%</ProgressBar>
+                                <div className="form-group mb-3">
+                                  <ProgressBar striped variant="success" now={this.state.loaded} label={`${this.state.loaded}%`} visuallyHidden />
                                 </div>
+                                
+                                <Figure className="mb-4">
+                                  <Figure.Image
+                                    width={171}
+                                    height={180}
+                                    alt={this.state.FullName}
+                                    src={this.state.userImageProfile}
+                                  />
+                                  <Figure.Caption className="text-center">
+                                    {this.state.FullName}
+                                  </Figure.Caption>
+                                </Figure>
                             </Col>
 
                             <Col breakPoint={{ xs: 12 }}>
-                              <div class="form-group">
-                                <label form='EditAuthorBio' for="EditAuthorBio" className="">{this.state.FirstName}'s Bio</label>
+                              <div className="form-group">
+                                <label htmlFor="EditAuthorBio" className="">{this.state.FirstName}'s Bio</label>
                                 <Input fullWidth shape="Round">
                                   <textarea rows={5} className='text-input form-control' id="EditAuthorBio" name='EditAuthorBio' value={this.state.AuthorBio} onChange ={onChangeStatus.bind(this, 'EditAuthorBio')} />
                                 </Input>
                               </div>
                             </Col>
-
-
                           </Row>
 
                           

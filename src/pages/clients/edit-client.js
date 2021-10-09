@@ -145,6 +145,8 @@ export default class AddClient extends Component {
       NoteText: '',
       ClientNotesData: [],
       ClientnoteIsSavedBool: false,
+      ClientNoteStatus: '',
+      ClientNoteEnteredDate: '',
       ClientCampaignIsSavedBool: false,
       ClientTodoList: [],
       UserAdminList: [],
@@ -186,6 +188,8 @@ export default class AddClient extends Component {
       NoteText: '',
       ClientNotesData: [],
       ClientnoteIsSavedBool: false,
+      ClientNoteStatus: '',
+      ClientNoteEnteredDate: '',
       ClientCampaignIsSavedBool: false,
       ClientTodoList: [],
       UserAdminList: [],
@@ -583,12 +587,25 @@ export default class AddClient extends Component {
         EnteredBy: isLoggedInUserID(),
         ClientID: singleClientID,
         NoteText: this.state.NoteText,
-        NoteType: 1
+        NoteType: 1,
+        ClientNoteStatus: 'Active',
+        ClientNoteEnteredDate: new Date().toLocaleString()
       }
     })
     .then(function (response) {
       saveState({
-        ClientnoteIsSavedBool: true
+        ClientnoteIsSavedBool: true,
+        ClientNotesData: [
+          ...state.ClientNotesData,
+          {
+            EnteredBy: isLoggedInUserID(),
+            ClientID: singleClientID,
+            NoteText: state.NoteText,
+            NoteType: 1,
+            ClientNoteStatus: 'Active',
+            ClientNoteEnteredDate: new Date().toLocaleString()
+          }
+        ]
       });
       console.log(response,`Added New Client Note successfull`);
     })
@@ -815,7 +832,7 @@ export default class AddClient extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`Deleted Company Insurance successfull`);
+      console.log(response,`Deleted To Do list successfull`);
       saveState({
         ClientTodoList: state.ClientTodoList.filter(({ ToDoID })=> ToDoID != todoListId)
       });
@@ -826,8 +843,31 @@ export default class AddClient extends Component {
   };
 
 
+  onSetToDoneClientNoteList = (clientNoteListId) => {
+    console.log("updateClientnoteListToDone value: "+clientNoteListId);
+    const { saveState, state } = this;
+    axios({
+      method: 'get',
+      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      params: {
+        tblName: 'tblClientNotes',
+        queryType: 'updateClientNoteListToDone',
+        ClientNoteListId: clientNoteListId
+      }
+    })
+    .then(function (response) {
+      console.log(response,`Deleted Client note successfull`);
+      saveState({
+        ClientNotesData: state.ClientNotesData.filter(({ ClientNoteID })=> ClientNoteID != clientNoteListId)
+      });
+    })
+    .catch(function (error) {
+      console.log(error,`error`);
+    });
+  };
+
   render() {
-    const { state, onChangeStatus, onUpdateClient, onChangeCampaignOption, onChangeRepOption, onChangeCardTypeOption, onChangeMonthOption, onChangeYearOption, onAddClientCampaign, cancelClientCampaign, onAddClientCampaignTrackingNumber, onAddClientNote, onSetToDoneToDoList, onAddToDo, onChangeTodoItemOption } = this;
+    const { state, onChangeStatus, onUpdateClient, onChangeCampaignOption, onChangeRepOption, onChangeCardTypeOption, onChangeMonthOption, onChangeYearOption, onAddClientCampaign, cancelClientCampaign, onAddClientCampaignTrackingNumber, onAddClientNote, onSetToDoneToDoList, onAddToDo, onChangeTodoItemOption, onSetToDoneClientNoteList } = this;
     return (
       <>
         <SEO title="ADD USER" />
@@ -1082,17 +1122,19 @@ export default class AddClient extends Component {
                               <th>Entered By</th>
                               <th>Date</th>
                               <th>Note</th>
+                              <th>Status</th>
                             </tr>
                           </thead>
                           <tbody>
                           
-                          {this.state.ClientNotesData.map(({ EnteredBy, EnteredDate, NoteText }) => { 
+                          {this.state.ClientNotesData.map(({ EnteredBy, EnteredDate, NoteText, ClientNoteID }) => { 
 
                               return (
                                 <tr  key={EnteredBy}>
                                   <td scope="col">{EnteredBy}</td>
                                   <td>{EnteredDate}</td>
                                   <td>{NoteText}</td>
+                                  <td className="text-center"><Checkbox status="Dangerd" name="setToDoneClientNote" onChange={onSetToDoneClientNoteList.bind(this,ClientNoteID)}></Checkbox></td>
                                 </tr>
                                 );
                               

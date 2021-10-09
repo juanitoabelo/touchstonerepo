@@ -4,6 +4,8 @@ import Row from '@paljs/ui/Row';
 import Select from '@paljs/ui/Select';
 import styled from 'styled-components';
 import { Button } from '@paljs/ui/Button';
+import { ButtonLink } from '@paljs/ui/Button';
+import { navigate, Link } from 'gatsby';
 import { InputGroup } from '@paljs/ui/Input';
 import { Checkbox } from '@paljs/ui/Checkbox';
 import { Container } from '@material-ui/core';
@@ -2722,7 +2724,8 @@ export default class EditLead extends Component {
                   </Row>
                   <Row className="mb-4">
                     <Col breakPoint={{ xs: 12, md: 4 }}>
-                        <Button status="Info" type="button" shape="SemiRound" fullWidth className="text-uppercase">REFER {this.state.FirstName.toUpperCase()}</Button>
+                        {/* <Button status="Info" type="button" shape="SemiRound" fullWidth className="text-uppercase">REFER {this.state.FirstName.toUpperCase()}</Button> */}
+                        <ButtonLink status="Success" type="button" shape="SemiRound" onClick={() => navigate('/leads/refer-lead?leadID='+LeadID)} fullWidth>REFER {this.state.FirstName.toUpperCase()}</ButtonLink>
                     </Col>
                     <Col breakPoint={{ xs: 12, md: 4 }}>
 
@@ -2736,9 +2739,9 @@ export default class EditLead extends Component {
                       </Row>
                       
                     </Col>
-                    <Col breakPoint={{ xs: 12, md: 2 }}></Col>
-                    <Col breakPoint={{ xs: 12, md: 2 }}>
-                        <Button status="Info" type="button" shape="SemiRound" fullWidth className="text-uppercase">CONVERT {this.state.FirstName.toUpperCase()}</Button>
+                    <Col breakPoint={{ xs: 12, md: 1 }}></Col>
+                    <Col breakPoint={{ xs: 12, md: 3 }}>
+                        <ButtonLink status="Success" type="button" shape="SemiRound" onClick={() => navigate('/leads/convert-lead-to-client?leadID='+LeadID)} fullWidth>CONVERT {this.state.FirstName.toUpperCase()}</ButtonLink>
                     </Col>
                   </Row>
                 </Col>

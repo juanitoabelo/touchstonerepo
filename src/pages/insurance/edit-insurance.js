@@ -207,7 +207,7 @@ export default class EditInsurance extends Component {
               <Container>
                   <Row>
                     <Col breakPoint={{ xs: 12 }}>
-                      <h1 className="text-center mb-5">Add Insurance</h1>
+                      <h1 className="text-center mb-5">Edit Insurance</h1>
                     </Col>
                   </Row>
   
