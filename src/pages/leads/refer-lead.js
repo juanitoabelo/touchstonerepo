@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import SEO from '../../components/SEO';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
-import { isLoggedIn } from "../../components/services/auth"
+import { isLoggedIn, getUser } from "../../components/services/auth"
 import Alert from '@paljs/ui/Alert';
 import { render } from 'react-dom';
 
@@ -41,6 +41,8 @@ const ErrorStyle = styled.div`
   }
 `;
 
+let ProductNameSelected = '';
+let thisProductNameFinal = '';
 const isBrowser = typeof window !== "undefined"
 
 export default class ReferLead extends Component {
@@ -51,7 +53,7 @@ export default class ReferLead extends Component {
       ReferCompanyID: 0,
       ProductData: [],
       LeadReferedNetworkData: [],
-      ProductName: ''
+      ProductID: ''
   }
 
   componentWillUnmount(){
@@ -61,7 +63,7 @@ export default class ReferLead extends Component {
         ReferCompanyID: 0,
         ProductData: [],
         LeadReferedNetworkData: [],
-        ProductName: ''
+        ProductID: ''
     })
   }
 
@@ -76,14 +78,15 @@ export default class ReferLead extends Component {
     saveState({ LeadID });
 
     /** Get All Company Type Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    // axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {    
       params: {
         tblName: 'tblUsers',
         queryType: 'searchRepresentativeUsers'
       }
     })
     .then(function (response) {
-       console.log('Representative User Data: '+ JSON.stringify(response.data));
+       //console.log('Representative User Data: '+ JSON.stringify(response.data));
       saveState({
         CSUserIDRepData: response.data
       });
@@ -98,9 +101,10 @@ export default class ReferLead extends Component {
     });
 
      /** Get users IP Address **/
-     axios.get('https://geolocation-db.com/json/')
+    //  axios.get('https://geolocation-db.com/json/')
+     axios.get(process.env.REACT_APP_GEOLOCATION_URL)
      .then(function (response) {
-        console.log('Users Geolocation Data: '+ JSON.stringify(response.data.IPv4));
+        //console.log('Users Geolocation Data: '+ JSON.stringify(response.data.IPv4));
        saveState({
          IPAddress: response.data.IPv4
        });
@@ -116,14 +120,15 @@ export default class ReferLead extends Component {
 
 
       /** Get All Main Leads Details **/
-    axios.get('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', {
+    // axios.get('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {  
         params: {
           tblName: 'tblProducts',
           queryType: 'getAllProducts'
         }
       })
       .then(function (response) {
-         console.log('All Product Data: '+ JSON.stringify(response.data));
+        // console.log('All Product Data: '+ JSON.stringify(response.data));
         saveState({
             ProductData: response.data,
             // ProductID: response.data.ProductID,
@@ -146,9 +151,9 @@ export default class ReferLead extends Component {
         console.log(response,`successfull`);
       });
 
-
+    
       /** Get All Refered Leads Details **/
-    axios.get('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
         params: {
           tblName: 'tblLeads',
           queryType: 'getAllLeadReferedNetwork',
@@ -156,7 +161,7 @@ export default class ReferLead extends Component {
         }
       })
       .then(function (response) {
-         console.log('All Refered Lead Data: '+ JSON.stringify(response.data));
+        //  console.log('All Refered Lead Data: '+ JSON.stringify(response.data));
         saveState({
             LeadReferedNetworkData: response.data
         });
@@ -177,26 +182,31 @@ export default class ReferLead extends Component {
     this.setState(data);
   }
   
-  onReferLead = () => {
+  onReferLead = (e) => {
     const { saveState, state } = this;
     const LeadID = getURLParams('leadID');
     saveState({ LeadID });
 
-    axios({
-      method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+    // axios({
+    //   method: 'get',
+    //   url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
-        tblName: 'tblClients',
-        queryType: 'addNewClient',
+        tblName: 'tblLeads',
+        queryType: 'referNewLeads',
         CampaignID: this.state.CampaignID,
-        LeadID: LeadID
+        ProductID: this.state.ProductID,
+        LeadID: LeadID,
+        CompanyID: e,
+        UserId: getUser().userid,
       }
     })
     .then(function (response) {
       saveState({
         isSaved: true
       });
-      console.log(response,`Added New Client successfull`);
+      //console.log(response,`Refered New Client successfull`);
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -205,16 +215,10 @@ export default class ReferLead extends Component {
   }
 
   onChangeStatus = (e) => {
-     // v will be true or false
-     console.log('Change Status: '+e.target.value);
-     switch(e.target.name){
-         case 'ProductID':
-           this.saveState({
-            ProductName: e.value
-           });
-           break;
-        
-     }
+     this.saveState({
+      ProductID: e.value
+     });
+
   }
   
   render() {
@@ -229,7 +233,7 @@ export default class ReferLead extends Component {
 
                 <Container>
                     <Row>
-                        <Col breakPoint={{ xs: 12 }}>
+                        <Col breakPoint={{ xs: 12 }}> 
                             <h1 className="text-center mb-5 text-uppercase">REFER LEAD</h1> 
                         </Col>
                         { state.isSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Refered a Lead</Alert></Col> : false }
@@ -259,6 +263,7 @@ export default class ReferLead extends Component {
                                     if(InsuranceName == null){
                                         InsuranceName = 'NA'
                                     }
+                                    
                                   return (
                                       <tr key={NetworkID}> 
                                         <td scope="col">
@@ -271,9 +276,23 @@ export default class ReferLead extends Component {
                                             {InsuranceName}
                                         </td>
                                         <td scope="col">
-                                            <SelectStyled options={state.ProductData.map(({ ProductID, ProductName }) => { 
+
+                                            <SelectStyled options={state.ProductData.map(({ ProductID, ProductName, ProductCompanyID }) => { 
+                                                
+                                                thisProductNameFinal = NetworkID
+                                                  if(ProductID == state.ProductID ){
+                                                    thisProductNameFinal = ProductName
+                                                  } else {
+                                                    thisProductNameFinal = "--Select Service--"
+                                                  }
+
+                                                if( CompanyID === ProductCompanyID){
+                                                  console.log(NetworkID+" Netowrk Id: "+CompanyID +"==="+ ProductCompanyID);
+                                                }
                                                 return { value: ProductID, label: ProductName };
-                                                })}  placeholder={state.ProductName}  placeholder="Select" id="ProductID" name="ProductID" onChange ={onChangeStatus.bind(this)} />
+
+                                                })} placeholder={thisProductNameFinal} id={"ProductID"+NetworkID} name={"ProductID"+NetworkID} onChange ={onChangeStatus.bind(this)} />
+
                                         </td>
                                         <td><Button onClick={onReferLead.bind(this,CompanyID)} id="submitButtons" status="Warning" type="button" shape="SemiRound" fullWidth className="submitButtons text-uppercase">Refer</Button></td>
                                       </tr>
