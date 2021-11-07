@@ -81,7 +81,7 @@ export default class Index extends Component {
       togglePName: true,
       loader: 'Loading!!!'
     });
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         searchFor: searchFor,
         searchForDept: searchForDept,

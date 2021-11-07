@@ -1,9 +1,9 @@
 import Select from '@paljs/ui/Select';
 import { InputGroup } from '@paljs/ui/Input';
 import { Card, CardBody } from '@paljs/ui/Card';
-import { ButtonLink } from '@paljs/ui/Button';
+// import { ButtonLink } from '@paljs/ui/Button';
 import { Button } from '@paljs/ui/Button';
-import { navigate } from 'gatsby';
+// import { navigate } from 'gatsby';
 import Col from '@paljs/ui/Col';
 import Row from '@paljs/ui/Row';
 import React, { Component } from 'react';
@@ -13,7 +13,7 @@ import axios from 'axios';
 import { Container } from '@material-ui/core';
 import { isLoggedIn, getUser } from "../../components/services/auth"
 import Alert from '@paljs/ui/Alert';
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
 
 import { getURLParams } from '../../components/utils/common';
 
@@ -287,7 +287,8 @@ export default class ReferLead extends Component {
                                                   }
 
                                                 if( CompanyID === ProductCompanyID){
-                                                  console.log(NetworkID+" Netowrk Id: "+CompanyID +"==="+ ProductCompanyID);
+                                                 // console.log(NetworkID+" Netowrk Id: "+CompanyID +"==="+ ProductCompanyID);
+                                                  // return { value: ProductID, label: ProductName };
                                                 }
                                                 return { value: ProductID, label: ProductName };
 

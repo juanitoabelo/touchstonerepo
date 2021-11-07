@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import SEO from '../../components/SEO';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
-
+import Alert from '@paljs/ui/Alert';
 import { isLoggedIn } from "../../components/services/auth"
 
 const Input = styled(InputGroup)`
@@ -28,11 +28,13 @@ export default class Index extends Component {
 
   state = {
     NetworkName: '',
+    isSaved : false,
   }
 
   componentWillUnmount(){
     this.setState({
       NetworkName: '',
+      isSaved : false,
     })
   }
 
@@ -47,9 +49,11 @@ export default class Index extends Component {
   }
 
   onAddNetwork = () => {
+    const { saveState, state } = this;
+
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblNetwork',
           queryType: 'addNewNetworkInfo',
@@ -58,6 +62,9 @@ export default class Index extends Component {
       })
       .then(function (response) {
         console.log(response,`Added New Company successfull`);
+        saveState({
+          isSaved: true
+        });
       })
       .catch(function (error) {
         console.log(error,`error`);
@@ -84,6 +91,7 @@ export default class Index extends Component {
                   <Row>
                     <Col breakPoint={{ xs: 12 }}>
                       <h1 className="mb-5">Add Network</h1>
+                      { state.isSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Added New Network Name</Alert></Col> : false }
                     </Col>
                   </Row>
 

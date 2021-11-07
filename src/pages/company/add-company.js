@@ -12,6 +12,7 @@ import SEO from '../../components/SEO';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
 import { isLoggedIn } from "../../components/services/auth"
+import Alert from '@paljs/ui/Alert';
 
 const Input = styled(InputGroup)`
   margin-bottom: 10px;
@@ -40,7 +41,8 @@ export default class MyCompany extends Component {
     CompanyName: '',
     CompanyType: 0,
     CompanyMemberType: '',
-    CompanyTypeData: []
+    CompanyTypeData: [],
+    isSaved : false,
   }
 
   componentWillUnmount(){
@@ -48,7 +50,8 @@ export default class MyCompany extends Component {
       CompanyName: '',
       CompanyType: 0,
       CompanyMemberType: '',
-      CompanyTypeData: []
+      CompanyTypeData: [],
+      isSaved : false,
     })  
   }
 
@@ -59,14 +62,14 @@ export default class MyCompany extends Component {
     const { saveState, state } = this;
 
      /** Get All Company Type Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCompanyType',
         queryType: 'getAllCompanyType'
       }
     })
     .then(function (response) {
-       console.log('Company Type Data: '+ JSON.stringify(response.data));
+      //  console.log('Company Type Data: '+ JSON.stringify(response.data));
       saveState({
         CompanyTypeData: response.data
       });
@@ -87,9 +90,11 @@ export default class MyCompany extends Component {
   }
 
   onAddCompany = () => {
+    const { saveState, state } = this;
+    
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblCompany',
           queryType: 'addNewCompanyInfo',
@@ -100,6 +105,9 @@ export default class MyCompany extends Component {
       })
       .then(function (response) {
         console.log(response,`Added New Company successfull`);
+        saveState({
+          isSaved: true
+        });
       })
       .catch(function (error) {
         console.log(error,`error`);
@@ -143,6 +151,7 @@ export default class MyCompany extends Component {
                   <Row>
                     <Col breakPoint={{ xs: 12 }}>
                       <h1 className="text-center mb-5">Add Company</h1>
+                      { state.isSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Added New Company</Alert></Col> : false }
                     </Col>
                   </Row>
 

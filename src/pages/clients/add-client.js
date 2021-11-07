@@ -156,14 +156,14 @@ export default class AddClient extends Component {
     const { saveState, state } = this;
 
     /** Get All Company Type Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblUsers',
         queryType: 'searchRepresentativeUsers'
       }
     })
     .then(function (response) {
-       console.log('Representative User Data: '+ JSON.stringify(response.data));
+       //console.log('Representative User Data: '+ JSON.stringify(response.data));
       saveState({
         CSUserIDRepData: response.data
       });
@@ -178,14 +178,14 @@ export default class AddClient extends Component {
     });
 
      /** Get All Company Type Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCampaigns',
         queryType: 'getAllCampaigns'
       }
     })
     .then(function (response) {
-       console.log('Compaigns Type Data: '+ JSON.stringify(response.data));
+       //console.log('Compaigns Type Data: '+ JSON.stringify(response.data));
       saveState({
         CampaignIDData: response.data
       });
@@ -203,7 +203,7 @@ export default class AddClient extends Component {
      /** Get users IP Address **/
      axios.get('https://geolocation-db.com/json/')
      .then(function (response) {
-        console.log('Users Geolocation Data: '+ JSON.stringify(response.data));
+        //console.log('Users Geolocation Data: '+ JSON.stringify(response.data));
        saveState({
          IPAddress: response.data.IPv4
        });
@@ -229,7 +229,7 @@ export default class AddClient extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClients',
         queryType: 'addNewClient',

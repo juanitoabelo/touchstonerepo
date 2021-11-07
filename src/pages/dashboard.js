@@ -77,7 +77,7 @@ export default class Home extends Component  {
       const { saveState } = this;
 
       /** Get All Company Details **/
-      axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+      axios.get(process.env.REACT_APP_API_DATABASE_URL, {
        params: {
          tblName: 'tblUsers',
          queryType: 'getUserAdminList'
@@ -100,7 +100,7 @@ export default class Home extends Component  {
 
 
      /** Get All Company Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblToDo',
         queryType: 'getToDoListFromDashBoarByUserId',
@@ -108,7 +108,7 @@ export default class Home extends Component  {
       }
     })
     .then(function (response) {
-      console.log('getToDoListFromDashBoarByUserId Data: '+ JSON.stringify(response.data));
+      //console.log('getToDoListFromDashBoarByUserId Data: '+ JSON.stringify(response.data));
       saveState({
        UserTodoList: response.data
       });
@@ -135,7 +135,7 @@ export default class Home extends Component  {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblToDo',
         queryType: 'addNewTodoDashBoard',
@@ -145,7 +145,7 @@ export default class Home extends Component  {
       }
     })
     .then(function (response) {
-      console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
+      //console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
       saveState({
         UserTodoList: state.UserTodoList.filter(({ ToDoID })=> ToDoID != response.data)
       });
@@ -158,7 +158,7 @@ export default class Home extends Component  {
   onSearchToDoItemListByUserId = (e) => {
     const { saveState } = this;
     /** Get All Company Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblToDo',
         queryType: 'getToDoListFromDashBoarByUserId',
@@ -166,7 +166,7 @@ export default class Home extends Component  {
       }
     })
     .then(function (response) {
-      console.log('onSearchToDoItemListByUserId Data: '+ JSON.stringify(response.data));
+      //console.log('onSearchToDoItemListByUserId Data: '+ JSON.stringify(response.data));
       saveState({
        UserTodoList: response.data
       });
@@ -190,11 +190,11 @@ export default class Home extends Component  {
 
   // Set the To Do Item to Done
    onSetToDoneToDoList = (todoListId) => {
-    console.log("updateToDoListToDone value: "+todoListId);
+   // console.log("updateToDoListToDone value: "+todoListId);
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
           tblName: 'tblToDo',
           queryType: 'updateToDoListToDone',

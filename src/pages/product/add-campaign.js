@@ -77,7 +77,7 @@ export default class AddCampaign extends Component  {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCampaigns',
         queryType: 'addNewCampaign',

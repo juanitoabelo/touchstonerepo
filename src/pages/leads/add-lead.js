@@ -102,14 +102,13 @@ export default class AddLead extends Component {
     const { saveState, state } = this;
 
       /** Get All Company Type Details **/
-      axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+      axios.get(process.env.REACT_APP_API_DATABASE_URL, {
         params: {
           tblName: 'tblUsers',
           queryType: 'searchRepresentativeUsers'
         }
       })
       .then(function (response) {
-         console.log('Representative User Data: '+ JSON.stringify(response.data));
         saveState({
           CSUserIDRepData: response.data
         });
@@ -124,14 +123,13 @@ export default class AddLead extends Component {
       });
 
        /** Get All Company Type Details **/
-       axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+       axios.get(process.env.REACT_APP_API_DATABASE_URL, {
         params: {
           tblName: 'tblCampaigns',
           queryType: 'getAllCampaigns'
         }
       })
       .then(function (response) {
-         console.log('Compaigns Type Data: '+ JSON.stringify(response.data));
         saveState({
           CampaignIDData: response.data
         });
@@ -156,7 +154,7 @@ export default class AddLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'addNewLead',
@@ -174,7 +172,6 @@ export default class AddLead extends Component {
       saveState({
         isSaved: true
       });
-      // console.log(response,`Added New Company successfull`);
     })
     .catch(function (error) {
       console.log(error,`error`);

@@ -220,7 +220,7 @@ export default function Login() {
     console.log("Username: "+formData.user);
     console.log("Password: "+formData.pass);
 
-    axios.get('https://apexnotes.abelocreative.com/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         username: formData.user,
         password: formData.pass
@@ -229,8 +229,8 @@ export default function Login() {
     .then(function (response) {
       // console.log('Handled username: data: '+formData.user);
       //  console.log('Data: '+ JSON.stringify(response.data.u));
-       console.log('Data: '+ response.data.username);
-       console.log('Data: '+ response.data.password);
+      //  console.log('Data: '+ response.data.username);
+      //  console.log('Data: '+ response.data.password);
 
        handleUpdate();
 

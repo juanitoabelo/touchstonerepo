@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://touchstone-api.abelocreative.com/ajax.php',
+      target: process.env.REACT_APP_API_DATABASE_URL,
       secure: false,
       changeOrigin: true,
     })

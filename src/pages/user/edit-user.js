@@ -21,7 +21,7 @@ import { getURLParams } from '../../components/utils/common';
 
 import Figure from 'react-bootstrap/Figure'
 import ProgressBar from 'react-bootstrap/ProgressBar'
-
+import Alert from '@paljs/ui/Alert';
 
 import Uploady, {useBatchProgressListener, useBatchAddListener, useBatchFinishListener, useBatchCancelledListener, useBatchAbortListener, useItemProgressListener} from "@rpldy/uploady";
 import UploadButton from "@rpldy/upload-button";
@@ -89,7 +89,8 @@ export default class EditUser extends Component {
     CRMID: '',
     loaded: 0,
     selectedFile: null,
-    userImageProfile: '/profile-avatar.png'
+    userImageProfile: '/profile-avatar.png',
+    isPermissionSaved : false,
   }
   
   componentWillUnmount(){
@@ -121,7 +122,8 @@ export default class EditUser extends Component {
       CRMID: '',
       loaded: 0,
       selectedFile: null,
-      userImageProfile: '/profile-avatar.png'
+      userImageProfile: '/profile-avatar.png',
+      isPermissionSaved : false,
     })
   }
   componentDidMount() {
@@ -134,7 +136,7 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblUsers',
         queryType: 'getUserById',
@@ -142,7 +144,7 @@ export default class EditUser extends Component {
       }
     })
     .then(function (response) {
-       console.log('User Type Data: '+ JSON.stringify(response.data));
+       //console.log('User Type Data: '+ JSON.stringify(response.data));
       saveState({
         UserData: response.data,
         FirstName: response.data.FirstName,
@@ -176,14 +178,14 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCompany',
         queryType: 'getAllCompanyInfo'
       }
     })
     .then(function (response) {
-       console.log('Company Type Data: '+ JSON.stringify(response.data));
+       //console.log('Company Type Data: '+ JSON.stringify(response.data));
       saveState({
         CompanyData: response.data
       });
@@ -200,14 +202,14 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblDepartments',
         queryType: 'getAllDepartments'
       }
     })
     .then(function (response) {
-       console.log('Departments Type Data: '+ JSON.stringify(response.data));
+       //console.log('Departments Type Data: '+ JSON.stringify(response.data));
       saveState({
         DepartmentData: response.data
       });
@@ -225,7 +227,7 @@ export default class EditUser extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblPermissions',
         queryType: 'getAllPermission'
@@ -250,7 +252,7 @@ export default class EditUser extends Component {
       /** Get All User Permissions Details **/
       axios({
         method: 'get',
-        url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblUserPermissions',
           queryType: 'getUserPermissionByUserID',
@@ -276,7 +278,7 @@ export default class EditUser extends Component {
       // Get Current User Profile Image On page Load
       axios({
         method: 'get',
-        url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblUsers',
           queryType: 'getuserProfileImage',
@@ -284,7 +286,7 @@ export default class EditUser extends Component {
         }
       })
       .then(function (response) {
-        console.log(response,`getting User profile Image successfully 1`+response.data.ImageURL);
+       // console.log(response,`getting User profile Image successfully 1`+response.data.ImageURL);
           saveState({
             userImageProfile: response.data.ImageURL
           });
@@ -306,7 +308,7 @@ export default class EditUser extends Component {
     const UserID = getURLParams('UserID');
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblUsers',
         queryType: 'addNewUserList',
@@ -336,7 +338,7 @@ export default class EditUser extends Component {
     const UserID = getURLParams('UserID');
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblUsers',
         queryType: 'updateAdminProfile',
@@ -377,7 +379,7 @@ export default class EditUser extends Component {
     }
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblUsers',
         queryType: 'updateUserPassword',
@@ -386,7 +388,7 @@ export default class EditUser extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`Updated User Profile Password successfully`);
+      //console.log(response,`Updated User Profile Password successfully`);
       saveState({
         UserPasswordUpdatedState: true
       });
@@ -397,7 +399,7 @@ export default class EditUser extends Component {
   }
 
   // PermissionIDStatus 
-  onUpdateUserPermission = () => {
+  onAddUserPermission = () => {
     const { saveState, state } = this;
     const UserID = getURLParams('UserID');
 
@@ -406,38 +408,100 @@ export default class EditUser extends Component {
     }
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
-        tblName: 'tblUsers',
-        queryType: 'updateUserPermission',
+        tblName: 'tblUserPermissions',
+        queryType: 'addUserPermission',
         PermissionIDStatus: this.state.PermissionIDStatus,
         UserID: UserID,
       }
     })
     .then(function (response) {
-      console.log(response,`Updated User Permission successfully`);
+      // console.log(response,`Added User Permission successfully`);
+      saveState({
+        isPermissionSaved: true
+      });
+
+      /** Get All User Permissions Details **/
+      axios({
+        method: 'get',
+        url: process.env.REACT_APP_API_DATABASE_URL,
+        params: {
+          tblName: 'tblUserPermissions',
+          queryType: 'getUserPermissionByUserID',
+          UserID: UserID,
+        }
+      })
+      .then(function (response) {
+        //console.log('Departments Type Data: '+ JSON.stringify(response.data));
+        saveState({
+          UserPermissionData: response.data
+        });
+        
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function (response) {
+        // always executed
+        console.log(response,`successfull`);
+      });
+
+
     })
     .catch(function (error) {
       console.log(error,`error`);
     });
   }
 
-  deleteUserPermission = (PermissionIDResult) => {
+  deleteUserPermission = (PermissionIDResultData) => {
     const { saveState, state } = this;
     const UserID = getURLParams('UserID');
 
     axios({
       method: 'get',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblUserPermissions',
         queryType: 'deleteUserPermission',
-        PermissionID: PermissionIDResult,
+        PermissionID: PermissionIDResultData,
         UserID: UserID,
       }
     })
     .then(function (response) {
       console.log(response,`Updated User Permission successfully`);
+      // saveState({
+      //   // isSaved: true,
+      //   PermissionData: state.PermissionData.filter(({ PermissionID })=> PermissionID != PermissionIDResultData)
+
+      // });
+
+          /** Get All User Permissions Details **/
+      axios({
+        method: 'get',
+        url: process.env.REACT_APP_API_DATABASE_URL,
+        params: {
+          tblName: 'tblUserPermissions',
+          queryType: 'getUserPermissionByUserID',
+          UserID: UserID,
+        }
+      })
+      .then(function (response) {
+        //console.log('Departments Type Data: '+ JSON.stringify(response.data));
+        saveState({
+          UserPermissionData: response.data
+        });
+        
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function (response) {
+        // always executed
+        console.log(response,`successfull`);
+      });
+
+
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -511,7 +575,7 @@ export default class EditUser extends Component {
   
   
   onChangeDropdown = (type, e) => {
-     console.log(type);
+     //console.log(type);
     switch(type){
       case 'UserStatus':
         this.saveState({
@@ -586,7 +650,7 @@ export default class EditUser extends Component {
   //     })
   //  }
 
-  axios.post('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', formData, {
+  axios.post(process.env.REACT_APP_API_DATABASE_URL, formData, {
     headers: {
       'accept': 'application/json',
       'Accept-Language': 'en-US,en;q=0.8',
@@ -620,7 +684,7 @@ getuserProfileImage = (e) => {
   const UserID = getURLParams('UserID');
   axios({
     method: 'get',
-    url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+    url: process.env.REACT_APP_API_DATABASE_URL,
     params: {
       tblName: 'tblUsers',
       queryType: 'getuserProfileImage',
@@ -723,7 +787,7 @@ LogProgress = () => {
 }
 
   render(){
-    const { state, onAdddUser, onChangeStatus, onChangeDepartmentOptions, onChangeCompanyOption, onChangeDropdown, onUpdateAdminProfile, onUpdateUserPassword, onChangePassword, onUpdateUserPermission, deleteUserPermission, onChangeFileHandler, filterBySize, LogProgress, getuserProfileImage } = this;
+    const { state, onAdddUser, onChangeStatus, onChangeDepartmentOptions, onChangeCompanyOption, onChangeDropdown, onUpdateAdminProfile, onUpdateUserPassword, onChangePassword, onAddUserPermission, deleteUserPermission, onChangeFileHandler, filterBySize, LogProgress, getuserProfileImage } = this;
     return (
       <>
         <SEO title="View/Edit User" />
@@ -955,6 +1019,7 @@ LogProgress = () => {
 
                           <Col breakPoint={{ xs: 12 }}>
                                 <h2 className="text-center mb-5">PERMISSION LIST</h2> 
+                                { state.isPermissionSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Assigning a new Permission Type to the user</Alert></Col> : false }
                           </Col>
 
                           <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 6 }}>
@@ -965,7 +1030,7 @@ LogProgress = () => {
                           </Col>
                           <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 3 }}>
                           <label htmlFor="PermissionID">&nbsp;</label>  
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateUserPermission} fullWidth>ADD</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onAddUserPermission} fullWidth>ADD</Button>
                             </Col>
                           <Col breakPoint={{ xs: 12 }} breakPoint={{ md: 12 }}> 
                             <table className="table table-striped">

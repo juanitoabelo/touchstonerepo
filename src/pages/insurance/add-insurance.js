@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import SEO from '../../components/SEO';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
-
+import Alert from '@paljs/ui/Alert';
 import { isLoggedIn } from "../../components/services/auth"
 
 const Input = styled(InputGroup)`
@@ -45,8 +45,24 @@ export default class AddInsurance extends Component {
     GradeOP: '',
     GradeDET: '',
     JCHOO: '',
-    CARF: ''
+    CARF: '',
+    isSaved : false,
   }
+
+  componentWillUnmount(){
+    this.setState({
+      Name: '',
+      GradeRes: '',
+      GradePHP: '',
+      GradeIOP: '',
+      GradeOP: '',
+      GradeDET: '',
+      JCHOO: '',
+      CARF: '',
+      isSaved : false,
+    })  
+  }
+
   saveState = (data) => {
     this.setState(data);
   }
@@ -57,9 +73,11 @@ export default class AddInsurance extends Component {
   }
 
   onAddInsurance = () => {
+    const { saveState, state } = this;
+
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblInsurance',
         queryType: 'addInsuranceData',
@@ -74,7 +92,10 @@ export default class AddInsurance extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`New Insurance data successfully Added`);
+      // console.log(response,`New Insurance data successfully Added`);
+      saveState({
+        isSaved: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -129,7 +150,7 @@ export default class AddInsurance extends Component {
   }
 
   render() {
-    const { onChangeStatus, onAddInsurance, onSelectCARFOption, onSelectJCHOOption, onSelectGradeDETOption, onSelectGradeOPOption, onSelectGradeIOPOption, onSelectGradeResOption, onSelectGradePHPOption } = this;
+    const { state, onChangeStatus, onAddInsurance, onSelectCARFOption, onSelectJCHOOption, onSelectGradeDETOption, onSelectGradeOPOption, onSelectGradeIOPOption, onSelectGradeResOption, onSelectGradePHPOption } = this;
     return (
       <>
         <SEO title="Add Insurance" />
@@ -143,6 +164,7 @@ export default class AddInsurance extends Component {
                   <Row>
                     <Col breakPoint={{ xs: 12 }}>
                       <h1 className="text-center mb-5">Add Insurance</h1>
+                      { state.isSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Added New Insurance</Alert></Col> : false }
                     </Col>
                   </Row>
   

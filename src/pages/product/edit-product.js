@@ -88,7 +88,7 @@ export default class EditProduct extends Component  {
     });
 
      /** Get All Company Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCampaigns',
         queryType: 'getCampaignByProductId',
@@ -96,7 +96,7 @@ export default class EditProduct extends Component  {
       }
     })
     .then(function (response) {
-      console.log('Compaign Data: '+ JSON.stringify(response.data));
+      //console.log('Compaign Data: '+ JSON.stringify(response.data));
       saveState({
         CampaignListByProductID: response.data
       });
@@ -113,7 +113,7 @@ export default class EditProduct extends Component  {
 
      // console.log('product id:'+prodId);
      /** Get All Company Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblProducts',
         queryType: 'getProductById',
@@ -123,7 +123,7 @@ export default class EditProduct extends Component  {
     })
     .then(function (response) {
       // console.log('product id 2:'+prodId);
-      console.log('Single Product Data: '+ JSON.stringify(response.data));
+      //console.log('Single Product Data: '+ JSON.stringify(response.data));
       saveState({
         ProductStatus: response.data.ProductStatus,
         ProductDataName : response.data.ProductName,
@@ -146,7 +146,7 @@ export default class EditProduct extends Component  {
   onSaveProduct = (e) => {
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblProducts',
         queryType: 'updateProductInfo',

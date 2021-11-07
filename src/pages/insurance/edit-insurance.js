@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import SEO from '../../components/SEO';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
+import Alert from '@paljs/ui/Alert';
 
 import { isLoggedIn } from "../../components/services/auth"
 
@@ -50,7 +51,8 @@ export default class EditInsurance extends Component {
     GradeOP: '',
     GradeDET: '',
     JCHO: '',
-    CARF: ''
+    CARF: '',
+    isSaved : false,
   }
 
   
@@ -65,7 +67,8 @@ export default class EditInsurance extends Component {
         GradeOP: '',
         GradeDET: '',
         JCHO: '',
-        CARF: ''
+        CARF: '',
+        isSaved : false,
     })  
    }
 
@@ -80,11 +83,11 @@ export default class EditInsurance extends Component {
     const { saveState, state } = this;
     const InsuranceID = getURLParams('InsuranceID');
     saveState({ InsuranceID });
-    console.log('Insurance ID: '+InsuranceID);
+    // console.log('Insurance ID: '+InsuranceID);
         // Getting Insurance Info
         axios({
           method: 'get',
-          url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+          url: process.env.REACT_APP_API_DATABASE_URL,
           params: {
             tblName: 'tblInsurance',
             queryType: 'getSingleInsuranceData',
@@ -92,7 +95,6 @@ export default class EditInsurance extends Component {
           }
         })
         .then(function (response) {
-          console.log('Single Insurance Data: '+ JSON.stringify(response.data));
           saveState({    
             Name: response.data.Name,
             GradeRes: response.data.GradeRes,
@@ -109,19 +111,17 @@ export default class EditInsurance extends Component {
           console.log(error,`error`);
         });
       
-
-
   }
 
   
   // Update Insurance Info
   onUpdateInsurance = () => {
-
+    const { saveState, state } = this;
     const InsuranceID = getURLParams('InsuranceID');
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblInsurance',
         queryType: 'updateInsuranceData',
@@ -137,7 +137,10 @@ export default class EditInsurance extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`Updated Insurance data successfully`);
+       console.log(response,`Updated Insurance data successfully`);
+       saveState({
+        isSaved: true
+      });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -194,7 +197,7 @@ export default class EditInsurance extends Component {
   }
 
   render() {
-    const { onChangeStatus, onUpdateInsurance, onSelectCARFOption, onSelectJCHOOption, onSelectGradeDETOption, onSelectGradeOPOption, onSelectGradeIOPOption, onSelectGradeResOption, onSelectGradePHPOption } = this;
+    const { state, onChangeStatus, onUpdateInsurance, onSelectCARFOption, onSelectJCHOOption, onSelectGradeDETOption, onSelectGradeOPOption, onSelectGradeIOPOption, onSelectGradeResOption, onSelectGradePHPOption } = this;
     return (
       <>
         <SEO title="Add Insurance" />
@@ -209,6 +212,7 @@ export default class EditInsurance extends Component {
                     <Col breakPoint={{ xs: 12 }}>
                       <h1 className="text-center mb-5">Edit Insurance</h1>
                     </Col>
+                    { state.isSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Updating Insurance</Alert></Col> : false }
                   </Row>
   
                   <Row className="justify-content-center align-items-center mb-5">

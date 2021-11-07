@@ -97,7 +97,8 @@ export default class Index extends Component {
 
     const { saveState, state } = this;
     /** Get All Company Type Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    // axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {  
       params: {
         tblName: 'tblCompanyType',
         queryType: 'getAllCompanyType'
@@ -157,8 +158,9 @@ export default class Index extends Component {
       errorMsg: '',
       data: []
     });
-    // axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',{
-    axios.get('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', {  
+    
+    // axios.get('https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php', {  
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, { 
       params: {
         tblName: 'tblLeads',
         queryType: 'searchLeadsByCompanyForBy',
@@ -307,7 +309,6 @@ export default class Index extends Component {
 
   // Search fields On Change Function 
   onChangeDropdown = (type, e) => {
-    //  console.log('search: '+e.value);
      console.log(e.value);
     this.saveState({
       perpage: e.value,
@@ -319,9 +320,7 @@ export default class Index extends Component {
 
   
   onChangeDropdownOption = (type, e) => {
-    // console.log('search: '+e.value);
-    // console.log('Tyepe'+ type); 
-
+    
     switch(type){
       case 'SearchBy':
         if(e.value!=""){

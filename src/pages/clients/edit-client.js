@@ -210,7 +210,7 @@ export default class AddClient extends Component {
     const UserID = getURLParams('UserID');
 
     /** Get All User Representatives  Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblUsers',
         queryType: 'searchRepresentativeUsers'
@@ -232,7 +232,7 @@ export default class AddClient extends Component {
     });
 
      /** Get All Campaigns Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCampaigns',
         queryType: 'getAllCampaigns'
@@ -255,7 +255,7 @@ export default class AddClient extends Component {
 
 
      /** Get Clients Details By Id **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblClients',
         queryType: 'getClientById',
@@ -309,7 +309,7 @@ export default class AddClient extends Component {
 
     
     /** Get All Client Campaigns Details By Id **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblClientCampaigns',
         queryType: 'getClientCampaignById',
@@ -335,7 +335,7 @@ export default class AddClient extends Component {
      /** Get All User Permissions Details **/
      axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblUserPermissions',
         queryType: 'getUserPermissionByUserID',
@@ -362,7 +362,7 @@ export default class AddClient extends Component {
     /** Get Current Client Notes By Client Id **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClientNotes',
         queryType: 'getClientNotesByID',
@@ -370,7 +370,7 @@ export default class AddClient extends Component {
       }
     })
     .then(function (response) {
-       console.log('Client Notes List: '+ JSON.stringify(response.data)+ singleClientID);
+       //console.log('Client Notes List: '+ JSON.stringify(response.data)+ singleClientID);
       saveState({
         ClientNotesData: response.data
       });
@@ -386,7 +386,7 @@ export default class AddClient extends Component {
 
 
     /** Get All Leads To Do List By Lead id **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblToDo',
         queryType: 'getToDoListFromSingleClientEditPageById',
@@ -394,7 +394,7 @@ export default class AddClient extends Component {
       }
     })
     .then(function (response) {
-      console.log('getToDoListFromSingleClientEditPageById Data: '+ JSON.stringify(response.data));
+      //console.log('getToDoListFromSingleClientEditPageById Data: '+ JSON.stringify(response.data));
       saveState({
         ClientTodoList: response.data
       });
@@ -410,14 +410,14 @@ export default class AddClient extends Component {
 
 
     /** Get All Company Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblUsers',
         queryType: 'getUserAdminList'
       }
     })
     .then(function (response) {
-      console.log('List Of Admin users: '+ JSON.stringify(response.data));
+      //console.log('List Of Admin users: '+ JSON.stringify(response.data));
       saveState({
         UserAdminList: response.data
       });
@@ -462,7 +462,7 @@ export default class AddClient extends Component {
     const singleClientID = getURLParams('ClientID');
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClients',
         queryType: 'UpdateClient',
@@ -501,7 +501,7 @@ export default class AddClient extends Component {
     
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClientCampaigns',
         queryType: 'addClientCampaign',
@@ -528,7 +528,7 @@ export default class AddClient extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClientCampaigns',
         queryType: 'cancelClientCampaign',
@@ -554,7 +554,7 @@ export default class AddClient extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClientCampaigns',
         queryType: 'addClientCampaignTrackingNumber',
@@ -580,7 +580,7 @@ export default class AddClient extends Component {
     console.log('Client ID: '+singleClientID);
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClientNotes',
         queryType: 'addNewClientNotes',
@@ -784,7 +784,7 @@ export default class AddClient extends Component {
     const ClientID = getURLParams('ClientID');
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblToDo',
         queryType: 'addNewTodoSingleClientEditPage',
@@ -795,7 +795,7 @@ export default class AddClient extends Component {
       }
     })
     .then(function (response) {
-      console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
+     // console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
       saveState({
         ClientTodoListAddedStatus: true,
         // ClientTodoList: state.ClientTodoList.filter(({ ClientID })=> ClientID != response.data),
@@ -824,7 +824,7 @@ export default class AddClient extends Component {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblToDo',
         queryType: 'updateToDoListToDone',
@@ -832,7 +832,7 @@ export default class AddClient extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`Deleted To Do list successfull`);
+      //console.log(response,`Deleted To Do list successfull`);
       saveState({
         ClientTodoList: state.ClientTodoList.filter(({ ToDoID })=> ToDoID != todoListId)
       });
@@ -844,11 +844,11 @@ export default class AddClient extends Component {
 
 
   onSetToDoneClientNoteList = (clientNoteListId) => {
-    console.log("updateClientnoteListToDone value: "+clientNoteListId);
+    //console.log("updateClientnoteListToDone value: "+clientNoteListId);
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClientNotes',
         queryType: 'updateClientNoteListToDone',

@@ -62,7 +62,7 @@ export default class Index extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCompany',
         queryType: 'getAllCompanyInfo'
@@ -86,7 +86,7 @@ export default class Index extends Component {
     /** Get All Company Details **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblDepartments',
         queryType: 'getAllDepartments'
@@ -117,7 +117,7 @@ export default class Index extends Component {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblUsers',
         queryType: 'addNewUserList',

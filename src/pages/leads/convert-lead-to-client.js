@@ -170,14 +170,13 @@ export default class AddClient extends Component {
     saveState({ LeadID });
 
     /** Get All Company Type Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblUsers',
         queryType: 'searchRepresentativeUsers'
       }
     })
     .then(function (response) {
-       console.log('Representative User Data: '+ JSON.stringify(response.data));
       saveState({
         CSUserIDRepData: response.data
       });
@@ -192,14 +191,13 @@ export default class AddClient extends Component {
     });
 
      /** Get All Company Type Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCampaigns',
         queryType: 'getAllCampaigns'
       }
     })
     .then(function (response) {
-       console.log('Compaigns Type Data: '+ JSON.stringify(response.data));
       saveState({
         CampaignIDData: response.data
       });
@@ -217,7 +215,7 @@ export default class AddClient extends Component {
      /** Get users IP Address **/
      axios.get('https://geolocation-db.com/json/')
      .then(function (response) {
-        console.log('Users Geolocation Data: '+ JSON.stringify(response.data.IPv4));
+        // console.log('Users Geolocation Data: '+ JSON.stringify(response.data.IPv4));
        saveState({
          IPAddress: response.data.IPv4
        });
@@ -233,7 +231,7 @@ export default class AddClient extends Component {
 
 
       /** Get All Main Leads Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
         params: {
           tblName: 'tblLeads',
           queryType: 'getLeadById',
@@ -241,7 +239,6 @@ export default class AddClient extends Component {
         }
       })
       .then(function (response) {
-         console.log('Single Lead Data: '+ JSON.stringify(response.data));
         saveState({
             CampaignID: response.data.CampaignID,
             FirstName: response.data.FirstName,
@@ -292,8 +289,7 @@ export default class AddClient extends Component {
 
     axios({
       method: 'get',
-      // url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
-      url: 'https://touchstone.touchstonemarketplace.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblClients',
         queryType: 'addNewClient',
@@ -327,7 +323,7 @@ export default class AddClient extends Component {
       saveState({
         isSaved: true
       });
-      console.log(response,`Added New Client successfull`);
+      // console.log(response,`Added New Client successfull`);
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -336,7 +332,6 @@ export default class AddClient extends Component {
   }
   onChangeStatus = (e) => {
      // v will be true or false
-     console.log('Change Status: '+e.target.value);
      switch(e.target.name){
          case 'FirstName':
            this.saveState({

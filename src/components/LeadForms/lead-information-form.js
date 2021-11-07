@@ -79,7 +79,7 @@ export default class LeadInformationForm extends Component {
       // Get Lead Information Form data for default Field display
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblLeads',
           queryType: 'getLeadInfoData',
@@ -88,7 +88,7 @@ export default class LeadInformationForm extends Component {
       })
       .then(function (response) {
         // console.log(response,`successfully Updating Lead information`);
-        console.log('Single Lead Information Data as: '+ LeadID + JSON.stringify(response.data));
+        //console.log('Single Lead Information Data as: '+ LeadID + JSON.stringify(response.data));
         saveState({
           LeadInformationCompanyName: response.data.CompanyName,
           LeadInformationWorkPhone: response.data.WorkPhone,

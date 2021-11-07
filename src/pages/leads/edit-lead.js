@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
 import Col from '@paljs/ui/Col';
 import Row from '@paljs/ui/Row';
 import Select from '@paljs/ui/Select';
@@ -10,7 +10,8 @@ import { InputGroup } from '@paljs/ui/Input';
 import { Checkbox } from '@paljs/ui/Checkbox';
 import { Container } from '@material-ui/core';
 import { Card, CardBody } from '@paljs/ui/Card';
-import { Accordion, AccordionItem } from '@paljs/ui/Accordion';
+import { Accordion, AccordionItem, AccordionRefObject } from '@paljs/ui/Accordion';
+import Alert from '@paljs/ui/Alert';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -27,7 +28,6 @@ import {
 //  import { LeadInformationForm } from '../../components/LeadForms/lead-information-form';
 // import { PatientChildprofileForm } from '../../components/LeadForms/patien-child-profile-form';
 
-
 const isBrowser = typeof window !== "undefined";
 
 const Input = styled(InputGroup)`
@@ -38,7 +38,7 @@ const SelectStyled = styled(Select)`
   margin-bottom: 0.25rem;
 `;
 
-console.log('User Id: '+getUser().userid);
+// console.log('User Id: '+getUser().userid);
 
 // const LeadInformationAwareOfTreatmentCostsStatus = '';
 
@@ -109,7 +109,11 @@ const ReadingLevelList = [
   { value: 'Above', label: 'Above' }
 ];
 
+
+
 export default class EditLead extends Component {
+
+
   state = {
 
     // Update Success States
@@ -129,7 +133,7 @@ export default class EditLead extends Component {
     UpdateparentGuardianSponsorInfoFormSuccessState: false,
     UpdateReferralFormSuccessState: false,
     UpdateVerificationOfBenifitsFormSuccessState: false,  
-
+    isSaved : false,
 
 
     // User List
@@ -344,6 +348,7 @@ export default class EditLead extends Component {
     UpdateparentGuardianSponsorInfoFormSuccessState: false,
     UpdateReferralFormSuccessState: false,
     UpdateVerificationOfBenifitsFormSuccessState: false,  
+    isSaved : false,
 
       // User List
       UserAdminList: [],
@@ -547,7 +552,7 @@ export default class EditLead extends Component {
     if(ToDoID != ""){
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblToDo',
           queryType: 'updateNewTodoItemDashBoardAsRead',
@@ -555,7 +560,7 @@ export default class EditLead extends Component {
         }
       })
       .then(function (response) {
-        console.log(response,`successfully Updated To Do Item List as Read`);
+        // console.log(response,`successfully Updated To Do Item List as Read`);
       })
       .catch(function (error) {
         console.log(error,`error`);
@@ -564,14 +569,13 @@ export default class EditLead extends Component {
 
 
     /** Get All Company Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblUsers',
         queryType: 'getUserAdminList'
       }
     })
     .then(function (response) {
-      console.log('List Of Admin users: '+ JSON.stringify(response.data));
       saveState({
         UserAdminList: response.data
       });
@@ -587,7 +591,7 @@ export default class EditLead extends Component {
 
 
     /** Get All Main Leads Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {  
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadById',
@@ -595,7 +599,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-       console.log('Single Lead Data: '+ JSON.stringify(response.data));
+      //  console.log('Single Lead Data: '+ JSON.stringify(response.data));
       saveState({
         AlcoholOrMarijuana: response.data.AlcoholOrMarijuana,
         IsSexuallyActive: response.data.IsSexuallyActive,
@@ -637,7 +641,7 @@ export default class EditLead extends Component {
     /* Get Lead Information Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadInfoData',
@@ -645,7 +649,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
       saveState({
         LeadInformationCompanyName: response.data.CompanyName,
         LeadInformationWorkPhone: response.data.WorkPhone,
@@ -671,7 +674,7 @@ export default class EditLead extends Component {
     /* Get Patien Child Profile Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadParentChildProfile',
@@ -679,8 +682,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
-      console.log('Single getLeadParentChildProfile: '+ response.data.ExpectToEnrollDate);
       saveState({
           PatientName: response.data.PatientName,
           PatientDOB: response.data.PatientDOB != '' ? new Date(response.data.PatientDOB) : '',
@@ -712,11 +713,11 @@ export default class EditLead extends Component {
       console.log(error,`error`);
     });
     
-
+    
     /* Get Lead Insurance Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadInsuranceFormData',
@@ -724,7 +725,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         InsuranceProvider: response.data.InsuranceProvider,
         InsuranceType: response.data.InsuranceType,
@@ -743,7 +743,7 @@ export default class EditLead extends Component {
     /* Get Lead Self Harm History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadSelfHarmHistoryFormData',
@@ -751,7 +751,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log('Single Lead Insurance Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         SelfHarmHistorySuicidal: response.data.Suicidal,
         SelfHarmHistoryPastSuicidalDesc: response.data.PastSuicidalDesc,
@@ -769,7 +768,7 @@ export default class EditLead extends Component {
     /* Get Lead Violence History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadViolenceHistoryFormData',
@@ -777,7 +776,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      //console.log('Single Lead Violence Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         ViolenceHistoryIsViolent: response.data.IsViolent,
         HistoryViolence: response.data.HistoryViolence,
@@ -792,7 +790,7 @@ export default class EditLead extends Component {
     /* Get Lead Violence History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadLegalHistoryFormData',
@@ -800,7 +798,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-     // console.log('Single Lead Legal History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         LegalHistoryLegalDesc: response.data.LegalDesc,
         LegalHistoryArrestedDesc: response.data.ArrestedDesc,
@@ -820,7 +817,7 @@ export default class EditLead extends Component {
     /* Get Lead therapy History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadTherapyHistory',
@@ -828,7 +825,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-    //  console.log('Single Lead Therapy History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         TherapyHistoryTherapyDesc: response.data.TherapyDesc,
         TherapyHistoryMedDesc: response.data.MedDesc,
@@ -843,7 +839,7 @@ export default class EditLead extends Component {
     /* Get Lead School History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadSchoolHistory',
@@ -851,7 +847,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead School History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         SchoolHistorySchoolGrade: response.data.SchoolGrade,
         SchoolHistoryChildReadingLevel: response.data.ChildReadingLevel,
@@ -872,7 +867,7 @@ export default class EditLead extends Component {
     /* Get Lead Drug History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadDrugHistory',
@@ -880,7 +875,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Drug History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         DrugHistoryAlcoholOrMarijuana: response.data.AlcoholOrMarijuana,
         DrugHistoryExperimentOrAbuse: response.data.ExperimentOrAbuse,
@@ -895,7 +889,7 @@ export default class EditLead extends Component {
     /* Get Lead Sexual History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadSexualHistory',
@@ -903,7 +897,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Sexual History Data: '+ LeadID + JSON.stringify(response.data));
+      //console.log('Single Lead Sexual History Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         SexualHistoryIsSexuallyActive: response.data.IsSexuallyActive,
         SexualHistoryRelHistory: response.data.RelHistory,
@@ -920,7 +914,7 @@ export default class EditLead extends Component {
     /* Get Lead Sexual History Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadEmergencyContact',
@@ -928,7 +922,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Emergency Contact Data: '+ LeadID + JSON.stringify(response.data));
+      //console.log('Single Lead Emergency Contact Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         EmergencyContactECName: response.data.ECName,
         EmergencyContactECRelationship: response.data.ECRelationship,
@@ -948,7 +942,7 @@ export default class EditLead extends Component {
     /* Get Lead Parent Guardian Sponsor Info Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadParentGuardianSponsorInfo',
@@ -956,7 +950,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Parent Guardian Sponsor Info Data: '+  JSON.stringify(response.data.GuardDOB));
+      //console.log('Single Lead Parent Guardian Sponsor Info Data: '+  JSON.stringify(response.data.GuardDOB));
       // if(JSON.stringify(response.data.GuardDOB) != new Date('0000-00-00 00:00:00')) {
       //   console.log('Empty Date');
       // } else {
@@ -999,7 +993,7 @@ export default class EditLead extends Component {
     /* Get Lead Referral Info Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadReferralInfo',
@@ -1007,7 +1001,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Referral Info Data: '+ LeadID + JSON.stringify(response.data));
+      //console.log('Single Referral Info Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         RefererralInfoInitialDisposition: response.data.InitialDisposition,
         RefererralInfoHowHear: response.data.HowHear,
@@ -1024,7 +1018,7 @@ export default class EditLead extends Component {
     /* Get Lead Verification Of Benefits Form data for default Field display */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'getLeadVerificationOfBenefits',
@@ -1032,7 +1026,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Verification Of Benefits Form Data: '+ LeadID + JSON.stringify(response.data));
+      //console.log('Single Verification Of Benefits Form Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         PreAppFilePath: response.data.PreAppFilePath
       });
@@ -1045,7 +1039,7 @@ export default class EditLead extends Component {
     /* Get Lead Notes */
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeadNotes',
         queryType: 'getLeadNotes',
@@ -1053,7 +1047,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Lead Notes table Data: '+ LeadID + JSON.stringify(response.data));
+      //console.log('Single Lead Notes table Data: '+ LeadID + JSON.stringify(response.data));
       saveState({
         LeadNoteData: response.data
       });
@@ -1089,7 +1083,7 @@ export default class EditLead extends Component {
 
 
     /** Get All Leads To Do List By Lead id **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblToDo',
         queryType: 'getToDoListFromSingleLeadEditPageById',
@@ -1097,7 +1091,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log('getToDoListFromSingleLeadEditPageById Data: '+ JSON.stringify(response.data));
+      // console.log('getToDoListFromSingleLeadEditPageById Data: '+ JSON.stringify(response.data));
       saveState({
        UserTodoList: response.data
       });
@@ -1156,7 +1150,7 @@ export default class EditLead extends Component {
     /** Update Lead Information **/ 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeadNotes',
         queryType: 'addNewLeadNotes',
@@ -1170,10 +1164,30 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead Main information`);
       saveState({
         UpdateLeadNotesFormSuccessState: true
       });
+
+
+        /* Get Lead Notes */
+        axios({
+          method: 'get',
+          url: process.env.REACT_APP_API_DATABASE_URL,
+          params: {
+            tblName: 'tblLeadNotes',
+            queryType: 'getLeadNotes',
+            LeadID: LeadID
+          }
+        })
+        .then(function (response) {
+          saveState({
+            LeadNoteData: response.data
+          });
+            
+        })
+        .catch(function (error) {
+          console.log(error,`error`);
+        }); // End
 
     })
     .catch(function (error) {
@@ -1190,7 +1204,7 @@ export default class EditLead extends Component {
     /** Update Lead Information **/ 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadMainInfo',
@@ -1211,7 +1225,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead Main information`);
       saveState({
         UpdateMainLeadFormSuccessState: true
       });
@@ -1231,7 +1244,7 @@ export default class EditLead extends Component {
     /** Update Lead Information **/ 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadInfo',
@@ -1252,7 +1265,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead information`);
       saveState({
         UpdateLeadInformationFormSuccessState: true
       });
@@ -1272,7 +1284,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadParentChildProfile',
@@ -1303,7 +1315,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Parent/Child Profile`);
       saveState({
         UpdateParentChildProfileFormSuccessState: true
       });
@@ -1322,7 +1333,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadInsurance',
@@ -1336,7 +1347,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead Insurance`);
       saveState({
         UpdateInsuranceFormSuccessState: true
       });
@@ -1354,7 +1364,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadSelfHarmHistory',
@@ -1367,7 +1377,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead Self Harm History`);
       saveState({
         UpdateSelfHarmHistoryFormSuccessState: true
       });
@@ -1386,7 +1395,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadViolenceHistory',
@@ -1397,7 +1406,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead Violence History`);
       saveState({
         UpdateViolenceHistoryFormSuccessState: true
       });
@@ -1415,7 +1423,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadLegalHistory',
@@ -1429,7 +1437,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead Violence History`);
       saveState({
         UpdateLegalHistoryFormSuccessState: true
       });
@@ -1447,7 +1454,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadTherapyHistory',
@@ -1458,7 +1465,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Lead Violence History`);
       saveState({
         UpdateTheraphyHistoryFormSuccessState: true
       });
@@ -1477,7 +1483,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadSchoolHistory',
@@ -1492,7 +1498,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating School History`);
       saveState({
         UpdateSchoolHistoryFormSuccessState: true
       });
@@ -1510,7 +1515,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadDrugHistory',
@@ -1521,7 +1526,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Drug History`);
       saveState({
         UpdateDrugHistoryFormSuccessState: true
       });
@@ -1539,7 +1543,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadSexualHistory',
@@ -1551,7 +1555,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Sexual History`);
       saveState({
         UpdateSexualHistoryFormSuccessState: true
       });
@@ -1569,7 +1572,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadEmergencyContact',
@@ -1584,7 +1587,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Updating Emergency Contact`);
       saveState({
         UpdateEmergencyContactFormSuccessState: true
       });
@@ -1602,7 +1604,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadVerificationOfBenefits',
@@ -1629,7 +1631,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadReferralInfo',
@@ -1660,7 +1662,7 @@ export default class EditLead extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadParentGuardianSponsorInfo',
@@ -1693,7 +1695,6 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      // console.log(response,`successfully Parent Guardian Sponsor Info`);
       saveState({
         UpdateparentGuardianSponsorInfoFormSuccessState: true
       });
@@ -1708,9 +1709,10 @@ export default class EditLead extends Component {
   onAddToDo = (e) => {
     const { saveState, state } = this;
     const LeadID = getURLParams('leadID');
+    const LeadIDFilter = getURLParams('leadID');
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblToDo',
         queryType: 'addNewTodoSingleLeadEditPage',
@@ -1721,10 +1723,34 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
+     // console.log(`New To Do Item successfully Added: `+JSON.stringify(response.data));
+     // this.afterAddToDoListUpdateData(LeadID);
       saveState({
-        UserTodoList: state.UserTodoList.filter(({ LeadID })=> LeadID != response.data)
+        isSaved: true,
+       //  UserTodoList: state.UserTodoList.filter(({ ToDoID })=> ToDoID != response.data)
       });
+
+              /** Get All Leads To Do List By Lead id **/
+              axios.get(process.env.REACT_APP_API_DATABASE_URL, {
+                params: {
+                  tblName: 'tblToDo',
+                  queryType: 'getToDoListFromSingleLeadEditPageById',
+                  LeadID: LeadID
+                }
+              })
+              .then(function (response) {
+                saveState({
+                UserTodoList: response.data
+                });
+                
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+              .then(function (response) {
+                // always executed
+                console.log(response,`successfull`);
+              });
     })
     .catch(function (error) {
       console.log(error,`error`);
@@ -1826,7 +1852,7 @@ export default class EditLead extends Component {
           });
         break;
       case 'EditPatientDOB':
-        console.log('Date of birth: '+e);
+       // console.log('Date of birth: '+e);
         this.saveState({
           PatientDOB: e
         });
@@ -1843,7 +1869,7 @@ export default class EditLead extends Component {
         });
       break;
       case 'EditIsAdopted':
-        console.log('is adopted: '+e.value);
+        //console.log('is adopted: '+e.value);
         this.saveState({
           PatientIsAdopted: e.value
         });
@@ -1942,22 +1968,19 @@ export default class EditLead extends Component {
   }
 
   onChangeLeadInsuranceInput = (type, e) => {
-    // console.log('Field Type: '+type);
     switch(type){
       case 'EditInsuranceProvider':
-        // console.log('InsuranceProvider: '+e.value);
           this.saveState({
             InsuranceProvider: e.value
           });
         break;
       case 'EditInsuranceType':
-        // console.log('InsuranceType: '+e.value);
         this.saveState({
           InsuranceType: e.value
         });
       break;
       case 'EditInsurancePhone':
-        console.log('EditInsurancePhone; '+e.target.value);
+        //console.log('EditInsurancePhone; '+e.target.value);
           this.saveState({
             InsurancePhone: e.target.value
           });
@@ -2391,7 +2414,7 @@ export default class EditLead extends Component {
           });
       break; 
       case 'Disposition':
-        console.log('type EditDisposition:'+type);
+        //console.log('type EditDisposition:'+type);
           this.saveState({
             Disposition: e.value
           });
@@ -2466,22 +2489,22 @@ export default class EditLead extends Component {
   }
 
   onChangeTodoItemOption = (type, e) => {
-    console.log('Type: '+type);
+    // console.log('Type: '+type);
     switch(type){
       case 'NewLeadNotes':
-        console.log('Type: '+e.target.value);
+        // console.log('Type: '+e.target.value);
           this.saveState({
             ToDoText: e.target.value
           });
       break; 
       case 'ToDoReminderDate':
-        console.log('Value: '+e);
+        // console.log('Value: '+e);
           this.saveState({
             ToDoReminderDate: e
           });
       break; 
       case 'ToDoUser':
-        console.log('Value: '+e.value);
+        // console.log('Value: '+e.value);
           this.saveState({
             ToDoUser: e.value
           });
@@ -2492,11 +2515,11 @@ export default class EditLead extends Component {
 
   // Set the To Do Item to Done
   onSetToDoneToDoList = (todoListId) => {
-    console.log("updateToDoListToDone value: "+todoListId);
+    //console.log("updateToDoListToDone value: "+todoListId);
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
           tblName: 'tblToDo',
           queryType: 'updateToDoListToDone',
@@ -2504,7 +2527,7 @@ export default class EditLead extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`Deleted Company Insurance successfull`);
+      //console.log(response,`Deleted Company Insurance successfull`);
       saveState({
         UserTodoList: state.UserTodoList.filter(({ ToDoID })=> ToDoID != todoListId)
       });
@@ -2542,14 +2565,20 @@ export default class EditLead extends Component {
   }
 
   
-  onBack = () => {}
+  onBack = () => {
+    
+  }
 
-  onPrintView = () => {}
+  onPrintView = () => {
+    
+  }
 
 
   render() {
-    
-    const { onBack, onChangeInput, onChangeMainLeadOption, onLeadInformationChangeInput, onChangeParentChildProfileInput, onChangeLeadInsuranceInput, onChangeSelfharmHistoryInput, onChangeViolenceHistoryOption, onChangeLegalHistoryOption, onChangeTherapyHistoryOption, onPrintView, onChangeDate, onChangeOption, onUpdateLeadMainInformation, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
+
+    const accordionRef = useRef<AccordionRefObject>(null);
+
+    const { state, onBack, onChangeInput, onChangeMainLeadOption, onLeadInformationChangeInput, onChangeParentChildProfileInput, onChangeLeadInsuranceInput, onChangeSelfharmHistoryInput, onChangeViolenceHistoryOption, onChangeLegalHistoryOption, onChangeTherapyHistoryOption, onPrintView, onChangeDate, onChangeOption, onUpdateLeadMainInformation, onUpdateChildProfile, onUpdateLeadInformation, onUpdateLeadInsurance, onUpdateSelfHarmHistory, 
       onChangeSchoolHistoryOption, onChangeDrugHistoryOption, onChangeSexualHistoryInput, onChangeEmergencyContactInput, onChangeParentGuardianSponsorInfoInput, onChangeReferralInfoInput, onChangeVerificationBenefitsInput, onChangeLeadNotesInput,
       onUpdateViolenceHistory, onUpdateLegalHistory, onUpdateSchoolHistory, onUpdateTherapyHistory, onUpdateSexualHistory, onUpdateDrugHistory, onUpdateEmergencyContact, 
       onUpdateVerificationBenefits, onUpdateReferralInfo, onUpdateParentGuardianSponsorInfo, onAddLeadNote, onSetToDoneToDoList, onAddToDo, onChangeTodoItemOption, state: { LeadName, LeadID, LeadInfo } } = this;
@@ -2560,10 +2589,13 @@ export default class EditLead extends Component {
         <Container style={{ height: 'auto', marginBottom: '1rem' }}>
           <Row>
             <Col breakPoint={{ xs: 2 }}>
-              <Button className="mx-1" status="Info" type="button" shape="square" onClick={onBack.bind(this)} fullWidth>BACK</Button>
+              <Button className="mx-1" status="Info" type="button" shape="square" onClick={()=>{navigate("/leads")}} fullWidth>BACK</Button>
+              {/* <Button className="mx-1" status="Info" type="button" shape="square" onClick={onBack.bind(this)} fullWidth>BACK</Button> */}
             </Col>
             <Col breakPoint={{ xs: 2 }}>
-              <Button className="mx-1" status="Success" type="button" shape="square" onClick={onPrintView.bind(this)} fullWidth>PRINT VIEW</Button>
+            
+              {/* <Button className="mx-1" status="Success" type="button" shape="square" onClick={onPrintView.bind(this)} fullWidth>PRINT VIEW</Button> */}
+              <Button className="mx-1" status="Success" type="button" shape="square" onClick={() => accordionRef.current?.openAll(1)} fullWidth>PRINT VIEW</Button>
             </Col>
           </Row>
         </Container>
@@ -4024,7 +4056,7 @@ export default class EditLead extends Component {
                       </Row>
                       <Row className="mb-2">
                         <Col breakPoint={{ xs: 12 }} className="mb-2">
-                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateVerificationBenefits} fullWidth> SAVE Racheal {this.state.FirstName}'S LEAD PROFILE</Button>
+                            <Button status="Success" type="button" shape="SemiRound" onClick={onUpdateVerificationBenefits} fullWidth> SAVE {this.state.FirstName}'S LEAD PROFILE</Button>
                         </Col>
                       </Row>
                     </AccordionItem>
@@ -4032,9 +4064,9 @@ export default class EditLead extends Component {
 
                   </Accordion>
                 </Col>
-                <Col className="mb-3" breakPoint={{ xs: 12, md: 6 }}>
+                {/* <Col className="mb-3" breakPoint={{ xs: 12, md: 6 }}>
                   <Button status="Warning" type="button" shape="SemiRound" fullWidth className="text-uppercase">SAVE {this.state.FirstName.toUpperCase()} {this.state.LastName.toUpperCase()}'S LEAD PROFILE</Button>
-                </Col>
+                </Col> */}
               </Row>
             </Container>
           </CardBody>
@@ -4045,6 +4077,7 @@ export default class EditLead extends Component {
           <Row className="justify-content-center align-items-left mb-5">
             <Col breakPoint={{ xs: 12 }}>
               <h2 className="text-left mb-5">TO DO ITEMS</h2>
+              { state.isSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Added New To Do Item</Alert></Col> : false }
             </Col>
             <Col breakPoint={{ xs: 12 }}>
               <Row className="mb-2">
@@ -4071,7 +4104,7 @@ export default class EditLead extends Component {
                 </Col>
                 <Col breakPoint={{ xs: 12, md: 3 }}>
                 <label htmlFor="ToDoReminderDates">&nbsp;</label>
-                  <Button status="Warning" type="button" shape="SemiRound" onClick={onAddToDo} fullWidth className="text-uppercase">+ ADD NOTE</Button>
+                  <Button status="Warning" type="button" shape="SemiRound" onClick={onAddToDo} fullWidth className="text-uppercase">+ ADD TO DO</Button>
                 </Col>
               </Row>
               <Row className="justify-content-left align-items-left mb-5">
@@ -4096,7 +4129,7 @@ export default class EditLead extends Component {
                           <tr> 
                             <td scope="col">{ToDoText}</td>
                             <td>{CreatedDate}</td>
-                            <td>{FinishedDate}</td>
+                            <td>{ReminderDate}</td>
                             <td><Checkbox status="Dangerd" name="setToDone" onChange={onSetToDoneToDoList.bind(this,ToDoID)}></Checkbox></td>
                           </tr>
                           );

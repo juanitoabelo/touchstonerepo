@@ -135,7 +135,7 @@ export default class PatientChildprofileForm extends Component {
       // Get Patien Child Profile Form data for default Field display
         axios({
             method: 'get',
-            url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+            url: process.env.REACT_APP_API_DATABASE_URL,
             params: {
             tblName: 'tblLeads',
             queryType: 'getLeadParentChildProfile',
@@ -144,7 +144,7 @@ export default class PatientChildprofileForm extends Component {
         })
         .then(function (response) {
             // console.log(response,`successfully Updating Lead information`);
-            console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
+            // console.log('Single Lead Information Data s: '+ LeadID + JSON.stringify(response.data));
             saveState({
                 PatientName: response.data.PatientName,
                 PatientDOB: response.data.PatientDOB,
@@ -186,7 +186,7 @@ export default class PatientChildprofileForm extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLeads',
         queryType: 'updateLeadParentChildProfile',

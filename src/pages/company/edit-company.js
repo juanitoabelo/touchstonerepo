@@ -174,7 +174,7 @@ export default class EditCompany extends Component {
     });
 
      /** Get All Company Type Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCompanyType',
         queryType: 'getAllCompanyType'
@@ -198,7 +198,7 @@ export default class EditCompany extends Component {
 
 
     /** Get All CompaignField Detail **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
         params: {
         tblName: 'tblCompany',
         queryType: 'getSingleCompanyInfoById',
@@ -238,7 +238,7 @@ export default class EditCompany extends Component {
 
 
      /** Get All Company Type Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCompanyInsurance',
         queryType: 'getCompanyInsuranceListByCompanyId',
@@ -246,7 +246,7 @@ export default class EditCompany extends Component {
       }
     })
     .then(function (response) {
-        console.log('Company Type Data: '+ JSON.stringify(response.data));
+       // console.log('Company Type Data: '+ JSON.stringify(response.data));
         let getCompanyInsuranceID = 0;
         response.data.map((item)=>{
           if (parseInt(getCompanyInsuranceID) < parseInt(item.CompanyInsuranceID)) {
@@ -268,7 +268,7 @@ export default class EditCompany extends Component {
 
 
      /** Get All Insurance **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblInsurance',
         queryType: 'getAllInsurance'
@@ -305,7 +305,7 @@ export default class EditCompany extends Component {
 
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
             tblName: 'tblCompany',
             queryType: 'updateSingleCompanyInfoById',
@@ -343,7 +343,7 @@ export default class EditCompany extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
           tblName: 'tblCompanyInsurance',
           queryType: 'addCompanyInsuranceData',
@@ -381,7 +381,7 @@ export default class EditCompany extends Component {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
           tblName: 'tblCompanyInsurance',
           queryType: 'deleteSingleCompanyInsuranceList',
@@ -389,7 +389,7 @@ export default class EditCompany extends Component {
       }
     })
     .then(function (response) {
-      console.log(response,`Deleted Company Insurance successfull`);
+      //console.log(response,`Deleted Company Insurance successfull`);
       saveState({
         tblCompanyInsuranceData: state.tblCompanyInsuranceData.filter(({ CompanyInsuranceID })=> CompanyInsuranceID != CompanyInsuranceIDValue)
       });

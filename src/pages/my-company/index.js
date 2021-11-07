@@ -12,7 +12,7 @@ import SEO from '../../components/SEO';
 import axios from 'axios';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import Alert from '@paljs/ui/Alert';
 import { isLoggedIn, getUser } from "../../components/services/auth"
 
 
@@ -34,7 +34,8 @@ export default class MyCompany extends Component {
     CompanyId: '',
     CompanyType: 0,
     CompanyTypeDescription: '',
-    CompanyTypeData: []
+    CompanyTypeData: [],
+    isSaved : false,
   }
   componentWillUnmount(){
     this.setState({
@@ -42,7 +43,8 @@ export default class MyCompany extends Component {
       CompanyId: '',
       CompanyType: 0,
       CompanyTypeDescription: '',
-      CompanyTypeData: []
+      CompanyTypeData: [],
+      isSaved : false,
     })  
   }
   componentDidMount() {
@@ -51,7 +53,7 @@ export default class MyCompany extends Component {
     }  
     const { saveState, state } = this;
     /** get Account Company Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCompany',
         queryType: 'getSingleCompanyInfo',
@@ -59,12 +61,6 @@ export default class MyCompany extends Component {
       }
     })
     .then(function (response) {
-      // console.log('Handled username: data: '+formData.user);
-      //  console.log('Data: '+ JSON.stringify(response.data));
-      console.log('Comapany Name: '+ response.data.companyName);
-      console.log('Company Id: '+ response.data.companyId);
-      console.log('Company CompanyType: '+ response.data.CompanyType);
-  
       saveState({
         CompanyName: response.data.companyName,
         CompanyId: response.data.companyId,
@@ -82,7 +78,7 @@ export default class MyCompany extends Component {
     });  
   
     /** Get All Company Type Details **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCompanyType',
         queryType: 'getAllCompanyType'
@@ -110,15 +106,16 @@ export default class MyCompany extends Component {
     this.setState(data);
   }
   onSaveCompany = () => {
-
+    const { saveState, state } = this;
+    
     if(window.localStorage.getItem("gatsbyUser") && typeof window !== "undefined"){
-      console.log('Company data: '+window.localStorage.getItem("gatsbyUser"));
-      console.log('Company Id: '+getUser().companyid);
+      // console.log('Company data: '+window.localStorage.getItem("gatsbyUser"));
+      // console.log('Company Id: '+getUser().companyid);
     }
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCompany',
         queryType: 'editSingleCompanyInfo',
@@ -128,6 +125,9 @@ export default class MyCompany extends Component {
       }
     })
     .then(function (response) {
+      saveState({
+        isSaved: true
+      });
       console.log(response,`Updating Company Info successfull`);
     })
     .catch(function (error) {
@@ -141,7 +141,7 @@ export default class MyCompany extends Component {
     this.setState({
       CompanyName: e.target.value
     });
-    console.log('Change Status: '+e.target.value);
+    // console.log('Change Status: '+e.target.value);
   }
 
   onChangeOption = (e) => {
@@ -149,7 +149,7 @@ export default class MyCompany extends Component {
       CompanyTypeDescription: e.label,
       CompanyType: e.value,
     });
-    console.log('Select Optin value: '+ e.label);
+    //console.log('Select Optin value: '+ e.label);
   }
 
   render() {
@@ -165,6 +165,7 @@ export default class MyCompany extends Component {
                       <Row>
                         <Col breakPoint={{ xs: 12 }}>
                           <h1 className="mb-5">{state.CompanyName}</h1>
+                          { state.isSaved ? <Col breakPoint={{ xs: 12 }} className="success text-center"><Alert className="success-message bg-success">Successfully Added New Lead Company</Alert></Col> : false }
                         </Col>
                       </Row>
 

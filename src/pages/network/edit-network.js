@@ -72,7 +72,7 @@ export default class EditNetwork extends Component {
 
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblNetwork',
         queryType: 'getSingleNetworkData',
@@ -80,7 +80,7 @@ export default class EditNetwork extends Component {
       }
     })
     .then(function (response) {
-      console.log('Single Network Data: '+ JSON.stringify(response.data));
+      // console.log('Single Network Data: '+ JSON.stringify(response.data));
       saveState({
         NetworkName: response.data.Name,
       });
@@ -94,14 +94,14 @@ export default class EditNetwork extends Component {
     /** get list of Companies **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCompany',
         queryType: 'getAllCompanyInfo'
       }
     })
     .then(function (response) {
-      console.log('List of Companies Data: '+ JSON.stringify(response.data));
+      // console.log('List of Companies Data: '+ JSON.stringify(response.data));
       saveState({
         CompanyData: response.data
       });
@@ -115,7 +115,7 @@ export default class EditNetwork extends Component {
     /** get Company List By Network Id **/
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCompanyNetwork',
         queryType: 'getCompanyListByNetworkId',
@@ -123,7 +123,7 @@ export default class EditNetwork extends Component {
       }
     })
     .then(function (response) {
-      console.log('List of Companies Data in a Network: '+ JSON.stringify(response.data));
+      // console.log('List of Companies Data in a Network: '+ JSON.stringify(response.data));
       saveState({
         CompanyNetworkData: response.data
       });
@@ -143,11 +143,11 @@ export default class EditNetwork extends Component {
   onUpdateNetwork = () => {
     const { saveState, state } = this;
     const NetworkID = getURLParams('NetworkID');
-     console.log('NetworkID ID: '+NetworkID+' '+this.state.NetworkName);
+    //  console.log('NetworkID ID: '+NetworkID+' '+this.state.NetworkName);
 
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblNetwork',
           queryType: 'updateNewNetworkInfo',
@@ -169,11 +169,11 @@ export default class EditNetwork extends Component {
   addNetworkCompany = () => {
     const { saveState, state } = this;
     const NetworkID = getURLParams('NetworkID');
-     console.log('NetworkID ID: '+NetworkID+' '+this.state.NetworkName);
+     //console.log('NetworkID ID: '+NetworkID+' '+this.state.NetworkName);
 
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblCompanyNetwork',
           queryType: 'addNewCompanyToNetworkInfo',
@@ -183,7 +183,7 @@ export default class EditNetwork extends Component {
         }
       })
       .then(function (response) {
-        console.log(response,`Added New Network successfull: `+state.CompanyID);
+        //console.log(response,`Added New Network successfull: `+state.CompanyID);
         saveState({
           AddCompanyToNetworkSuccessState: true,
           
@@ -209,11 +209,11 @@ export default class EditNetwork extends Component {
     console.log('Company Id: '+e);
     const { saveState, state } = this;
     const NetworkID = getURLParams('NetworkID');
-     console.log('NetworkID ID: '+NetworkID+' '+this.state.NetworkName);
+   // console.log('NetworkID ID: '+NetworkID+' '+this.state.NetworkName);
 
       axios({
         method: 'get',
-        url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+        url: process.env.REACT_APP_API_DATABASE_URL,
         params: {
           tblName: 'tblCompanyNetwork',
           queryType: 'deleteCompanyListFromNetwork',

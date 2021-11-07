@@ -52,14 +52,14 @@ export default class AddProduct extends Component  {
     const { saveState } = this;
 
      /** Get All Company Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get( process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCompany',
         queryType: 'getAllCompanyInfo'
       }
     })
     .then(function (response) {
-      console.log('Company Data: '+ JSON.stringify(response.data));
+     // console.log('Company Data: '+ JSON.stringify(response.data));
       saveState({
         CompanyData: response.data
       });
@@ -81,7 +81,7 @@ export default class AddProduct extends Component  {
   onSaveProduct = (e) => {
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblProducts',
         queryType: 'addProductInfo',

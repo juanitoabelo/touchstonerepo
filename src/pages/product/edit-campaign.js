@@ -127,7 +127,7 @@ export default class EditCampaign extends Component  {
     });
     console.log('Product id Paremeter:'+prodId);
      /** Get All Company Details **/
-     axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+     axios.get( process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCampaigns',
         queryType: 'getCampaignByProductId',
@@ -135,7 +135,7 @@ export default class EditCampaign extends Component  {
       }
     })
     .then(function (response) {
-      console.log('Compaign Data: '+ JSON.stringify(response.data[0].CampaignName));
+     // console.log('Compaign Data: '+ JSON.stringify(response.data[0].CampaignName));
 
       /** Get the string value of the currrent Campaign type **/
         {switch(response.data[0].CampaignType){
@@ -188,7 +188,7 @@ export default class EditCampaign extends Component  {
     
 
     /** Get All CompaignField Detail **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get( process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblCampaignFields',
         queryType: 'getCampaignFieldByCampaignId',
@@ -197,7 +197,7 @@ export default class EditCampaign extends Component  {
     })
     .then(function (response) {
 
-      console.log('Campaign Field Name: '+ JSON.stringify(response.data));
+     // console.log('Campaign Field Name: '+ JSON.stringify(response.data));
 
       saveState({
           CampaignFieldsData: response.data,
@@ -217,7 +217,7 @@ export default class EditCampaign extends Component  {
 
 
     /** Get All tblLandingPage Detail By CampaignID **/
-    axios.get('https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php', {
+    axios.get(process.env.REACT_APP_API_DATABASE_URL, {
       params: {
         tblName: 'tblLandingPage',
         queryType: 'getLandingPageByCampaignId',
@@ -225,7 +225,7 @@ export default class EditCampaign extends Component  {
       }
     })
     .then(function (response) {
-      console.log('Campaign Field Name: '+ JSON.stringify(response.data));
+      //console.log('Campaign Field Name: '+ JSON.stringify(response.data));
       saveState({
         LandingPageDataByCampaignIdData: response.data
       });
@@ -247,7 +247,7 @@ export default class EditCampaign extends Component  {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCampaigns',
         queryType: 'updateCampaign',
@@ -282,7 +282,7 @@ export default class EditCampaign extends Component  {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblLandingPage',
         queryType: 'addNewLandingPage',
@@ -306,7 +306,7 @@ export default class EditCampaign extends Component  {
     const { saveState, state } = this;
     axios({
       method: 'get',
-      url: 'https://touchstone-api.abelocreative.com/touchstone-ajax/ajax.php',
+      url: process.env.REACT_APP_API_DATABASE_URL,
       params: {
         tblName: 'tblCampaignFields',
         queryType: 'addNewCampaignField',
@@ -349,7 +349,7 @@ export default class EditCampaign extends Component  {
 
     switch(e.target.name){
       case 'FieldName':
-        console.log('Field Name: '+e.target.value);
+       // console.log('Field Name: '+e.target.value);
         this.saveState({
           FieldName: e.target.value
         });
